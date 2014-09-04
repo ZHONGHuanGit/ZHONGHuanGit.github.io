@@ -1,0 +1,604 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>正则表达式和python的re模块 | de部落格^_^</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="钟桓">
+    
+    <meta name="description" itemprop="description" content="正则表达式部分和python的re模块使用学习笔记，可供入门">
+    
+    
+    
+    
+    <link rel="alternate" href="/atom.xml" title="de部落格^_^" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/BlogLogo64.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/BlogLogo64.ico">
+    <link rel="apple-touch-icon-precomposed" href="/img/BlogLogo64.ico">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/BlogLogo.png" alt="de部落格^_^" title="de部落格^_^"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="de部落格^_^">de部落格^_^</a></h1>
+				<h2 class="blog-motto">Keep Blogging，keep trying，never give up~</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">存档</a></li>
+					
+						<li><a href="/about">关于ZH</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhonghuan.info">
+					</form>
+					
+					</li>
+					
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/09/04/正则表达式和python的re模块/" title="正则表达式和python的re模块" itemprop="url">正则表达式和python的re模块</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhonghuan.info" title="钟桓">钟桓</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-09-04T15:04:30.000Z" itemprop="datePublished">9月 4 2014</time>
+    更新日期:<time datetime="2014-09-04T15:26:41.000Z" itemprop="dateModified">9月 4 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是正则表达式"><span class="toc-number">1.</span> <span class="toc-text">什么是正则表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#元字符使用一览表："><span class="toc-number">2.</span> <span class="toc-text">元字符使用一览表：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符转义"><span class="toc-number">3.</span> <span class="toc-text">字符转义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重复"><span class="toc-number">4.</span> <span class="toc-text">重复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符类"><span class="toc-number">5.</span> <span class="toc-text">字符类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分支条件"><span class="toc-number">6.</span> <span class="toc-text">分支条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分组"><span class="toc-number">7.</span> <span class="toc-text">分组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#re模块"><span class="toc-number">8.</span> <span class="toc-text">re模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#compile"><span class="toc-number">8.0.1.</span> <span class="toc-text">compile</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#match和search"><span class="toc-number">8.0.2.</span> <span class="toc-text">match和search</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#split"><span class="toc-number">8.0.3.</span> <span class="toc-text">split</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#findall"><span class="toc-number">8.0.4.</span> <span class="toc-text">findall</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#finditer"><span class="toc-number">8.0.5.</span> <span class="toc-text">finditer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sub"><span class="toc-number">8.0.6.</span> <span class="toc-text">sub</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#subn"><span class="toc-number">8.0.7.</span> <span class="toc-text">subn</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">9.</span> <span class="toc-text">参考资料</span></a></li></ol>
+		</div>
+		
+		<h2 id="什么是正则表达式">什么是正则表达式</h2>
+<p>在编写处理字符串的程序或网页时，经常会有查找符合某些复杂规则的字符串的需要。正则表达式就是用于描述这些规则的工具。正则表达式就是记录文本规则的代码，换句话说，正则表达式是一种文本模式，包括普通字符（例如，a 到 z 之间的字母）和特殊字符（称为“元字符”）。模式描述在搜索文本时要匹配的一个或多个字符串。</p>
+<pre><code>字符是计算机软件处理文字时最基本的单位，可能是字母，数字，标点符号，空格，换行符，汉字等等。字符串是0个或更多个字符的序列。文本也就是文字，字符串。说某个字符串匹配某个正则表达式，通常是指这个字符串里有一部分（或几部分分别）能满足表达式给出的条件。
+</code></pre><p>假设你要在英文小说中查找Hi，那么使用的正则表达式就是<code>Hi</code>，这个很简单吧，不过，通常处理正则表达式的工具（例如后面会提到的python的re模块）会提供忽略大小写的选项。</p>
+<p>不幸的是，很多单词里都包含了很多单词里包含hi这两个连续的字符，比如him,history,high等等。用hi来查找的话，这里边的hi也会被找出来。如果要精确地查找hi这个单词的话，我们应该使用<code>\bhi\b</code>。</p>
+<pre><code><span class="command">\b</span>是正则表达式规定的一个特殊代码（这里称为元字符，metacharacter），代表着单词的开头或结尾，也就是单词的分界处。
+</code></pre><p>假设你要找的Hi后面不远处有一个ZH，那么可以用<code>\bhi\b.*\bZH\b</code>.</p>
+<pre><code>这里，.是另一个元字符，匹配除了换行符以外的任意字符。<span class="keyword">*</span>同样是元字符，不过它代表的不是字符，也不是位置，而是数量——它指定<span class="keyword">*</span>前边的内容可以连续重复使用任意次以使整个表达式得到匹配,例如，zo<span class="keyword">*</span> 能匹配 <span class="string">"z"</span> 以及 <span class="string">"zoo"</span>等 。
+</code></pre><p>如果同时使用其它元字符，我们就能构造出功能更强大的正则表达式。比如下面这个例子：<br><code>0\d\d-\d\d\d\d\d\d\d\d</code>匹配这样的字符串：以0开头，然后是两个数字，然后是一个连字号“-”，最后是8个数字(也就是中国的电话号码。当然，这个例子只能匹配区号为3位的情形)。</p>
+<p>现在你已经知道几个很有用的元字符了，如\b,.,*，还有\d.正则表达式里还有更多的元字符，比如\s匹配任意的空白符，包括空格，制表符(Tab)，换行符，中文全角空格等。\w匹配字母或数字或下划线或汉字等。</p>
+<p>下面来看看更多的例子：<br><code>\ba\w*\b</code>匹配以字母a开头的单词——先是某个单词开始处(<code>\b</code>)，然后是字母a,然后是任意数量的字母或数字(<code>\w*</code>)，最后是单词结束处(<code>\b</code>)。<br>好吧，现在我们说说正则表达式里的单词是什么意思吧：就是不少于一个的连续的<code>\w</code>。不错，这与学习英文时要背的成千上万个同名的东西的确关系不大 :)<br><code>\d+</code>匹配1个或更多连续的数字。这里的<code>+</code>是和<code>*</code>类似的元字符，不同的是*匹配重复任意次(可能是0次)，而<code>+</code>则匹配重复1次或更多次。<br><code>\b\w{6}\b</code> 匹配刚好6个字符的单词。</p>
+<hr>
+<h2 id="元字符使用一览表：">元字符使用一览表：</h2>
+<p>上面介绍了部分的metacharacter，下面给出元字符一览表，使用时可以查找。</p>
+<div class="caption"></div><div class="tableSection"><table width="50%" frame="lhs"><tr><th><p>字符</p></th><th><p>说明</p></th></tr><tr><td><p>\</p></td><td><p>将下一字符标记为特殊字符、文本、反向引用或八进制转义符。例如，“n”匹配字符“n”。“\n”匹配换行符。序列“\”匹配“\”，“(”匹配“(”。</p></td></tr><tr><td><p>^</p></td><td><p>匹配输入字符串开始的位置。如果设置了 <b>RegExp</b> 对象的 <b>Multiline</b> 属性，^ 还会与“\n”或“\r”之后的位置匹配。</p></td></tr><tr><td><p>$</p></td><td><p>匹配输入字符串结尾的位置。如果设置了 <b>RegExp</b> 对象的 <b>Multiline</b> 属性，$ 还会与“\n”或“\r”之前的位置匹配。</p></td></tr><tr><td><p><em> </em></p></td><td><p>零次或多次匹配前面的字符或子表达式。例如，zo 匹配“z”和“zoo”。<em> 等效于 {0,}。</em></p></td></tr><tr><td><p>+</p></td><td><p>一次或多次匹配前面的字符或子表达式。例如，“zo+”与“zo”和“zoo”匹配，但与“z”不匹配。+ 等效于 {1,}。</p></td></tr><tr><td><p>?</p></td><td><p>零次或一次匹配前面的字符或子表达式。例如，“do(es)?”匹配“do”或“does”中的“do”。? 等效于 {0,1}。</p></td></tr><tr><td><p>{<i>n</i>}</p></td><td><p><i>n </i>是非负整数。正好匹配 <i>n</i> 次。例如，“o{2}”与“Bob”中的“o”不匹配，但与“food”中的两个“o”匹配。</p></td></tr><tr><td><p>{<i>n</i>,}</p></td><td><p><i>n </i>是非负整数。至少匹配 <i>n </i>次。例如，“o{2,}”不匹配“Bob”中的“o”，而匹配“foooood”中的所有 o。“o{1,}”等效于“o+”。“o{0,}”等效于“o ”。</p></td></tr><tr><td><p>{<i>n</i>,<i>m</i>}</p></td><td><p><i>M</i> 和 <i>n</i> 是非负整数，其中 <i>n</i> &lt;= <i>m</i>。匹配至少 <i>n</i> 次，至多 <i>m</i> 次。例如，“o{1,3}”匹配“fooooood”中的头三个 o。’o{0,1}’ 等效于 ‘o?’。注意：您不能将空格插入逗号和数字之间。</p></td></tr><tr><td><p>?</p></td><td><p>当此字符紧随任何其他限定符（*、+、?、{<i>n</i>}、{<i>n</i>,}、{<i>n</i>,<i>m</i>}）之后时，匹配模式是“非贪心的”。“非贪心的”模式匹配搜索到的、尽可能短的字符串，而默认的“贪心的”模式匹配搜索到的、尽可能长的字符串。例如，在字符串“oooo”中，“o+?”只匹配单个“o”，而“o+”匹配所有“o”。</p></td></tr><tr><td><p>.</p></td><td><p>匹配除“\n”之外的任何单个字符。若要匹配包括“\n”在内的任意字符，请使用诸如“[\s\S]”之类的模式。</p></td></tr><tr><td><p>(<i>pattern</i>)</p></td><td><p>匹配 <i>pattern</i> 并捕获该匹配的子表达式。可以使用 <b>$0…$9</b> 属性从结果“匹配”集合中检索捕获的匹配。若要匹配括号字符 ( )，请使用“(”或者“)”。</p></td></tr><tr><td><p>(?:<i>pattern</i>)</p></td><td><p>匹配 <i>pattern</i> 但不捕获该匹配的子表达式，即它是一个非捕获匹配，不存储供以后使用的匹配。这对于用“or”字符 (|) 组合模式部件的情况很有用。例如，’industr(?:y|ies) 是比 ‘industry|industries’ 更经济的表达式。</p></td></tr><tr><td><p>(?=<i>pattern</i>)</p></td><td><p>执行正向预测先行搜索的子表达式，该表达式匹配处于匹配 <i>pattern</i> 的字符串的起始点的字符串。它是一个非捕获匹配，即不能捕获供以后使用的匹配。例如，’Windows (?=95|98|NT|2000)’ 匹配“Windows 2000”中的“Windows”，但不匹配“Windows 3.1”中的“Windows”。预测先行不占用字符，即发生匹配后，下一匹配的搜索紧随上一匹配之后，而不是在组成预测先行的字符后。</p></td></tr><tr><td><p>(?!<i>pattern</i>)</p></td><td><p>执行反向预测先行搜索的子表达式，该表达式匹配不处于匹配 <i>pattern</i> 的字符串的起始点的搜索字符串。它是一个非捕获匹配，即不能捕获供以后使用的匹配。例如，’Windows (?!95|98|NT|2000)’ 匹配“Windows 3.1”中的 “Windows”，但不匹配“Windows 2000”中的“Windows”。预测先行不占用字符，即发生匹配后，下一匹配的搜索紧随上一匹配之后，而不是在组成预测先行的字符后。</p></td></tr><tr><td><p><i>x</i>|<i>y</i></p></td><td><p>匹配 <i>x</i> 或 <i>y</i>。例如，’z|food’ 匹配“z”或“food”。’(z|f)ood’ 匹配“zood”或“food”。</p></td></tr><tr><td><p>[<i>xyz</i>]</p></td><td><p>字符集。匹配包含的任一字符。例如，“[abc]”匹配“plain”中的“a”。</p></td></tr><tr><td><p>[^<i>xyz</i>]</p></td><td><p>反向字符集。匹配未包含的任何字符。例如，“[^abc]”匹配“plain”中的“p”。</p></td></tr><tr><td><p>[<i>a-z</i>]</p></td><td><p>字符范围。匹配指定范围内的任何字符。例如，“[a-z]”匹配“a”到“z”范围内的任何小写字母。</p></td></tr><tr><td><p>[^<i>a-z</i>]</p></td><td><p>反向范围字符。匹配不在指定的范围内的任何字符。例如，“[^a-z]”匹配任何不在“a”到“z”范围内的任何字符。</p></td></tr><tr><td><p>\b</p></td><td><p>匹配一个字边界，即字与空格间的位置。例如，“er\b”匹配“never”中的“er”，但不匹配“verb”中的“er”。</p></td></tr><tr><td><p>\B</p></td><td><p>非字边界匹配。“er\B”匹配“verb”中的“er”，但不匹配“never”中的“er”。</p></td></tr><tr><td><p>\c<i>x</i></p></td><td><p>匹配 <i>x</i> 指示的控制字符。例如，\cM 匹配 Control-M 或回车符。<i>x</i> 的值必须在 A-Z 或 a-z 之间。如果不是这样，则假定 c 就是“c”字符本身。</p></td></tr><tr><td><p>\d</p></td><td><p>数字字符匹配。等效于 [0-9]。</p></td></tr><tr><td><p>\D</p></td><td><p>非数字字符匹配。等效于 [^0-9]。</p></td></tr><tr><td><p>\f</p></td><td><p>换页符匹配。等效于 \x0c 和 \cL。</p></td></tr><tr><td><p>\n</p></td><td><p>换行符匹配。等效于 \x0a 和 \cJ。</p></td></tr><tr><td><p>\r</p></td><td><p>匹配一个回车符。等效于 \x0d 和 \cM。</p></td></tr><tr><td><p>\s</p></td><td><p>匹配任何空白字符，包括空格、制表符、换页符等。与 [ \f\n\r\t\v] 等效。</p></td></tr><tr><td><p>\S</p></td><td><p>匹配任何非空白字符。与 [^ \f\n\r\t\v] 等效。</p></td></tr><tr><td><p>\t</p></td><td><p>制表符匹配。与 \x09 和 \cI 等效。</p></td></tr><tr><td><p>\v</p></td><td><p>垂直制表符匹配。与 \x0b 和 \cK 等效。</p></td></tr><tr><td><p>\w</p></td><td><p>匹配任何字类字符，包括下划线。与“[A-Za-z0-9<em>]”等效。</em></p></td></tr><tr><td><p>\W</p></td><td><p>与任何非单词字符匹配。与“[^A-Za-z0-9]”等效。</p></td></tr><tr><td><p>\x<i>n</i></p></td><td><p>匹配 <i>n</i>，此处的 <i>n</i> 是一个十六进制转义码。十六进制转义码必须正好是两位数长。例如，“\x41”匹配“A”。“\x041”与“\x04”&amp;“1”等效。允许在正则表达式中使用 ASCII 代码。</p></td></tr><tr><td><p>\<i>num</i></p></td><td><p>匹配 <i>num</i>，此处的 <i>num</i> 是一个正整数。到捕获匹配的反向引用。例如，“(.)\1”匹配两个连续的相同字符。</p></td></tr><tr><td><p>\<i>n</i></p></td><td><p>标识一个八进制转义码或反向引用。如果 \<i>n</i> 前面至少有 <i>n</i> 个捕获子表达式，那么 <i>n</i> 是反向引用。否则，如果 <i>n</i> 是八进制数 (0-7)，那么 <i>n</i> 是八进制转义码。</p></td></tr><tr><td><p>\<i>nm</i></p></td><td><p>标识一个八进制转义码或反向引用。如果 \<i>nm</i> 前面至少有 <i>nm</i> 个捕获子表达式，那么 <i>nm</i> 是反向引用。如果 \<i>nm</i> 前面至少有 <i>n</i> 个捕获，则 <i>n</i> 是反向引用，后面跟有字符 <i>m</i>。如果两种前面的情况都不存在，则 \<i>nm</i> 匹配八进制值 <i>nm</i>，其中 <i>n </i>和 <i>m</i> 是八进制数字 (0-7)。</p></td></tr><tr><td><p>\<span class="parameter" sdata="paramReference">nml</span></p></td><td><p>当 <i>n</i> 是八进制数 (0-3)，<i>m</i> 和 <i>l</i> 是八进制数 (0-7) 时，匹配八进制转义码 <i>nml</i>。</p></td></tr><tr><td><p>\u<i>n</i></p></td><td><p>匹配 <i>n</i>，其中 <i>n</i> 是以四位十六进制数表示的 Unicode 字符。例如，\u00A9 匹配版权符号 (©)。</p></td></tr></table></div>
+
+<hr>
+<h2 id="字符转义">字符转义</h2>
+<p>如果你想查找元字符本身的话，比如你查找.,或者<em>,就出现了问题：你没办法指定它们，因为它们会被解释成别的意思。这时你就得使用\来取消这些字符的特殊意义。因此，你应该使用.和\</em>。当然，要查找\本身，你也得用\.</p>
+<p>例如：<code>deerchao\.net</code>匹配<code>deerchao.net</code>，<code>C:\\Windows</code>匹配<code>C:\Windows</code>。</p>
+<hr>
+<h2 id="重复">重复</h2>
+<p>正则表达式第一件能做的事是能够匹配不定长的字符集，而这是其它能作用在字符串上的方法所不能做到的。 不过，如果那是正则表达式唯一的附加功能的话，那么它们也就不那么优秀了。它们的另一个功能就是你可以指定正则表达式的一部分的重复次数。</p>
+<p>就像前面介绍的元字符 <code>*</code>. <code>*</code> 并不匹配字母字符 “*”；相反，它指定前一个字符可以被匹配零次或更多次，而不是只有一次。</p>
+<p>上面我们的元字符表把大部分元字符都说了，这里我们抽取出重复限定符。</p>
+<table>
+<thead>
+<tr>
+<th>代码/语法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td>重复零次或更多次</td>
+</tr>
+<tr>
+<td>+</td>
+<td>重复一次或更多次</td>
+</tr>
+<tr>
+<td>?</td>
+<td>重复零次或一次</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>重复n次</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td>重复n次或更多次</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>重复n到m次</td>
+</tr>
+</tbody>
+</table>
+<p>再举个例子，ca?t 将匹配 “ct” (0 个 “a” 字符) 或 “cat” (1 个 “a”);<br>有了上面的这些限定元字符，可以很好得处理重复情况，只要运用得当。</p>
+<hr>
+<h2 id="字符类">字符类</h2>
+<p>要想查找数字，字母或数字，空白是很简单的，因为已经有了对应这些字符集合的元字符，但是如果你想匹配没有预定义元字符的字符集合(比如元音字母a,e,i,o,u),应该怎么办？</p>
+<p>很简单，你只需要在方括号里列出它们就行了，像[aeiou]就匹配任何一个英文元音字母，[.?!]匹配标点符号(.或?或!)。</p>
+<p>我们也可以轻松地指定一个字符范围，像[0-9]代表的含意与\d就是完全一致的：一位数字；同理[a-z0-9A-Z_]也完全等同于\w（如果只考虑英文的话）。</p>
+<p>下面是一个更复杂的表达式：(?0\d{2}[) -]?\d{8}。</p>
+<p>“(”和“)”也是元字符，后面的分组节里会提到，所以在这里需要使用转义。</p>
+<p>这个表达式可以匹配几种格式的电话号码，像(010)88886666，或022-22334455，或02912345678等。我们对它进行一些分析吧：首先是一个转义字符(,它能出现0次或1次(?),然后是一个0，后面跟着2个数字(\d{2})，然后是)或-或空格中的一个，它出现1次或不出现(?)，最后是8个数字(\d{8})。</p>
+<hr>
+<h2 id="分支条件">分支条件</h2>
+<p>不幸的是，刚才那个表达式也能匹配010)12345678或(022-87654321这样的“不正确”的格式。要解决这个问题，我们需要用到分枝条件。正则表达式里的分枝条件指的是有几种规则，如果满足其中任意一种规则都应该当成匹配，具体方法是用|把不同的规则分隔开。听不明白？没关系，看例子：</p>
+<p><code>0\d{2}-\d{8}|0\d{3}-\d{7}</code>这个表达式能匹配两种以连字号分隔的电话号码：一种是三位区号，8位本地号(如010-12345678)，一种是4位区号，7位本地号(0376-2233445)。</p>
+<p><code>\(?0\d{2}\)?[- ]?\d{8}|0\d{2}[- ]?\d{8}</code>这个表达式匹配3位区号的电话号码，其中区号可以用小括号括起来，也可以不用，区号与本地号间可以用连字号或空格间隔，也可以没有间隔。你可以试试用分枝条件把这个表达式扩展成也支持4位区号的。</p>
+<p><code>\d{5}-\d{4}|\d{5}</code>这个表达式用于匹配美国的邮政编码。美国邮编的规则是5位数字，或者用连字号间隔的9位数字。之所以要给出这个例子是因为它能说明一个问题：使用分枝条件时，要注意各个条件的顺序。如果你把它改成<code>\d{5}|\d{5}-\d{4}</code>的话，那么就只会匹配5位的邮编(以及9位邮编的前5位)。原因是匹配分枝条件时，将会从左到右地测试每个条件，如果满足了某个分枝的话，就不会去再管其它的条件了。</p>
+<hr>
+<h2 id="分组">分组</h2>
+<p>我们已经提到了怎么重复单个字符（直接在字符后面加上限定符就行了）；但如果想要重复多个字符又该怎么办？你可以用小括号来指定子表达式(也叫做分组)，然后你就可以指定这个子表达式的重复次数了，你也可以对子表达式进行其它一些操作(后面会有介绍)。</p>
+<p>(\d{1,3}.){3}\d{1,3}是一个简单的IP地址匹配表达式。要理解这个表达式，请按下列顺序分析它：\d{1,3}匹配1到3位的数字，(\d{1,3}.){3}匹配三位数字加上一个英文句号(这个整体也就是这个分组)重复3次，最后再加上一个一到三位的数字(\d{1,3})。</p>
+<p>IP地址中每个数字都不能大于255. 经常有人问我, 01.02.03.04 这样前面带有0的数字, 是不是正确的IP地址呢? 答案是: 是的, IP 地址里的数字可以包含有前导 0 (leading zeroes).</p>
+<p>不幸的是，它也将匹配256.300.888.999这种不可能存在的IP地址。如果能使用算术比较的话，或许能简单地解决这个问题，但是正则表达式中并不提供关于数学的任何功能，所以只能使用冗长的分组，选择，字符类来描述一个正确的IP地址：((2[0-4]\d|25[0-5]|[01]?\d\d?).){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)。</p>
+<p>理解这个表达式的关键是理解2[0-4]\d|25[0-5]|[01]?\d\d?，这里我就不细说了，你自己应该能分析得出来它的意义。</p>
+<hr>
+<h2 id="re模块">re模块</h2>
+<p>Python中得正则表达式（regular expression）模块，即re模块，功能还是很强大的。在介绍re之前，先看下面这部分。</p>
+<p>正则表达式使用反斜杠” \ “来代表特殊形式或用作转义字符，这里跟Python的语法冲突，因此，Python用” \\ “表示正则表达式中的” \ “，因为正则表达式中如果要匹配” \ “，需要用\来转义，变成” \ “，而Python语法中又需要对字符串中每一个\进行转义，所以就变成了” \\ “。</p>
+<p>上面的写法是不是觉得很麻烦，为了使正则表达式具有更好的可读性，Python特别设计了原始字符串(raw string)，需要提醒你的是，在写文件路径的时候就不要使用raw string了，这里存在陷阱。raw string就是用’r’作为字符串的前缀，如 r”\n”：表示两个字符”\”和”n”，而不是换行符了。Python中写正则表达式时推荐使用这种形式。</p>
+<p>下面来看一下re模块的几个函数：</p>
+<h4 id="compile">compile</h4>
+<p><strong>re.compile(strPattern[, flag]):</strong></p>
+<p>这个方法是Pattern类的工厂方法，用于将字符串形式的正则表达式编译为Pattern对象。<br>第二个参数flag是匹配模式，取值可以使用按位或运算符’|’表示同时生效，比如re.I | re.M。<br>另外，你也可以在regex字符串中指定模式，<br>比如re.compile(‘pattern’, re.I | re.M)与re.compile(‘(?im)pattern’)是等价的。<br>可选值有：</p>
+<pre><code>re.I(IGNORECASE): 忽略大小写（括号内是完整写法，下同）
+re.M(MULTILINE): 多行模式，改变'^'和'<span class="formula">$'的行为（参见上图）
+re.S(DOTALL): 点任意匹配模式，改变'.'的行为
+re.L(LOCALE): 使预定字符类 <span class="command">\w</span> <span class="command">\W</span> <span class="command">\b</span> <span class="command">\B</span> <span class="command">\s</span> <span class="command">\S</span> 取决于当前区域设定
+re.U(UNICODE): 使预定字符类 <span class="command">\w</span> <span class="command">\W</span> <span class="command">\b</span> <span class="command">\B</span> <span class="command">\s</span> <span class="command">\S</span> <span class="command">\d</span> <span class="command">\D</span> 取决于unicode定义的字符属性
+re.X(VERBOSE): 详细模式。这个模式下正则表达式可以是多行，忽略空白字符，并可以加入注释。</span>
+</code></pre><p>其实compile方法的作用，不是很明显，因为下面的两个得到的结果等价。调用compile后，返回RegexObject对象，可以用该对象调用macth()和search()等匹配方法。</p>
+<pre><code><span class="keyword">import</span> re
+
+pattern = <span class="string">r"hi"</span>;
+string = <span class="string">"hi,jack"</span>;
+
+prog = re.compile(pattern);
+result1 = prog.match(string);
+<span class="keyword">print</span> <span class="string">"result1: "</span>, result1.group();
+
+result2 = re.match(pattern, string);
+<span class="keyword">print</span> <span class="string">"result2: "</span>,result2.group();
+</code></pre><p>输出的结果是一样的。这里match下面会介绍，它是一个匹配的方法，group方法后面也会介绍，它这里输出的时匹配的内容。可以试验一下，就明白他两是等效的。</p>
+<h4 id="match和search">match和search</h4>
+<p>两个方法都是进行匹配时调用的。但他们有不同之处。</p>
+<p>Python提供了两种不同的原始操作：match和search。match是从字符串的起点开始做匹配，而search（perl默认）是从字符串做任意匹配。</p>
+<p><strong>例子1</strong>    </p>
+<pre><code><span class="keyword">import</span> re
+
+result1 = re.match(<span class="string">"c"</span>,<span class="string">"abcde"</span>);
+<span class="keyword">if</span>(result1):
+    <span class="keyword">print</span>(<span class="string">"result1:"</span>+result1.<span class="keyword">group</span>());
+<span class="keyword">else</span>:
+    <span class="keyword">print</span>(<span class="string">"nothing"</span>);
+
+result2 = re.search(<span class="string">"c"</span>,<span class="string">"abcde"</span>);
+<span class="keyword">if</span>(result2):
+    <span class="keyword">print</span>(<span class="string">"result2:"</span>+result2.<span class="keyword">group</span>());
+</code></pre><p>输出：<br><br>nothing<br><br>result2:c</p>
+<p><strong>例子2</strong></p>
+<pre><code><span class="keyword">import</span> re
+
+result1 = re.match(<span class="string">"a"</span>,<span class="string">"abcde"</span>);
+<span class="keyword">if</span>(result1):
+    <span class="keyword">print</span>(<span class="string">"result1:"</span>+result1.<span class="keyword">group</span>());
+<span class="keyword">else</span>:
+    <span class="keyword">print</span>(<span class="string">"nothing"</span>);
+
+result2 = re.search(<span class="string">"a"</span>,<span class="string">"abcde"</span>);
+<span class="keyword">if</span>(result2):
+    <span class="keyword">print</span>(<span class="string">"result2:"</span>+result2.<span class="keyword">group</span>());
+</code></pre><p>输出：<br><br>result1:a<br><br>result2:a</p>
+<p><strong>例子3</strong></p>
+<p>match函数可以设置匹配开始的位置，下面分别从0，1，2位置开始匹配。当然也可以设置终止的位置，具体可以查API文档。</p>
+<pre><code>import re
+
+pattern = re.compile(<span class="string">"c"</span>);
+
+result1 = pattern.<span class="keyword">match</span>(<span class="string">"abcde"</span>,<span class="number">0</span>);
+<span class="keyword">if</span>(result1):
+    <span class="keyword">print</span>(<span class="string">"result1:"</span>+result1.<span class="keyword">group</span>());
+<span class="keyword">else</span>:
+    <span class="keyword">print</span>(<span class="string">"result1: nothing"</span>);
+
+result2 = pattern.<span class="keyword">match</span>(<span class="string">"abcde"</span>,<span class="number">1</span>);
+<span class="keyword">if</span>(result2):
+    <span class="keyword">print</span>(<span class="string">"result2:"</span>+result2.<span class="keyword">group</span>());
+<span class="keyword">else</span>:
+    <span class="keyword">print</span>(<span class="string">"result2: nothing"</span>);
+
+result3 = pattern.<span class="keyword">match</span>(<span class="string">"abcde"</span>,<span class="number">2</span>);
+<span class="keyword">if</span>(result3):
+    <span class="keyword">print</span>(<span class="string">"result3:"</span>+result3.<span class="keyword">group</span>());
+<span class="keyword">else</span>:
+    <span class="keyword">print</span>(<span class="string">"result3: nothing"</span>);
+</code></pre><p>输出：<br><br>result1: nothing<br><br>result2: nothing<br><br>result3:c</p>
+<h4 id="split">split</h4>
+<p><strong>re.split(pattern, string, maxsplit=0)</strong></p>
+<p>通过正则表达式将字符串分离。如果用括号将正则表达式括起来，那么匹配的字符串也会被列入到list中返回。maxsplit是分离的次数，maxsplit=1分离一次，默认为0，不限制次数。</p>
+<p>看一下例子：</p>
+<pre><code>import re    
+<span class="keyword">print</span> re.<span class="built_in">split</span>(<span class="string">'\W+'</span>, <span class="string">'Words, words, words.'</span>)
+</code></pre><p>输出:<br><br>[‘Words’, ‘words’, ‘words’, ‘’]</p>
+<p>思考一下为什么输出会是这个? 查看一下<code>\W</code>的作用，注意W是大写的。</p>
+<h4 id="findall">findall</h4>
+<p><strong>re.findall(pattern, string, flags=0)</strong></p>
+<p>找到 RE 匹配的所有子串，并把它们作为一个列表返回。这个匹配是从左到右有序地返回。如果无匹配，返回空列表。</p>
+<pre><code><span class="keyword">import</span> re
+<span class="keyword">print</span> re.<span class="keyword">findall</span>(<span class="string">"\d"</span>,<span class="string">"1a2b3c4d"</span>);
+</code></pre><p>输出：<br><br>[‘1’, ‘2’, ‘3’, ‘4’]</p>
+<h4 id="finditer">finditer</h4>
+<p><strong>re.finditer(pattern, string, flags=0)</strong></p>
+<p>找到 RE 匹配的所有子串，并把它们作为一个迭代器返回。这个匹配是从左到右有序地返回。如果无匹配，返回空列表。</p>
+<pre><code><span class="keyword">import</span> re
+
+it = re.finditer(<span class="string">r"\d+"</span>,<span class="string">"123abc456efg789hij"</span>)
+<span class="keyword">for</span> match <span class="keyword">in</span> it:
+    <span class="keyword">print</span> match.group()
+</code></pre><p>输出：<br><br>123<br>456<br>789</p>
+<h4 id="sub">sub</h4>
+<p><strong>sub(pattern, repl, string, count=0, flags=0)</strong></p>
+<p>其用途是用来替换匹配成功的字串，被替换成repl。值得一提的时，这里的repl不仅仅可以是字符串，也可以是方法。</p>
+<p>首先看下字符串的时候，被匹配的字符串就会被替换成为repl。</p>
+<pre><code><span class="keyword">import</span> re
+<span class="keyword">print</span> re.sub(<span class="string">r'\sAND\s'</span>, <span class="string">' &amp; '</span>, <span class="string">'Baked Beans And Spam'</span>, flags=re.IGNORECASE)
+</code></pre><p>输出：<br><br>Baked Beans &amp; Spam</p>
+<p><code>可以使用\id或\g&lt;id&gt;、\g&lt;name&gt;引用分组</code>.</p>
+<p>当repl是方法的时候。这个方法应当只接受一个参数（Match对象），并返回一个字符串用于替换（返回的字符串中不能再引用分组）。 </p>
+<pre><code><span class="keyword">import</span> re
+
+<span class="function"><span class="keyword">def</span> <span class="title">dashrepl</span><span class="params">(matchobj)</span>:</span>
+    <span class="keyword">if</span> matchobj.group(<span class="number">0</span>) == <span class="string">'-'</span>: <span class="keyword">return</span> <span class="string">' '</span>
+    <span class="keyword">else</span>: <span class="keyword">return</span> <span class="string">'-'</span>
+
+<span class="keyword">print</span>  re.sub(<span class="string">'-{1,2}'</span>, dashrepl, <span class="string">'pro----gram-files'</span>)
+<span class="keyword">print</span>  re.sub(<span class="string">'-{1,2}'</span>, dashrepl, <span class="string">'pro----gram-files'</span>)
+</code></pre><p>输出：<br><br>pro—gram files    </p>
+<h4 id="subn">subn</h4>
+<p>subn(repl, string[, count]) |re.sub(pattern, repl, string[, count]):<br>多返回 (sub(repl, string[, count]), 替换次数)。</p>
+<pre><code><span class="keyword">import</span> re
+<span class="keyword">print</span> re.subn(<span class="string">r'\sAND\s'</span>, <span class="string">' &amp; '</span>, <span class="string">'Baked Beans And Spam'</span>, flags=re.IGNORECASE)
+</code></pre><hr>
+<h2 id="参考资料">参考资料</h2>
+<ol>
+<li><a href="http://deerchao.net/tutorials/regex/regex.htm" target="_blank" rel="external">正则表达式30分钟入门教程</a>  <strong>(推荐)</strong></li>
+<li><a href="http://msdn.microsoft.com/zh-cn/library/ae5bf541(v=vs.90).aspx" target="_blank" rel="external">正则表达式语法</a></li>
+<li><a href="http://www.cnblogs.com/PythonHome/archive/2011/11/19/2255459.html" target="_blank" rel="external">Python-re模块</a></li>
+<li><a href="http://dragon.cnblogs.com/archive/2006/05/08/394078.html" target="_blank" rel="external">深入浅出之正则表达式</a> <strong>(推荐)</strong></li>
+<li><a href="http://www.crifan.com/files/doc/docbook/python_topic_re/release/html/python_topic_re.html" target="_blank" rel="external">正则表达式re模块详解</a> <strong>(推荐)</strong></li>
+<li><a href="http://wiki.ubuntu.org.cn/Python%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97" target="_blank" rel="external">Python正则表达式操作指南</a> <strong>(推荐)</strong></li>
+<li><a href="http://blog.csdn.net/pleasecallmewhy/article/details/8929576" target="_blank" rel="external">python正则表达式教程</a></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/python/">python</a><a href="/tags/webspider/">webspider</a><a href="/tags/re/">re</a><a href="/tags/正则表达式/">正则表达式</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/webspider/">python网络爬虫</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhonghuan.info/2014/09/04/正则表达式和python的re模块/" data-title="正则表达式和python的re模块 | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2014/09/04/python网络爬虫学习笔记/"  title="python网络爬虫学习笔记">
+ <strong>NEXT:</strong><br/> 
+ <span>python网络爬虫学习笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是正则表达式"><span class="toc-number">1.</span> <span class="toc-text">什么是正则表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#元字符使用一览表："><span class="toc-number">2.</span> <span class="toc-text">元字符使用一览表：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符转义"><span class="toc-number">3.</span> <span class="toc-text">字符转义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重复"><span class="toc-number">4.</span> <span class="toc-text">重复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符类"><span class="toc-number">5.</span> <span class="toc-text">字符类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分支条件"><span class="toc-number">6.</span> <span class="toc-text">分支条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分组"><span class="toc-number">7.</span> <span class="toc-text">分组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#re模块"><span class="toc-number">8.</span> <span class="toc-text">re模块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#compile"><span class="toc-number">8.0.1.</span> <span class="toc-text">compile</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#match和search"><span class="toc-number">8.0.2.</span> <span class="toc-text">match和search</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#split"><span class="toc-number">8.0.3.</span> <span class="toc-text">split</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#findall"><span class="toc-number">8.0.4.</span> <span class="toc-text">findall</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#finditer"><span class="toc-number">8.0.5.</span> <span class="toc-text">finditer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sub"><span class="toc-number">8.0.6.</span> <span class="toc-text">sub</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#subn"><span class="toc-number">8.0.7.</span> <span class="toc-text">subn</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">9.</span> <span class="toc-text">参考资料</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/webspider/" title="python网络爬虫">python网络爬虫<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/python/" title="python">python<sup>2</sup></a></li>
+		
+			<li><a href="/tags/re/" title="re">re<sup>1</sup></a></li>
+		
+			<li><a href="/tags/urllib/" title="urllib">urllib<sup>1</sup></a></li>
+		
+			<li><a href="/tags/urllib2/" title="urllib2">urllib2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/webspider/" title="webspider">webspider<sup>2</sup></a></li>
+		
+			<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> You, lower the IQ of the street, go to study~~ <br/>
+			^_^</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/u/2103243911" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/ZHONGHuanGit" target="_blank" title="github"></a>
+		
+		
+	</div>
+		
+		<p class="copyright">
+			<font face="arial" size=“1”>
+ 			博客所有内容采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">自由转载-非商业用途-非衍生-保持署名的创作共用协议</a>
+			</font>
+		</p>
+		<p class="copyright">
+			<font face="arial" size=“1”>
+ 			Licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike License</a>.
+			</font>
+		</p>
+		
+
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhonghuan.info" target="_blank" title="钟桓">钟桓</a>
+		
+		<font face=“arial” size=“1”>
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253200423'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1253200423%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</font>
+		</p>
+</div>
+
+
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+  </body>
+</html>
