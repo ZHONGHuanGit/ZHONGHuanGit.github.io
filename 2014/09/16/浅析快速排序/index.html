@@ -1,0 +1,610 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>浅析快速排序 | de部落格^_^</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="钟桓">
+    
+    <meta name="description" itemprop="description" content="快速排序的介绍与性能，复杂度分析">
+    
+    
+    
+    
+    <link rel="alternate" href="/atom.xml" title="de部落格^_^" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/BlogLogo64.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/BlogLogo64.ico">
+    <link rel="apple-touch-icon-precomposed" href="/img/BlogLogo64.ico">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/BlogLogo.png" alt="de部落格^_^" title="de部落格^_^"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="de部落格^_^">de部落格^_^</a></h1>
+				<h2 class="blog-motto">Keep Blogging，keep trying，never give up~</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">存档</a></li>
+					
+						<li><a href="/about">关于ZH</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhonghuan.info">
+					</form>
+					
+					</li>
+					
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/09/16/浅析快速排序/" title="浅析快速排序" itemprop="url">浅析快速排序</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhonghuan.info" title="钟桓">钟桓</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-09-16T08:08:44.000Z" itemprop="datePublished">9月 16 2014</time>
+    更新日期:<time datetime="2014-09-16T08:10:04.000Z" itemprop="dateModified">9月 16 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本思想与特性"><span class="toc-number">1.</span> <span class="toc-text">基本思想与特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#步骤与代码实现"><span class="toc-number">2.</span> <span class="toc-text">步骤与代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#算法分析"><span class="toc-number">3.</span> <span class="toc-text">算法分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）最坏时间复杂度"><span class="toc-number">3.1.</span> <span class="toc-text">（1）最坏时间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）_最好时间复杂度"><span class="toc-number">3.2.</span> <span class="toc-text">（2）    最好时间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（3）基准关键字的选取"><span class="toc-number">3.3.</span> <span class="toc-text">（3）基准关键字的选取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（4）平均时间复杂度"><span class="toc-number">3.4.</span> <span class="toc-text">（4）平均时间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（5）空间复杂度"><span class="toc-number">3.5.</span> <span class="toc-text">（5）空间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（6）稳定性"><span class="toc-number">3.6.</span> <span class="toc-text">（6）稳定性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料："><span class="toc-number">4.</span> <span class="toc-text">参考资料：</span></a></li></ol>
+		</div>
+		
+		<h2 id="基本思想与特性">基本思想与特性</h2>
+<p>快速排序是C.R.A.Hoare于1962年提出的一种划分交换排序。它采用了一种分治的策略，通常称其为分治法(Divide-and-ConquerMethod)。</p>
+<p>该方法的基本思想是：</p>
+<ol>
+<li><p>先从数列中取出一个数作为基准数。</p>
+</li>
+<li><p>分区过程，将比这个数大的数全放到它的右边，小于或等于它的数全放到它的左边。</p>
+</li>
+<li><p>再对左右区间重复第二步，直到各区间只有一个数。</p>
+</li>
+</ol>
+<p>快速排序算法的基本特性:</p>
+<ol>
+<li><p>时间复杂度：O（n*lgn）</p>
+</li>
+<li><p>最坏：O（n^2）</p>
+</li>
+<li><p>空间复杂度：O（n*lgn）</p>
+</li>
+<li><p>不稳定。</p>
+</li>
+</ol>
+<p>快速排序是一种排序算法，对包含n个数的输入数组，平均时间为O（nlgn），最坏情况是O（n^2）。<br>通常是用于排序的最佳选择。因为，基于比较的排序，最快也只能达到O（nlgn）。</p>
+<hr>
+<h2 id="步骤与代码实现">步骤与代码实现</h2>
+<p>虽然快速排序称为分治法，但分治法这三个字显然无法很好的概括快速排序的全部步骤。因此我的对快速排序作了进一步的说明：挖坑填数+分治法：</p>
+<p>先来看实例吧，定义下面再给出（最好能用自己的话来总结定义，这样对实现代码会有帮助）。</p>
+<p>以一个数组作为示例，取区间第一个数为基准数。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">0</th>
+<th style="text-align:center">1</th>
+<th style="text-align:center">2</th>
+<th style="text-align:center">3</th>
+<th style="text-align:center">4</th>
+<th style="text-align:center">5</th>
+<th style="text-align:center">6</th>
+<th style="text-align:center">7</th>
+<th style="text-align:center">8</th>
+<th style="text-align:center">9</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">72</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">57</td>
+<td style="text-align:center">88</td>
+<td style="text-align:center">60</td>
+<td style="text-align:center">42</td>
+<td style="text-align:center">83</td>
+<td style="text-align:center">73</td>
+<td style="text-align:center">48</td>
+<td style="text-align:center">85</td>
+</tr>
+</tbody>
+</table>
+<p>初始时，i = 0;  j = 9;   X = a[i] = 72</p>
+<p>由于已经将a[0]中的数保存到X中，可以理解成在数组a[0]上挖了个坑，可以将其它数据填充到这来。</p>
+<p>从j开始向前找一个比X小或等于X的数。当j=8，符合条件，将a[8]挖出再填到上一个坑a[0]中。a[0]=a[8]; i++;  这样一个坑a[0]就被搞定了，但又形成了一个新坑a[8]，这怎么办了？简单，再找数字来填a[8]这个坑。这次从i开始向后找一个大于X的数，当i=3，符合条件，将a[3]挖出再填到上一个坑中a[8]=a[3]; j—;</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">0</th>
+<th style="text-align:center">1</th>
+<th style="text-align:center">2</th>
+<th style="text-align:center">3</th>
+<th style="text-align:center">4</th>
+<th style="text-align:center">5</th>
+<th style="text-align:center">6</th>
+<th style="text-align:center">7</th>
+<th style="text-align:center">8</th>
+<th style="text-align:center">9</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">48</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">57</td>
+<td style="text-align:center">88</td>
+<td style="text-align:center">60</td>
+<td style="text-align:center">42</td>
+<td style="text-align:center">83</td>
+<td style="text-align:center">73</td>
+<td style="text-align:center">48</td>
+<td style="text-align:center">85</td>
+</tr>
+</tbody>
+</table>
+<p> i = 3;   j = 7;   X=72</p>
+<p>再重复上面的步骤，先从后向前找，再从前向后找。</p>
+<p>从j开始向前找，当j=5，符合条件，将a[5]挖出填到上一个坑中，a[3] = a[5]; i++;</p>
+<p>从i开始向后找，当i=5时，由于i==j退出。</p>
+<p>此时，i = j = 5，而a[5]刚好又是上次挖的坑，因此将X填入a[5]。</p>
+<p>数组变为：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">0</th>
+<th style="text-align:center">1</th>
+<th style="text-align:center">2</th>
+<th style="text-align:center">3</th>
+<th style="text-align:center">4</th>
+<th style="text-align:center">5</th>
+<th style="text-align:center">6</th>
+<th style="text-align:center">7</th>
+<th style="text-align:center">8</th>
+<th style="text-align:center">9</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">48</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">57</td>
+<td style="text-align:center">42</td>
+<td style="text-align:center">60</td>
+<td style="text-align:center">72</td>
+<td style="text-align:center">83</td>
+<td style="text-align:center">73</td>
+<td style="text-align:center">88</td>
+<td style="text-align:center">85</td>
+</tr>
+</tbody>
+</table>
+<p>可以看出a[5]前面的数字都小于它，a[5]后面的数字都大于它。因此再对a[0…4]和a[6…9]这二个子区间重复上述步骤就可以了。</p>
+<p>对挖坑填数进行总结</p>
+<ol>
+<li><p>i =L; j = R; 将基准数挖出形成第一个坑a[i]。</p>
+</li>
+<li><p>j—由后向前找比它小的数，找到后挖出此数填前一个坑a[i]中。</p>
+</li>
+<li><p>i++由前向后找比它大的数，找到后也挖出此数填到前一个坑a[j]中。</p>
+</li>
+<li><p>再重复执行2，3二步，直到i==j，将基准数填入a[i]中。</p>
+</li>
+</ol>
+<p>照着这个总结很容易实现挖坑填数的代码：</p>
+<pre><code><span class="keyword">void</span> quick_sort1(<span class="keyword">int</span> s[], <span class="keyword">int</span> l, <span class="keyword">int</span> r)
+{
+    <span class="keyword">if</span> (l &lt; r)
+    {
+        <span class="keyword">int</span> i = AdjustArray(s, l, r);<span class="comment">//先成挖坑填数法调整s[]</span>
+        quick_sort1(s, l, i - <span class="number">1</span>); <span class="comment">// 递归调用 </span>
+        quick_sort1(s, i + <span class="number">1</span>, r);
+    }
+}
+
+<span class="comment">//快速排序</span>
+<span class="keyword">void</span> quick_sort(<span class="keyword">int</span> s[], <span class="keyword">int</span> l, <span class="keyword">int</span> r)
+{
+    <span class="keyword">if</span> (l &lt; r)
+    {
+        <span class="comment">//Swap(s[l], s[(l + r) / 2]); //将中间的这个数和第一个数交换 参见注1</span>
+        <span class="keyword">int</span> i = l, j = r, x = s[l];
+        <span class="keyword">while</span> (i &lt; j)
+        {
+            <span class="keyword">while</span>(i &lt; j &amp;&amp; s[j] &gt;= x) <span class="comment">// 从右向左找第一个小于x的数</span>
+                j--;  
+            <span class="keyword">if</span>(i &lt; j) 
+                s[i++] = s[j];
+
+            <span class="keyword">while</span>(i &lt; j &amp;&amp; s[i] &lt; x) <span class="comment">// 从左向右找第一个大于等于x的数</span>
+                i++;  
+            <span class="keyword">if</span>(i &lt; j) 
+                s[j--] = s[i];
+        }
+        s[i] = x;
+        quick_sort(s, l, i - <span class="number">1</span>); <span class="comment">// 递归调用 </span>
+        quick_sort(s, i + <span class="number">1</span>, r);
+    }
+}
+</code></pre><hr>
+<h2 id="算法分析">算法分析</h2>
+<p>快速排序的时间主要耗费在划分操作上，对长度为k的区间进行划分，共需k-1次关键字的比较。</p>
+<h3 id="（1）最坏时间复杂度">（1）最坏时间复杂度</h3>
+<p>最坏情况是每次划分选取的基准都是当前无序区中关键字最小(或最大)的记录，划分的结果是基准左边的子区间为空(或右边的子区间为空)，而划分所得的另一个非空的子区间中记录数目，仅仅比划分前的无序区中记录个数减少一个。<br>    　<br>因此，快速排序必须做n-1次划分，第i次划分开始时区间长度为n-i+1，所需的比较次数为n-i(1≤i≤n-1)，故总的比较次数达到最大值：</p>
+<pre><code><span class="attribute">           Cmax </span>=<span class="string"> n(n-1)/2=O(n2)
+　</span>
+</code></pre><p>如果按上面给出的划分算法，每次取当前无序区的第1个记录为基准，那么当文件的记录已按递增序(或递减序)排列时，每次划分所取的基准就是当前无序区中关键字最小(或最大)的记录，则快速排序所需的比较次数反而最多。</p>
+<h3 id="（2）_最好时间复杂度">（2）    最好时间复杂度</h3>
+<p> 　<br>在最好情况下，每次划分所取的基准都是当前无序区的”中值”记录，划分的结果是基准的左、右两个无序子区间的长度大致相等。总的关键字比较次数 ：O(nlgn)</p>
+<p>注意：
+    　</p>
+<pre><code>    用递归树来分析最好情况下的比较次数更简单。因为每次划分后左、右子区间长度大致相等，故递归树的高度为<span class="keyword">O</span>(lgn)，而递归树每一层上各结点所对应的划分过程中所需要的关键字比较次数总和不超过n，故整个排序过程所需要的关键字比较总次数<span class="keyword">C</span>(n)=<span class="keyword">O</span>(nlgn)。
+    因为快速排序的记录移动次数不大于比较的次数，所以快速排序的最坏时间复杂度应为<span class="number">0</span>(n2)，最好时间复杂度为<span class="keyword">O</span>(nlgn)。
+</code></pre><h3 id="（3）基准关键字的选取">（3）基准关键字的选取</h3>
+<p>在当前无序区中选取划分的基准关键字是决定算法性能的关键。</p>
+<ul>
+<li>“三者取中”的规则<br>  　“三者取中”规则，即在当前区间里，将该区间首、尾和中间位置上的关键字比较，取三者之中值所对应的记录作为基准，在划分开始前将该基准记录和该区伺的第1个记录进行交换，此后的划分过程与上面所给的Partition算法完全相同。
+ 　</li>
+<li>取位于low和high之间的随机数k(low≤k≤high)，用R[k]作为基准<br>  　选取基准最好的方法是用一个随机函数产生一个取位于low和high之间的随机数k(low≤k≤high)，用R[k]作为基准，这相当于强迫R[low..high]中的记录是随机分布的。用此方法所得到的快速排序一般称为随机的快速排序。具体算法【参见教材】</li>
+</ul>
+<p>注意：
+　    </p>
+<pre><code>随机化的快速排序与一般的快速排序算法差别很小。但随机化后，算法的性能大大地提高了，尤其是对初始有序的文件，一般不可能导致最坏情况的发生。算法的随机化不仅仅适用于快速排序，也适用于其它需要数据随机分布的算法。
+</code></pre><h3 id="（4）平均时间复杂度">（4）平均时间复杂度</h3>
+<p>尽管快速排序的最坏时间为O(n2)，但就平均性能而言，它是基于关键字比较的内部排序算法中速度最快者，快速排序亦因此而得名。它的平均时间复杂度为O(nlgn)。</p>
+<h3 id="（5）空间复杂度">（5）空间复杂度</h3>
+<p>快速排序在系统内部需要一个栈来实现递归。若每次划分较为均匀，则其递归树的高度为O(lgn)，故递归后需栈空间为O(lgn)。最坏情况下，递归树的高度为O(n)，所需的栈空间为O(n)。</p>
+<h3 id="（6）稳定性">（6）稳定性</h3>
+<p>快速排序是非稳定的.</p>
+<hr>
+<h2 id="参考资料：">参考资料：</h2>
+<ul>
+<li><p><a href="http://student.zjzk.cn/course_ware/data_structure/web/paixu/paixu8.3.2.4.htm" target="_blank" rel="external">快速排序—算法分析</a></p>
+</li>
+<li><p><a href="http://blog.csdn.net/morewindows/article/details/6684558" target="_blank" rel="external">白话经典算法系列之六 快速排序 快速搞定</a></p>
+</li>
+<li><p><a href="http://blog.csdn.net/v_july_v/article/details/6116297" target="_blank" rel="external">快速排序算法</a></p>
+</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/algorithm/">algorithm</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/算法/">算法</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhonghuan.info/2014/09/16/浅析快速排序/" data-title="浅析快速排序 | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2014/09/16/浅析连续子向量(子数组)和问题/"  title="浅析连续子向量,子数组和(一维，二维)问题">
+ <strong>NEXT:</strong><br/> 
+ <span>浅析连续子向量,子数组和(一维，二维)问题
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本思想与特性"><span class="toc-number">1.</span> <span class="toc-text">基本思想与特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#步骤与代码实现"><span class="toc-number">2.</span> <span class="toc-text">步骤与代码实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#算法分析"><span class="toc-number">3.</span> <span class="toc-text">算法分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）最坏时间复杂度"><span class="toc-number">3.1.</span> <span class="toc-text">（1）最坏时间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）_最好时间复杂度"><span class="toc-number">3.2.</span> <span class="toc-text">（2）    最好时间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（3）基准关键字的选取"><span class="toc-number">3.3.</span> <span class="toc-text">（3）基准关键字的选取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（4）平均时间复杂度"><span class="toc-number">3.4.</span> <span class="toc-text">（4）平均时间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（5）空间复杂度"><span class="toc-number">3.5.</span> <span class="toc-text">（5）空间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（6）稳定性"><span class="toc-number">3.6.</span> <span class="toc-text">（6）稳定性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料："><span class="toc-number">4.</span> <span class="toc-text">参考资料：</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/webspider/" title="python网络爬虫">python网络爬虫<sup>2</sup></a></li>
+		
+			<li><a href="/categories/算法/" title="算法">算法<sup>4</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/KMP/" title="KMP">KMP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>4</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>2</sup></a></li>
+		
+			<li><a href="/tags/re/" title="re">re<sup>1</sup></a></li>
+		
+			<li><a href="/tags/urllib/" title="urllib">urllib<sup>1</sup></a></li>
+		
+			<li><a href="/tags/urllib2/" title="urllib2">urllib2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/webspider/" title="webspider">webspider<sup>2</sup></a></li>
+		
+			<li><a href="/tags/单调队列/" title="单调队列">单调队列<sup>1</sup></a></li>
+		
+			<li><a href="/tags/字符串匹配/" title="字符串匹配">字符串匹配<sup>1</sup></a></li>
+		
+			<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> You, lower the IQ of the street, go to study~~ <br/>
+			^_^</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/u/2103243911" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/ZHONGHuanGit" target="_blank" title="github"></a>
+		
+		
+	</div>
+		
+		<p class="copyright">
+			<font face="arial" size=“1”>
+ 			博客所有内容采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">自由转载-非商业用途-非衍生-保持署名的创作共用协议</a>
+			</font>
+		</p>
+		<p class="copyright">
+			<font face="arial" size=“1”>
+ 			Licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike License</a>.
+			</font>
+		</p>
+		
+
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhonghuan.info" target="_blank" title="钟桓">钟桓</a>
+		
+		<font face=“arial” size=“1”>
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253200423'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1253200423%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</font>
+		</p>
+</div>
+
+
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+  </body>
+</html>
