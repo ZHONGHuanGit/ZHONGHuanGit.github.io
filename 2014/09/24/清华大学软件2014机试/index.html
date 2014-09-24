@@ -1,0 +1,430 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>清华大学软件2014机试 | de部落格^_^</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="钟桓">
+    
+    <meta name="description" content="今天刚刚机试完，乘者还没忘记，把自己知道的记下来，也算是泽被后来人吧~~~
+这次的机试题，相对来说，会更简单一点，总共3题，时间是3小时。
+1 超级幸运数
+题目大致描述：
+一个数字，若是只含有1和4，这个数字就是幸运数，例如，14，114。但是514这样的就不是了，因为含有其它数字。  若这个幸运数">
+    
+    
+    
+    
+    <link rel="alternate" href="/atom.xml" title="de部落格^_^" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/BlogLogo64.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/BlogLogo64.ico">
+    <link rel="apple-touch-icon-precomposed" href="/img/BlogLogo64.ico">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/BlogLogo.png" alt="de部落格^_^" title="de部落格^_^"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="de部落格^_^">de部落格^_^</a></h1>
+				<h2 class="blog-motto">Keep Blogging，keep trying，never give up~</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">存档</a></li>
+					
+						<li><a href="/about">关于ZH</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhonghuan.info">
+					</form>
+					
+					</li>
+					
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/09/24/清华大学软件2014机试/" title="清华大学软件2014机试" itemprop="url">清华大学软件2014机试</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhonghuan.info" title="钟桓">钟桓</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-09-24T11:33:15.000Z" itemprop="datePublished">9月 24 2014</time>
+    更新日期:<time datetime="2014-09-24T11:34:35.000Z" itemprop="dateModified">9月 24 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1_超级幸运数"><span class="toc-number">1.</span> <span class="toc-text">1 超级幸运数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2_移动小球"><span class="toc-number">2.</span> <span class="toc-text">2 移动小球</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3_整理书架"><span class="toc-number">3.</span> <span class="toc-text">3 整理书架</span></a></li></ol>
+		</div>
+		
+		<p>今天刚刚机试完，乘者还没忘记，把自己知道的记下来，也算是泽被后来人吧~~~</p>
+<p>这次的机试题，相对来说，会更简单一点，总共3题，时间是3小时。</p>
+<h3 id="1_超级幸运数">1 超级幸运数</h3>
+<p>题目大致描述：</p>
+<p>一个数字，若是只含有1和4，这个数字就是幸运数，例如，14，114。但是514这样的就不是了，因为含有其它数字。  若这个幸运数字中，1和4的数量相同，那么就是超级幸运数，例如14，1144，41等等。</p>
+<p>题目要求，输入一个n，n的范围是[1,1e9]，输出[1,n]的最大超级幸运数。无解的话，输出-1.</p>
+<p>解题思路：</p>
+<p>这个题目，当n<14，那么显然是无解的，其余情况，最起码还有14，其实就是当>=14的时候，找一个最大的就好了，那么最大有什么规律，假设输入的n有x位，当位数是奇数的时候，输出(x-1)/2个4，和(x-1)/2个1，就好了。如果位数是偶数的话，那么，要考虑一下一些情况了，因为输出是不能大于n的，并且4和1的个数相等。还有，注意这样的数据1000，它的输出应该是41。</14，那么显然是无解的，其余情况，最起码还有14，其实就是当></p>
+<p>一些测试数据：</p>
+<p>in： 20  out：14</p>
+<p>in： 10  out： -1</p>
+<p>in：1000  out： 41</p>
+<h3 id="2_移动小球">2 移动小球</h3>
+<p>有一些小球，1，2，。。。，n；<br>有两种操作，分别是</p>
+<ul>
+<li>1 x y ,把x移动至y的左边</li>
+<li>2 x y ,把x移动至y的右边</li>
+</ul>
+<p>问得是，m次操作后，小球的顺序是什么..</p>
+<p>其实就是这样的，原本1，2，3，4，5.（如果n=5的话）。经过1 1 4操作后，变成2 3 1 4 5</p>
+<p>n数据范围[1,1000]</p>
+<p>m 数据范围[1,200000]</p>
+<p>解题思路：</p>
+<p>双向链表就能够解决这个问题。再用一个数组存储这些个节点的位置。</p>
+<p>测试数据：</p>
+<p>in ：  </p>
+<p>5， 2  （输入是 n m）</p>
+<p>1 1 4   （表示操作，1，x， y）</p>
+<p>2 4 2</p>
+<p>out：  2 4 3 1 5；</p>
+<h3 id="3_整理书架">3 整理书架</h3>
+<p>书店管理员要把书架上的书整理一下，其实就是一排书，让书的排序是按照书的高低，每本书有一个重量，重量越大，移动书时越费力，越累，让我们求的是，总的移动书本的最小重量是多少。</p>
+<p>给出的数据是：</p>
+<p>5（书的数量）</p>
+<p>1 2 5 3 3 （表示书的高度）</p>
+<p>1 1 3 1 1 （标示书的重量）</p>
+<p>输出是2，</p>
+<p>为什么是2，因为这里只需要把第4，第5本书移动到第三本书的前面，就能够保证书的有序，移动的重量和是2。</p>
+<p>解题思路：</p>
+<p>移动的重量和最小，其实就是求，不移动重量和的最大是多少。那么怎么求不移动的最大重量和呢？其实就是记录下每本书的位置，高度，重量，然后按照高度排序，排序完后，按照节点的位置，来求一个最大子序列，不过这个最大子序列，大不在长度上，而是重量和上，这样求出来的最大子序列重量和，就是不移动的最大重量和，总的重量减去它，就是我们要的答案</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhonghuan.info/2014/09/24/清华大学软件2014机试/" data-title="清华大学软件2014机试 | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2014/09/16/浅析快速排序/"  title="浅析快速排序">
+ <strong>NEXT:</strong><br/> 
+ <span>浅析快速排序
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1_超级幸运数"><span class="toc-number">1.</span> <span class="toc-text">1 超级幸运数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2_移动小球"><span class="toc-number">2.</span> <span class="toc-text">2 移动小球</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3_整理书架"><span class="toc-number">3.</span> <span class="toc-text">3 整理书架</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/webspider/" title="python网络爬虫">python网络爬虫<sup>2</sup></a></li>
+		
+			<li><a href="/categories/算法/" title="算法">算法<sup>4</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/KMP/" title="KMP">KMP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>4</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>2</sup></a></li>
+		
+			<li><a href="/tags/re/" title="re">re<sup>1</sup></a></li>
+		
+			<li><a href="/tags/urllib/" title="urllib">urllib<sup>1</sup></a></li>
+		
+			<li><a href="/tags/urllib2/" title="urllib2">urllib2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/webspider/" title="webspider">webspider<sup>2</sup></a></li>
+		
+			<li><a href="/tags/单调队列/" title="单调队列">单调队列<sup>1</sup></a></li>
+		
+			<li><a href="/tags/字符串匹配/" title="字符串匹配">字符串匹配<sup>1</sup></a></li>
+		
+			<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> You, lower the IQ of the street, go to study~~ <br/>
+			^_^</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/u/2103243911" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/ZHONGHuanGit" target="_blank" title="github"></a>
+		
+		
+	</div>
+		
+		<p class="copyright">
+			<font face="arial" size=“1”>
+ 			博客所有内容采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">自由转载-非商业用途-非衍生-保持署名的创作共用协议</a>
+			</font>
+		</p>
+		<p class="copyright">
+			<font face="arial" size=“1”>
+ 			Licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike License</a>.
+			</font>
+		</p>
+		
+
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhonghuan.info" target="_blank" title="钟桓">钟桓</a>
+		
+		<font face=“arial” size=“1”>
+		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253200423'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1253200423%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+		</font>
+		</p>
+</div>
+
+
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+  </body>
+</html>
