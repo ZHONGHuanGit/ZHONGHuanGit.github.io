@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Keep Blogging，keep trying，never give up~]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhonghuan.info/"/>
-  <updated>2014-09-27T14:25:39.949Z</updated>
+  <updated>2014-10-01T06:15:26.547Z</updated>
   <id>http://zhonghuan.info/</id>
   
   <author>
@@ -13,6 +13,57 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[pip介绍与使用]]></title>
+    <link href="http://zhonghuan.info/2014/10/01/pip%E4%BB%8B%E7%BB%8D%E4%B8%8E%E4%BD%BF%E7%94%A8/"/>
+    <id>http://zhonghuan.info/2014/10/01/pip介绍与使用/</id>
+    <published>2014-10-01T01:26:54.000Z</published>
+    <updated>2014-10-01T06:14:53.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="介绍">介绍</h2>
+<p>pip 是一个安装和管理 Python 包的工具，python安装包的工具有easy_install, setuptools, pip，distribute。使用这些工具都能下载并安装django。，而pip是easy_install的替代品。在CPython解释器，pypy解释器，可以很好地工作</p>
+<hr>
+<h2 id="安装pip">安装pip</h2>
+<p>安装和升级之前，先下载 <a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a></p>
+<p>然后使用下面的命令：</p>
+<pre><code><span class="keyword">python</span> <span class="built_in">get</span>-pip.<span class="keyword">py</span>
+</code></pre><p>不过注意一下，linux或osX下，需要权限，使用下面的命令，输入密码后即可。</p>
+<pre><code>sudo <span class="keyword">python</span> <span class="built_in">get</span>-pip.<span class="keyword">py</span> 
+</code></pre><p>windows下需要管理员权限启动终端。</p>
+<p>如果你还没有安装了<a href="http://baike.baidu.com/view/4944440.htm" target="_blank" rel="external">setuptools</a>，get-pip.py 会帮你安装。</p>
+<p>如果你已经安装了setuptools，运行下面的命令进行升级。</p>
+<pre><code>pip <span class="operator"><span class="keyword">install</span> -U setuptools</span>
+</code></pre><p>windows下，注意将pip路劲加到系统的path中，原因就不解释了吧。</p>
+<hr>
+<h2 id="升级pip">升级pip</h2>
+<p>Linux or OS X系统，运行下面的命令:</p>
+<pre><code>pip <span class="operator"><span class="keyword">install</span> -U pip</span>
+</code></pre><p>windows系统运行下面的命令：</p>
+<pre><code><span class="keyword">python</span> -<span class="keyword">m</span> pip install -U pip
+</code></pre><hr>
+<h2 id="安装包">安装包</h2>
+<p>使用下面的命令来安装包</p>
+<pre><code>pip <span class="operator"><span class="keyword">install</span> SomePackage            # latest <span class="keyword">version</span>
+pip <span class="keyword">install</span> SomePackage==<span class="number">1.0</span><span class="number">.4</span>     # specific <span class="keyword">version</span>
+pip <span class="keyword">install</span> <span class="string">'SomePackage&gt;=1.0.4'</span>     # minimum <span class="keyword">version</span></span>
+</code></pre><p>要看更多地例子，可以看这里<a href="https://pip.pypa.io/en/latest/reference/pip_install.html#pip-install" target="_blank" rel="external">pip install</a></p>
+<p>例如我要安装Django，用下面的一条命令即可，方便快捷。</p>
+<pre><code><span class="attribute">pip install Django=</span>=<span class="string">1.7</span>
+</code></pre><hr>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li><a href="https://pip.pypa.io/en/latest/installing.html" target="_blank" rel="external">pip</a></li>
+</ul>
+]]></content>
+    
+    
+      <category term="python安装管理工具" scheme="http://zhonghuan.info/tags/python%E5%AE%89%E8%A3%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/"/>
+    
+      <category term="pip" scheme="http://zhonghuan.info/tags/pip/"/>
+    
+      <category term="工具类，软件类介绍" scheme="http://zhonghuan.info/categories/%E5%B7%A5%E5%85%B7%E7%B1%BB%EF%BC%8C%E8%BD%AF%E4%BB%B6%E7%B1%BB%E4%BB%8B%E7%BB%8D/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[清华大学软件2014机试]]></title>

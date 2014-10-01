@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Hello World | de部落格^_^</title>
+    <title>pip介绍与使用 | de部落格^_^</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="钟桓">
     
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in ">
+    <meta name="description" itemprop="description" content="介绍一个python安装管理工具pip">
     
     
     
@@ -72,15 +72,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/09/01/hello-world/" title="Hello World" itemprop="url">Hello World</a>
+      <a href="/2014/10/01/pip介绍与使用/" title="pip介绍与使用" itemprop="url">pip介绍与使用</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhonghuan.info" title="钟桓">钟桓</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-09-01T08:28:04.000Z" itemprop="datePublished">9月 1 2014</time>
-    更新日期:<time datetime="2014-09-01T08:28:04.000Z" itemprop="dateModified">9月 1 2014</time>
+    <time datetime="2014-10-01T01:26:54.000Z" itemprop="datePublished">10月 1 2014</time>
+    更新日期:<time datetime="2014-10-01T06:14:53.000Z" itemprop="dateModified">10月 1 2014</time>
     
   </p>
 </header>
@@ -89,37 +89,63 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick_Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create_a_new_post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run_server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate_static_files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy_to_remote_sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装pip"><span class="toc-number">2.</span> <span class="toc-text">安装pip</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#升级pip"><span class="toc-number">3.</span> <span class="toc-text">升级pip</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装包"><span class="toc-number">4.</span> <span class="toc-text">安装包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">5.</span> <span class="toc-text">参考资料</span></a></li></ol>
 		</div>
 		
-		<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">trobuleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2>
-<h3 id="Create_a_new_post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+		<h2 id="介绍">介绍</h2>
+<p>pip 是一个安装和管理 Python 包的工具，python安装包的工具有easy_install, setuptools, pip，distribute。使用这些工具都能下载并安装django。，而pip是easy_install的替代品。在CPython解释器，pypy解释器，可以很好地工作</p>
+<hr>
+<h2 id="安装pip">安装pip</h2>
+<p>安装和升级之前，先下载 <a href="https://bootstrap.pypa.io/get-pip.py" target="_blank" rel="external">get-pip.py</a></p>
+<p>然后使用下面的命令：</p>
+<pre><code><span class="keyword">python</span> <span class="built_in">get</span>-pip.<span class="keyword">py</span>
+</code></pre><p>不过注意一下，linux或osX下，需要权限，使用下面的命令，输入密码后即可。</p>
+<pre><code>sudo <span class="keyword">python</span> <span class="built_in">get</span>-pip.<span class="keyword">py</span> 
+</code></pre><p>windows下需要管理员权限启动终端。</p>
+<p>如果你还没有安装了<a href="http://baike.baidu.com/view/4944440.htm" target="_blank" rel="external">setuptools</a>，get-pip.py 会帮你安装。</p>
+<p>如果你已经安装了setuptools，运行下面的命令进行升级。</p>
+<pre><code>pip <span class="operator"><span class="keyword">install</span> -U setuptools</span>
+</code></pre><p>windows下，注意将pip路劲加到系统的path中，原因就不解释了吧。</p>
+<hr>
+<h2 id="升级pip">升级pip</h2>
+<p>Linux or OS X系统，运行下面的命令:</p>
+<pre><code>pip <span class="operator"><span class="keyword">install</span> -U pip</span>
+</code></pre><p>windows系统运行下面的命令：</p>
+<pre><code><span class="keyword">python</span> -<span class="keyword">m</span> pip install -U pip
+</code></pre><hr>
+<h2 id="安装包">安装包</h2>
+<p>使用下面的命令来安装包</p>
+<pre><code>pip <span class="operator"><span class="keyword">install</span> SomePackage            # latest <span class="keyword">version</span>
+pip <span class="keyword">install</span> SomePackage==<span class="number">1.0</span><span class="number">.4</span>     # specific <span class="keyword">version</span>
+pip <span class="keyword">install</span> <span class="string">'SomePackage&gt;=1.0.4'</span>     # minimum <span class="keyword">version</span></span>
+</code></pre><p>要看更多地例子，可以看这里<a href="https://pip.pypa.io/en/latest/reference/pip_install.html#pip-install" target="_blank" rel="external">pip install</a></p>
+<p>例如我要安装Django，用下面的一条命令即可，方便快捷。</p>
+<pre><code><span class="attribute">pip install Django=</span>=<span class="string">1.7</span>
+</code></pre><hr>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li><a href="https://pip.pypa.io/en/latest/installing.html" target="_blank" rel="external">pip</a></li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
 
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/python安装管理工具/">python安装管理工具</a><a href="/tags/pip/">pip</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/工具类，软件类介绍/">工具类，软件类介绍</a>
+</div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhonghuan.info/2014/09/01/hello-world/" data-title="Hello World | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
+  <div data-url="http://zhonghuan.info/2014/10/01/pip介绍与使用/" data-title="pip介绍与使用 | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
   </div>
 
 </div>
@@ -128,14 +154,14 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/09/04/python网络爬虫学习笔记/" title="python网络爬虫学习笔记">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  python网络爬虫学习笔记</span>
+
+<div class="next">
+<a href="/2014/09/24/清华大学软件2014机试/"  title="清华大学软件2014机试">
+ <strong>NEXT:</strong><br/> 
+ <span>清华大学软件2014机试
+</span>
 </a>
 </div>
-
 
 </nav>
 
@@ -149,7 +175,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick_Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create_a_new_post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run_server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate_static_files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy_to_remote_sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装pip"><span class="toc-number">2.</span> <span class="toc-text">安装pip</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#升级pip"><span class="toc-number">3.</span> <span class="toc-text">升级pip</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装包"><span class="toc-number">4.</span> <span class="toc-text">安装包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">5.</span> <span class="toc-text">参考资料</span></a></li></ol>
   </div>
 
 <div id="asidepart">
