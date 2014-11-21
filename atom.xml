@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Keep Blogging，keep trying，never give up~]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhonghuan.info/"/>
-  <updated>2014-10-15T17:03:09.384Z</updated>
+  <updated>2014-11-21T16:33:01.711Z</updated>
   <id>http://zhonghuan.info/</id>
   
   <author>
@@ -13,6 +13,49 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[flashlight--spotlight的好帮手]]></title>
+    <link href="http://zhonghuan.info/2014/11/22/flashlight-spotlight%E7%9A%84%E5%A5%BD%E5%B8%AE%E6%89%8B/"/>
+    <id>http://zhonghuan.info/2014/11/22/flashlight-spotlight的好帮手/</id>
+    <published>2014-11-21T16:29:30.000Z</published>
+    <updated>2014-11-21T16:32:42.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="Flashlight简介：">Flashlight简介：</h3>
+<p>OS X Yosemite 上全新的 Spotlight 越发强大，大有吞并 LaunchBar 6 与 Alfread 之势，但碍于官方 API 的种种限制，很多 Web 内容、文件和应用程序不能直接在其搜索框调用。为此一款基于 Python 编写的 Spotlight 插件应运而生。这个便是Flashlight啦。</p>
+<p>那么它的作用是什么？如果你用过Alfred的话，那么对于Flashlight的定义就是给Spotlight写workflow的插件。</p>
+<p>Spotlight的作用，用过的人都知道了，就不详述了，那么flashlight给Spotlight带来了什么呢？为什么大家说，有了flashlight的话，未来Spotlight会替代Alfred（当然，这句话有待观察，毕竟Flashlight现在还不太稳定）</p>
+<hr>
+<h3 id="功能">功能</h3>
+<p>主要能够实现的功能。下面列出我觉得几个不错的扩展功能。</p>
+<ul>
+<li>天气搜索，通过 Flashlight 提供的 API 接口，Spotlight 搜索框内会显示动态天气动画与未来三天的天气预测，用法：weather + 地址</li>
+</ul>
+<p><img src="http://zhonghuan.qiniudn.com/osX/flashlight/weather.gif" alt=""></p>
+<ul>
+<li>有道词典翻译，通过 Flashlight 提供的 API 接口，Spotlight 搜索框内需要翻译的内容。用法yd + （内容）</li>
+</ul>
+<p><img src="http://zhonghuan.qiniudn.com/osX/flashlight/youdao1.gif" alt=""></p>
+<ul>
+<li>WolframAlpha搜索，WolframAlpha是一个自动问答网站，非常智慧。用法 walpha + 问题<br><img src="http://zhonghuan.qiniudn.com/osX/flashlight/walpha.gif" alt=""></li>
+</ul>
+<ul>
+<li>知乎日报的功能。 用法 zhihu + (daily || hot || 20140822(该日期热点新闻)）<br><img src="http://zhonghuan.qiniudn.com/osX/flashlight/zhihu1.gif" alt=""></li>
+</ul>
+<hr>
+<p>Flashlight，就是提供给开发者一个平台，给Spotlight增加用户需要的一些额外的功能。</p>
+<p><img src="http://zhonghuan.qiniudn.com/osX/flashlight/flashlight.png" alt=""></p>
+<hr>
+<h3 id="开发">开发</h3>
+<p>如果你想要给Spotlight增加一些额外的功能，可以看这里<a href="https://github.com/nate-parrott/Flashlight" target="_blank" rel="external">https://github.com/nate-parrott/Flashlight</a></p>
+<p>上面的功能介绍中，第四个知乎日报，是由本人闲得时候贡献的，具体可以看这里<a href="https://github.com/ZHONGHuanGit/ZhihuDaily" target="_blank" rel="external">https://github.com/ZHONGHuanGit/ZhihuDaily</a> 要是觉得不错，请点个star</p>
+]]></content>
+    
+    
+      <category term="osX" scheme="http://zhonghuan.info/tags/osX/"/>
+    
+      <category term="工具类，软件类介绍" scheme="http://zhonghuan.info/categories/%E5%B7%A5%E5%85%B7%E7%B1%BB%EF%BC%8C%E8%BD%AF%E4%BB%B6%E7%B1%BB%E4%BB%8B%E7%BB%8D/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[电子商务发展对企业和消费者行为带来了哪些变化]]></title>
@@ -170,7 +213,7 @@ pip <span class="keyword">install</span> <span class="string">'SomePackage&gt;=1
     <link href="http://zhonghuan.info/2014/09/16/%E6%B5%85%E6%9E%90%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/"/>
     <id>http://zhonghuan.info/2014/09/16/浅析快速排序/</id>
     <published>2014-09-16T08:08:44.000Z</published>
-    <updated>2014-09-16T08:10:04.000Z</updated>
+    <updated>2014-11-21T16:30:21.000Z</updated>
     <content type="html"><![CDATA[<h2 id="基本思想与特性">基本思想与特性</h2>
 <p>快速排序是C.R.A.Hoare于1962年提出的一种划分交换排序。它采用了一种分治的策略，通常称其为分治法(Divide-and-ConquerMethod)。</p>
 <p>该方法的基本思想是：</p>
