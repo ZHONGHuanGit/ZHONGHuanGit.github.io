@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>浅析编译原理-上下文无关文法 | de部落格^_^</title>
+    <title>Mac下“一键回桌面”应用开发笔记 | de部落格^_^</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="钟桓">
     
-    <meta name="description" itemprop="description" content="上下文无关文法的简单理解">
+    <meta name="description" itemprop="description" content="正则表达式部分和python的re模块使用学习笔记，可供入门">
     
     
     
@@ -72,15 +72,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/11/23/浅析编译原理-上下文无关文法/" title="浅析编译原理-上下文无关文法" itemprop="url">浅析编译原理-上下文无关文法</a>
+      <a href="/2015/03/03/Mac下“一键回桌面”应用开发笔记/" title="Mac下“一键回桌面”应用开发笔记" itemprop="url">Mac下“一键回桌面”应用开发笔记</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhonghuan.info" title="钟桓">钟桓</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-11-23T15:47:09.000Z" itemprop="datePublished">11月 23 2014</time>
-    更新日期:<time datetime="2014-11-23T15:50:09.000Z" itemprop="dateModified">11月 23 2014</time>
+    <time datetime="2015-03-03T13:48:32.000Z" itemprop="datePublished">3月 3 2015</time>
+    更新日期:<time datetime="2015-03-03T13:49:21.000Z" itemprop="dateModified">3月 3 2015</time>
     
   </p>
 </header>
@@ -89,100 +89,29 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#上下文无关的文法"><span class="toc-number">1.</span> <span class="toc-text">上下文无关的文法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从例子中理解"><span class="toc-number">2.</span> <span class="toc-text">从例子中理解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#补充"><span class="toc-number">3.</span> <span class="toc-text">补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料："><span class="toc-number">4.</span> <span class="toc-text">参考资料：</span></a></li></ol>
+		
 		</div>
 		
-		<p>查找wiki，是这样说文法，文法即文章的书写法规，一般用来指以文字、词语、短句、句子[1]编排而成的完整语句和文章的合理性组织。语言的结构方式。包括词的构成和变化﹐词组和句子的组织。</p>
-<pre><code>例如：
-最简单的语句组合一：主词及动词：
-“我”“哭了”
-（主语）+（动词）
-“天气”“改变了”
-</code></pre><p>其实说白了，在程序语言中，就是语言的构造规则。例如中文的构造规则是：&lt;主语&gt;&lt;谓语&gt;&lt;宾语&gt;&lt;补语&gt;&lt;状语&gt;。英文的构造规则是：S十V主谓结构 S十V十F主系表结构 S十V十O主谓宾结构 S十V十O1十O2主谓双宾结构 S十V十O十C主谓宾补结构说明：S＝主语；V＝谓语；P＝表语；O＝宾语；O1＝间接宾语；O2＝直接宾语；C＝宾语补足语。我们可以看出汉语和英语有不同的编排，不同的规则，这就是文法的不同。 </p>
-<hr>
-<h3 id="上下文无关的文法">上下文无关的文法</h3>
-<p>上下文无关的文法，是文法中一种，它是这样定义的：</p>
-<p>一个上下文无关文法G包括四个组成部分：</p>
-<ul>
-<li>一组终结符号</li>
-<li>一组非终结符</li>
-<li>一个开始符号</li>
-<li>一组产生式。</li>
-</ul>
-<p>所谓终结符号：</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;乃是组成语言的基本符号，即在程序语言中以前屡次提到的单词符号，如基本字，标识符，常数，算符和界符等</p>
-<p>所谓非终结符号（也称语法变量）:</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用来代表语法范畴。如“算术表达式”、“布尔表达式”、“过程”等。一个非终结符代表一个一定的语法概念。因此非终结符是一个类（或集合）记号，而不是个体记号。</p>
-<p>开始符号:</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是一个特殊的非终结符号，它代表所定义的语言中我们最感兴趣的语法范畴，这个语法范畴通常称为“句子”。但在程序语言中我们最终感兴趣的是“程序”这个语法范畴，而其他的语法范畴都只不过是构造“程序”的一块块砖石。</p>
-<p>产生式（也称为产生规则或简称规则）</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是定义语法范畴的一种书写规则。一个产生式的形式是  A→ α ,其中箭头左边的A是一个终结符，称为产生式的左部符号；箭头右边的α是终结符号或与非终结符号组成的一符号串，称为产生式的右部。</p>
-<p>看完上面的概念，似乎仍旧不太理解，让我们来看下面的例子，从例子中理解。</p>
-<hr>
-<h3 id="从例子中理解">从例子中理解</h3>
-<p>分析句子：The grey wolf will eat  the  goat .</p>
-<p>这个句子的结构如下图:</p>
-<p><img src="http://zhonghuan.qiniudn.com/CompilerTheory/上下文无关文法/上下文无关文法1.jpeg" alt=""></p>
-<p>可以从上面的图中清晰地看出句子的成分。</p>
-<p>上面树中的每一个<strong>叶子节点中的单词</strong>，对应的就是上下文无关文法中的<strong>终结符号</strong>。</p>
-<p>而句子的<strong>开始符号</strong>就是<strong>根节点&lt;句子&gt;</strong></p>
-<p>而句子的产生式，如下图：</p>
-<p><img src="http://zhonghuan.qiniudn.com/CompilerTheory/上下文无关文法/上下文无关文法2.jpeg" alt=""></p>
-<p>那么什么是<strong>非终结符号</strong>呢？它对应着上面树中的<strong>非叶子节点</strong>，是滴，你木有看错，飞叶子节点，包括<strong>根节点句子</strong>。</p>
-<p><img src="http://zhonghuan.qiniudn.com/CompilerTheory/上下文无关文法/上下文无关文法3.jpeg" alt=""></p>
-<p>看到这里，估计你对于上下文无关文法有了一个大致的了解。</p>
-<p>前面我们提到过可以用一张图表示一个句型的推导，这种表示称为语法分析树，或简称语法树。</p>
-<p>语法树的根结由开始符号所标记。随着推导的展开，当某个非终结符被它的某个候选式所替换时，这个非终结符的相应结就产生了下一代新结。每个新结和其父亲结间都有一条连线。在一棵语法树生长过程中的任何时刻，所有那些没有后代的端末结自左至右排列起来就是一个句型。</p>
-<hr>
-<h3 id="补充">补充</h3>
-<p>首先引入几个概念：</p>
-<p>设Σ是一个有穷字母表，它的每个元素称为一个符号。 Σ上的一个符号串是指由Σ中的符号所构成的有穷序列。不包含符号的序列称为空字符，记为ε。用Σ*表示Σ上的所有符号串的全体，空字也包括在其中。</p>
-<pre><code>如：若Σ=<span class="list">{a,b}</span>则Σ*=<span class="list">{,a,b,aa,ab,bb,aaa,…}</span>。Σ表示不含人何元素的空集<span class="list">{}</span>。这里要注意ε、<span class="list">{}</span>和<span class="list">{ε}</span>的区别
-</code></pre><p>Σ*的子集U和V中的（连接）积定义为:</p>
-<pre><code><span class="attribute">UV</span>=<span class="string">{αβ∣α∈U &amp; β∈V }</span>
-</code></pre><p>即集合UV中的符号串是由U和V的符号串连接而成的。注意，一般UV≠VU，但（UV)W=U(VW).<br>V自身的n次（连接）积记为：</p>
-<pre><code><span class="attribute">Vn </span>=<span class="string"> V V…V   (n个V)</span>
-</code></pre><p>规定 V0 = {}.<br>   令： V*  = V0 ∪ V1 ∪ V2 ∪ …<br>   称 V*是V的闭包。<br>记V+ = VV*, 称 V+是V的正则包。</p>
-<p>闭包V*中的每个符号都是由V中的符号串经有限次连接而成的。</p>
-<p>假定G是一个文法，S是它的开始符号。如果S→*α(表示从S出发，经0步或若干步可推出α），则称α是一个句型。仅含终结符号的句型是一个句子。文法G所产生的句子的全体是一个语言，将它记为L(G).</p>
-<pre><code><span class="attribute"> L(G)</span>=<span class="string">{|S →* α &amp; α ∈ VT }</span>
-</code></pre><p>例如：终结符号串（i*i+i)是文法</p>
-<pre><code><span class="keyword">E</span>→<span class="keyword">E</span>+<span class="keyword">E</span>|<span class="keyword">E</span>\*<span class="keyword">E</span>|(<span class="keyword">E</span>)|ｉ　　　  (<span class="number">2.1</span>)
-</code></pre><p>的一个句子。是因为有</p>
-<pre><code><span class="keyword">E</span> → (<span class="keyword">E</span>) → (<span class="keyword">E</span>+<span class="keyword">E</span>) → (<span class="keyword">E</span>*<span class="keyword">E</span>+<span class="keyword">E</span>) → (i*<span class="keyword">E</span>+<span class="keyword">E</span>)
-→ (i*i+<span class="keyword">E</span>) → (i*i+i)从开始符号<span class="keyword">E</span>至
- （i*i+i)的一个推导。而<span class="keyword">E</span>,(<span class="keyword">E</span>),(<span class="keyword">E</span>*<span class="keyword">E</span>+<span class="keyword">E</span>)等是文法的句型。
-</code></pre><p>考虑一个文法G1:</p>
-<pre><code>  S→bA
-  <span class="literal">A</span>→aA|<span class="literal">a</span> 它定义了一个什么语言呢？
-</code></pre><p>从开始符S出发，我们可以推出如下句子：<br>   S → bA → ba<br>   S → bA → baA → baa<br>   S → bA → baA → …  → baa…a<br>可以写为：L(G1)={ba^n|n≥1}</p>
-<hr>
-<h3 id="参考资料：">参考资料：</h3>
-<ul>
-<li><a href="http://zh.wikipedia.org/zh-cn/%E6%96%87%E6%B3%95" target="_blank" rel="external">wiki 文法</a></li>
-<li><a href="http://book.douban.com/subject/3296317/" target="_blank" rel="external">编译原理</a></li>
-<li><a href="">编译原理学习周入门教程—（3）文法和语言</a></li>
-</ul>
-  
+		  
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/编译原理/">编译原理</a>
+  <span></span> <a href="/tags/python/">python</a><a href="/tags/webspider/">webspider</a><a href="/tags/re/">re</a><a href="/tags/正则表达式/">正则表达式</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/编译/">编译</a>
+  <a class="article-category-link" href="/categories/webspider/">python网络爬虫</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhonghuan.info/2014/11/23/浅析编译原理-上下文无关文法/" data-title="浅析编译原理-上下文无关文法 | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
+  <div data-url="http://zhonghuan.info/2015/03/03/Mac下“一键回桌面”应用开发笔记/" data-title="Mac下“一键回桌面”应用开发笔记 | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
   </div>
 
 </div>
@@ -191,19 +120,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/03/03/Mac下“一键回桌面”应用开发笔记/" title="Mac下“一键回桌面”应用开发笔记">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  Mac下“一键回桌面”应用开发笔记</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/11/22/flashlight-spotlight的好帮手/"  title="flashlight--spotlight的好帮手">
+<a href="/2014/11/23/浅析编译原理-上下文无关文法/"  title="浅析编译原理-上下文无关文法">
  <strong>NEXT:</strong><br/> 
- <span>flashlight--spotlight的好帮手
+ <span>浅析编译原理-上下文无关文法
 </span>
 </a>
 </div>
@@ -220,7 +141,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#上下文无关的文法"><span class="toc-number">1.</span> <span class="toc-text">上下文无关的文法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从例子中理解"><span class="toc-number">2.</span> <span class="toc-text">从例子中理解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#补充"><span class="toc-number">3.</span> <span class="toc-text">补充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料："><span class="toc-number">4.</span> <span class="toc-text">参考资料：</span></a></li></ol>
+  
   </div>
 
 <div id="asidepart">
