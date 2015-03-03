@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Enjoy your choice, enjoy your life.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhonghuan.info/"/>
-  <updated>2015-03-03T14:45:46.205Z</updated>
+  <updated>2015-03-03T15:05:04.611Z</updated>
   <id>http://zhonghuan.info/</id>
   
   <author>
@@ -19,8 +19,8 @@
     <link href="http://zhonghuan.info/2015/03/03/Mac%E4%B8%8B%E2%80%9C%E4%B8%80%E9%94%AE%E5%9B%9E%E6%A1%8C%E9%9D%A2%E2%80%9D%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/"/>
     <id>http://zhonghuan.info/2015/03/03/Mac下“一键回桌面”应用开发笔记/</id>
     <published>2015-03-03T13:48:32.000Z</published>
-    <updated>2015-03-03T14:20:54.000Z</updated>
-    <content type="html"><![CDATA[<p>偶然看到别人的写得一篇<a href="http://jiajixin.cn/2015/02/21/mac-application-show-desktop/" target="_blank" rel="external">blog</a>,觉得挺有趣的，并且，一键回桌面，对我来说，也是挺常用的，所以，就试着自己开发了一个，不过原来的作者使用的是objective c开发的。这里使用的是Swift语言来进行开发，也是加深自己对于Swift的运用吧。</p>
+    <updated>2015-03-03T15:04:42.000Z</updated>
+    <content type="html"><![CDATA[<p>偶然看到别人的写得一篇<a href="http://jiajixin.cn/2015/02/21/mac-application-show-desktop/" target="_blank" rel="external">Mac下显示桌面应用开发</a>,觉得挺有趣的，并且，一键回桌面，对我来说，也是挺常用的，所以，就试着自己开发了一个，不过原来的作者使用的是objective c开发的。这里使用的是Swift语言来进行开发，也是加深自己对于Swift的运用吧。</p>
 <h3 id="功能">功能</h3>
 <ol>
 <li>状态栏点击图标，即显示桌面，所有显示窗口最小化。</li>
@@ -59,6 +59,10 @@ statusItem.<span class="variable">action =</span> Selector(<span class="string">
 </code></pre><p>其中0x37，对应的是Command按键。</p>
 <h3 id="开机启动">开机启动</h3>
 <p>Swift开机启动，我是看了这个<a href="http://stackoverflow.com/questions/26475008/swift-getting-a-mac-app-to-launch-on-startup" target="_blank" rel="external">stackoverflow的提问</a>,了解的。</p>
+<h3 id="效果展示">效果展示</h3>
+<p><img src="http://zhonghuan.qiniudn.com/showDesktop.gif" alt=""></p>
+<h3 id="代码">代码</h3>
+<p>代码都放在我的github上了，喜欢的朋友请点个赞，觉得有必要改进的朋友，可以fork之后，再合并给我。</p>
 ]]></content>
     
     

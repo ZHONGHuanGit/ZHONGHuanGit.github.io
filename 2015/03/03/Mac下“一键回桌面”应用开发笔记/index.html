@@ -80,7 +80,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-03-03T13:48:32.000Z" itemprop="datePublished">3月 3 2015</time>
-    更新日期:<time datetime="2015-03-03T14:20:54.000Z" itemprop="dateModified">3月 3 2015</time>
+    更新日期:<time datetime="2015-03-03T15:04:42.000Z" itemprop="dateModified">3月 3 2015</time>
     
   </p>
 </header>
@@ -89,10 +89,10 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#功能"><span class="toc-number">1.</span> <span class="toc-text">功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#状态栏"><span class="toc-number">2.</span> <span class="toc-text">状态栏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#显示桌面"><span class="toc-number">3.</span> <span class="toc-text">显示桌面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开机启动"><span class="toc-number">4.</span> <span class="toc-text">开机启动</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#功能"><span class="toc-number">1.</span> <span class="toc-text">功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#状态栏"><span class="toc-number">2.</span> <span class="toc-text">状态栏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#显示桌面"><span class="toc-number">3.</span> <span class="toc-text">显示桌面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开机启动"><span class="toc-number">4.</span> <span class="toc-text">开机启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#效果展示"><span class="toc-number">5.</span> <span class="toc-text">效果展示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码"><span class="toc-number">6.</span> <span class="toc-text">代码</span></a></li></ol>
 		</div>
 		
-		<p>偶然看到别人的写得一篇<a href="http://jiajixin.cn/2015/02/21/mac-application-show-desktop/" target="_blank" rel="external">blog</a>,觉得挺有趣的，并且，一键回桌面，对我来说，也是挺常用的，所以，就试着自己开发了一个，不过原来的作者使用的是objective c开发的。这里使用的是Swift语言来进行开发，也是加深自己对于Swift的运用吧。</p>
+		<p>偶然看到别人的写得一篇<a href="http://jiajixin.cn/2015/02/21/mac-application-show-desktop/" target="_blank" rel="external">Mac下显示桌面应用开发</a>,觉得挺有趣的，并且，一键回桌面，对我来说，也是挺常用的，所以，就试着自己开发了一个，不过原来的作者使用的是objective c开发的。这里使用的是Swift语言来进行开发，也是加深自己对于Swift的运用吧。</p>
 <h3 id="功能">功能</h3>
 <ol>
 <li>状态栏点击图标，即显示桌面，所有显示窗口最小化。</li>
@@ -131,6 +131,10 @@ statusItem.<span class="variable">action =</span> Selector(<span class="string">
 </code></pre><p>其中0x37，对应的是Command按键。</p>
 <h3 id="开机启动">开机启动</h3>
 <p>Swift开机启动，我是看了这个<a href="http://stackoverflow.com/questions/26475008/swift-getting-a-mac-app-to-launch-on-startup" target="_blank" rel="external">stackoverflow的提问</a>,了解的。</p>
+<h3 id="效果展示">效果展示</h3>
+<p><img src="http://zhonghuan.qiniudn.com/showDesktop.gif" alt=""></p>
+<h3 id="代码">代码</h3>
+<p>代码都放在我的github上了，喜欢的朋友请点个赞，觉得有必要改进的朋友，可以fork之后，再合并给我。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -180,7 +184,7 @@ statusItem.<span class="variable">action =</span> Selector(<span class="string">
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#功能"><span class="toc-number">1.</span> <span class="toc-text">功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#状态栏"><span class="toc-number">2.</span> <span class="toc-text">状态栏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#显示桌面"><span class="toc-number">3.</span> <span class="toc-text">显示桌面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开机启动"><span class="toc-number">4.</span> <span class="toc-text">开机启动</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#功能"><span class="toc-number">1.</span> <span class="toc-text">功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#状态栏"><span class="toc-number">2.</span> <span class="toc-text">状态栏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#显示桌面"><span class="toc-number">3.</span> <span class="toc-text">显示桌面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开机启动"><span class="toc-number">4.</span> <span class="toc-text">开机启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#效果展示"><span class="toc-number">5.</span> <span class="toc-text">效果展示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码"><span class="toc-number">6.</span> <span class="toc-text">代码</span></a></li></ol>
   </div>
 
 <div id="asidepart">
