@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Enjoy your choice, enjoy your life.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhonghuan.info/"/>
-  <updated>2015-03-04T01:52:39.924Z</updated>
+  <updated>2015-03-10T09:04:08.515Z</updated>
   <id>http://zhonghuan.info/</id>
   
   <author>
@@ -13,6 +13,84 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[osx XAMPP 403 error及在mac下的XAMPP下配置VirtualHosts]]></title>
+    <link href="http://zhonghuan.info/2015/03/10/osx-XAMPP-403-error%E5%8F%8A%E5%9C%A8mac%E4%B8%8B%E7%9A%84XAMPP%E4%B8%8B%E9%85%8D%E7%BD%AEVirtualHosts/"/>
+    <id>http://zhonghuan.info/2015/03/10/osx-XAMPP-403-error及在mac下的XAMPP下配置VirtualHosts/</id>
+    <published>2015-03-10T07:28:47.000Z</published>
+    <updated>2015-03-10T09:03:48.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="error_403">error 403</h3>
+<p>你发现，安装完XAMPP，默认的localhost对应的地址是在/Applications/XAMPP/xamppfiles/htdocs下，可以将应用部署在这儿。(当然，也可以不用，文章后面会介绍VirtualHosts，就是解决这个问题的。)</p>
+<p>然后，通过XAMPP的manager-osx启动apache服务器后，访问你的应用，可能会提示出403 error。原因，主要是—权限-的问题。apache默认是没有用户的，但是，在mac下，你需要在XAMPP的配置文件里设置user。步骤如下：</p>
+<ol>
+<li>打开/Applications/XAMPP/xamppfiles/etc/httpd.conf</li>
+<li><p>找到如下代码出：</p>
+<pre><code> # User/<span class="keyword">Group</span>: The name (<span class="keyword">or</span> #number) <span class="keyword">of</span> the user/<span class="keyword">group</span> <span class="keyword">to</span> run httpd <span class="keyword">as</span>.
+ # It <span class="keyword">is</span> usually good practice <span class="keyword">to</span> <span class="keyword">create</span> a dedicated user <span class="keyword">and</span> <span class="keyword">group</span> <span class="keyword">for</span>
+ # running httpd, <span class="keyword">as</span> <span class="keyword">with</span> most system services.
+ #
+ User daemon
+ <span class="keyword">Group</span> daemon
+</code></pre><p>更改User和Group后面的内容，具体可以在mac下，系统偏好设置—&gt;用户与群组， 先解锁，然后触摸板双击或者鼠标右键当前用户，选择 高级选项。然后里面的账号名称对应User，群组对应group。</p>
+</li>
+<li><p>在终端中运行下面的命令。</p>
+<pre><code> sudo chown -R 你当前的用户名字 <span class="regexp">/Applications/</span>XAMPP<span class="regexp">/xamppfiles/</span>htdocs
+</code></pre></li>
+</ol>
+<p>然后，再重启Apache服务器,ok 问题解决。</p>
+<h3 id="在mac下的XAMPP下配置VirtualHosts">在mac下的XAMPP下配置VirtualHosts</h3>
+<p>什么是virtualHosts，virtualHosts允许apache将hostname和目录对应起来。怎么说呢，就像上面的localhost，对应的是/Applications/XAMPP/xamppfiles/htdocs目录，有时候我们需要mysite.local（名字自己随便取）对应 /Users/yourusername/mysite(应用所在的目录)。</p>
+<p>过程如下：</p>
+<h5 id="允许VirtualHosts">允许VirtualHosts</h5>
+<p>打开/Applications/XAMPP/xamppfiles/etc/httpd.conf，找到下面的部分：</p>
+<pre><code>        # Virtual hosts
+        #<span class="keyword">Include</span> <span class="regexp">/Applications/</span>XAMPP<span class="regexp">/etc/</span>extra<span class="regexp">/httpd-vhosts.conf</span>
+</code></pre><p>然后去掉#：</p>
+<pre><code>        # Virtual hosts
+        <span class="keyword">Include</span> <span class="regexp">/Applications/</span>XAMPP<span class="regexp">/etc/</span>extra<span class="regexp">/httpd-vhosts.conf</span>
+</code></pre><h5 id="创建VirtualHosts">创建VirtualHosts</h5>
+<p>创建VirtualHosts，在/Applications/XAMPP/xamppfiles/etc/extra/httpd-vhosts.conf尾部，添加</p>
+<pre><code>        <span class="comment"># My custom host</span>
+        <span class="tag">&lt;VirtualHost *:80&gt;</span>
+            <span class="keyword"><span class="common">ServerName</span></span> mysite.local
+            <span class="keyword"><span class="common">DocumentRoot</span></span> <span class="string">"/Users/yourusername/path/to/your/site"</span>
+            <span class="tag">&lt;Directory "/Users/yourusername/path/to/your/site"&gt;</span>
+                <span class="keyword"><span class="common">Options</span></span> Indexes FollowSymLinks Includes ExecCGI
+                <span class="keyword">AllowOverride</span> <span class="literal">All</span>
+                <span class="keyword">Require</span> <span class="literal">all</span> granted
+            <span class="tag">&lt;/Directory&gt;</span>
+            <span class="keyword">ErrorLog</span> <span class="string">"logs/mysite.local-error_log"</span>
+        <span class="tag">&lt;/VirtualHost&gt;</span>
+</code></pre><p>记住，mysite.local是自定义的host name。</p>
+<h6 id="编辑hosts文件">编辑hosts文件</h6>
+<p>完成上面的步骤，你只是在Apache内完成配置，当你在浏览器内访问mysite.local时候，浏览器并不知道这一切，你需要在hosts文件内，将mysite.local和127.0.0.1绑定映射。</p>
+<p>打开终端，输入：</p>
+<pre><code>    <span class="built_in">sudo</span> nano /etc/hosts
+</code></pre><p>输入：</p>
+<pre><code>    <span class="comment"># XAMPP VirtualHost mappings</span>
+    <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> mysite.<span class="built_in">local</span>
+</code></pre><p>使用control+o保存，使用control+x关闭。</p>
+<h5 id="重启Apache服务器">重启Apache服务器</h5>
+<h3 id="结束语">结束语</h3>
+<p>希望能够帮助在osx下使用XAMPP的朋友。</p>
+<h3 id="引用：">引用：</h3>
+<ol>
+<li><p><a href="http://jonathannicol.com/blog/2012/03/11/configuring-virtualhosts-in-xampp-on-mac/" target="_blank" rel="external">Configuring VirtualHosts in XAMPP on Mac</a></p>
+</li>
+<li><p><a href="http://stackoverflow.com/questions/18365500/xampp-mac-virtual-host-showing-403" target="_blank" rel="external">XAMPP (Mac) Virtual host showing 403 (stackoverflow)</a></p>
+</li>
+</ol>
+]]></content>
+    
+    
+      <category term="osX" scheme="http://zhonghuan.info/tags/osX/"/>
+    
+      <category term="XAMPP" scheme="http://zhonghuan.info/tags/XAMPP/"/>
+    
+      <category term="问题笔记" scheme="http://zhonghuan.info/categories/%E9%97%AE%E9%A2%98%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Mac下“一键回桌面”应用开发笔记]]></title>
