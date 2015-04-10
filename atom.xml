@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Enjoy your choice, enjoy your life.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhonghuan.info/"/>
-  <updated>2015-03-12T05:35:21.147Z</updated>
+  <updated>2015-04-10T06:41:06.705Z</updated>
   <id>http://zhonghuan.info/</id>
   
   <author>
@@ -13,6 +13,157 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Swift网络编程]]></title>
+    <link href="http://zhonghuan.info/2015/04/10/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"/>
+    <id>http://zhonghuan.info/2015/04/10/网络编程/</id>
+    <published>2015-04-10T06:37:56.000Z</published>
+    <updated>2015-04-10T06:40:51.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="开头扫描大概">开头扫描大概</h2>
+<p>在ios中，有一个名称位URL loading system，它是一系列通过URL访问获取内容的类和协议的统称。它的核心是  <strong>NSURL</strong>  类。</p>
+<p>Foundation 提供了丰富的一系列的类允许你  1 加载某个URL下的内容，2 上传数据到服务器，3 操作cookie， 4 控制响应的缓存   5 其它的例如证书存储，认证等。</p>
+<p>URL loading system支持下面的一系列协议。</p>
+<ol>
+<li>File Transfer Protocol (ftp://)</li>
+<li>Hypertext Transfer Protocol (http://)</li>
+<li>Hypertext Transfer Protocol with encryption (https://)</li>
+<li>Local file URLs (file:///)</li>
+<li>Data URLs (data://)</li>
+</ol>
+<p>同时，osx和ios还提供了一些api允许在其它应用中打开URL，例如Safari，但本篇不会涉及。(可自行上网搜罗)</p>
+<p>URL loading system 大致可以分为5部分，可以看下图：</p>
+<p><img src="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/Art/nsobject_hierarchy_2x.png" alt=""></p>
+<p>我们最常用的可能就是根据URL来获取数据。在ios和osx中，有几种方式，可以根据不同的target进行选择。</p>
+<ol>
+<li>在ios7或者之后的版本，osx v10.9或者之后的版本，更倾向于使用NSURLSession</li>
+<li>对于想要支持老版本的osx，可以使用NSURLDownload</li>
+<li>对于想支持老版本的ios或者osx，可以使用 NSURLConnection</li>
+</ol>
+<p>本文主要介绍支持新版本的NSURLSession (依据ios  版本的百分比，ios7和8占据多数)</p>
+<p>若要使用NSURLConnection，可以查看<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLConnection.html#//apple_ref/doc/uid/20001836-BAJEAIEE" target="_blank" rel="external">Using NSURLConnection</a></p>
+<p>若要使用NSURLDownload，可以查看<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLDownload.html#//apple_ref/doc/uid/20001839-BAJEAIEE" target="_blank" rel="external">Using NSURLDownload</a></p>
+<h2 id="获取数据">获取数据</h2>
+<ol>
+<li><p>对于简单的访问，使用NSURLSession的api，根据NSURL对象，可以直接获取NSData对象或者是下载文件</p>
+</li>
+<li><p>对于较为复杂的访问，例如还需要上传数据，提供了NSURLRequest对象或者它的子类NSMutableURLRequest，</p>
+</li>
+</ol>
+<h2 id="NSURLSession">NSURLSession</h2>
+<p>NSURLSession 提供了通过HTTP下载内容的API，并且提供丰富的委托方法，来支持认证，和当app退居背后的时候，依旧能够进行下载。</p>
+<p>顾名思义，NSURLSession是一次<strong>会话</strong>，在进行会话时候，我们需要设置几点</p>
+<ol>
+<li>session的类型(通过 configuration 对象来确定)</li>
+<li>task的类型(是上传呢，还是下载呢？)</li>
+</ol>
+<h4 id="1_资源定位_使用NSURL">1 资源定位  使用NSURL</h4>
+<pre><code>     <span class="comment">//网址</span>
+     <span class="keyword">let</span> url = NSURL(<span class="keyword">string</span>:<span class="string">"http://......."</span>)
+</code></pre><h4 id="2_会话配置">2 会话配置</h4>
+<p> 有几种方式：</p>
+<p> a 磁盘缓存<br> b 内存缓存<br> c 系统后台缓存</p>
+<p> 默认方式是磁盘缓存</p>
+<pre><code>     <span class="comment">//默认的会话配置</span>
+     <span class="keyword">let</span> config = NSURLSessionConfiguration.defaultSessionConfiguration()
+
+     <span class="comment">//还能设置会话超时时间，默认是1分钟，可以自己设定。</span>
+     config.timeoutIntervalForRequest = <span class="number">10</span> <span class="comment">// 设置为10秒</span>
+
+     <span class="comment">//建立会话</span>
+     <span class="keyword">let</span> session = NSURLSession(configuration : config)
+</code></pre><h4 id="3_操作方法（任务）">3 操作方法（任务）</h4>
+<p> 上传，下载或者同时皆有</p>
+<pre><code>     <span class="comment">//建立会话的任务</span>
+     <span class="keyword">let</span> task = session.dataTaskWithURL(url!,completionHandler:{(data,
+         <span class="number">_</span>,error) -&gt; <span class="type">Void</span> <span class="keyword">in</span>
+
+         <span class="comment">//如果连接没有错误，则处理数据</span>
+         <span class="keyword">if</span> error == <span class="built_in">nil</span> {
+              <span class="keyword">let</span> temp = <span class="type">NSJSONSerialization</span>.<span class="type">JSONObjectWithData</span>(data,options:<span class="type">NSJSONReadingOptions</span>.<span class="type">AllowFragment</span>, error : <span class="built_in">nil</span>) <span class="keyword">as</span>? <span class="type">NSDictionary</span> {
+
+                  <span class="comment">//可以对dictionary 直接进行 map</span>
+                  <span class="keyword">let</span> weather = (json.valueForKey(<span class="string">"result"</span>) <span class="keyword">as</span>? <span class="type">NSDictionary</span>).<span class="built_in">map</span>{
+
+                      <span class="type">Weather</span>(city: $<span class="number">0</span>[<span class="string">"citynm"</span>] <span class="keyword">as</span>? <span class="type">String</span> , 
+                              weather : $<span class="number">0</span>[<span class="string">"weather"</span>] <span class="keyword">as</span>? <span class="type">String</span>,
+                              temp : $<span class="number">0</span>[<span class="string">"temp"</span>] <span class="keyword">as</span>? <span class="type">String</span>)
+
+                  }
+
+
+                  <span class="comment">// 由于session执行task的线程和更新界面的主线程不是同一个线程，所以，如果要更新界面UI，那么需要切换到主线程，提升速度。速度差异明显，自己尝试便知</span>
+
+                  dispatch_async(dispatch_get_main_queue(),{
+                      () -&gt; void <span class="keyword">in</span> 
+                          <span class="keyword">self</span>.weatherDatas = weather
+                  })
+
+
+
+                  <span class="comment">// 更新界面和</span>
+
+
+              }
+
+
+         }
+
+     })
+
+     <span class="comment">//执行任务</span>
+     task.resume()
+</code></pre><h4 id="4_任务状态">4 任务状态</h4>
+<p> 继续，暂停，取消</p>
+<h3 id="在Swift_playground的简单http访问">在Swift playground的简单http访问</h3>
+<pre><code>        <span class="keyword">import</span> Foundation
+
+        <span class="keyword">import</span> XCPlayground
+
+        func httpGet(request: NSURLRequest<span class="subst">!</span>, callback: (<span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">?</span>) <span class="subst">-&gt; </span><span class="literal">Void</span>) {
+            <span class="built_in">var</span> session <span class="subst">=</span> NSURLSession<span class="built_in">.</span>sharedSession()  <span class="comment">//共享的会话，使用默认的configuration</span>
+            <span class="built_in">var</span> task <span class="subst">=</span> session<span class="built_in">.</span>dataTaskWithRequest(request){
+                (<span class="built_in">data</span>, response, error) <span class="subst">-&gt; </span><span class="literal">Void</span> <span class="keyword">in</span>
+                <span class="keyword">if</span> error <span class="subst">!=</span> nil {
+                    callback(<span class="string">""</span>, error<span class="built_in">.</span>localizedDescription)
+                } <span class="keyword">else</span> {
+                    <span class="built_in">var</span> result <span class="subst">=</span> NSString(<span class="built_in">data</span>: <span class="built_in">data</span>, encoding:
+                        NSASCIIStringEncoding)<span class="subst">!</span>
+                    callback(result as <span class="built_in">String</span>, nil)
+                }
+            }
+            task<span class="built_in">.</span>resume() 
+        }
+
+        <span class="built_in">var</span> request <span class="subst">=</span> NSMutableURLRequest(URL: NSURL(<span class="built_in">string</span>: <span class="string">"http://www.baidu.com"</span>)<span class="subst">!</span>)
+
+        httpGet(request){
+                (<span class="built_in">data</span>, error) <span class="subst">-&gt; </span><span class="literal">Void</span> <span class="keyword">in</span>
+                <span class="keyword">if</span> error <span class="subst">!=</span> nil {
+                    println(error)
+                } <span class="keyword">else</span> {
+                    println(<span class="built_in">data</span>)
+                }
+        }
+
+        XCPSetExecutionShouldContinueIndefinitely(continueIndefinitely: <span class="literal">true</span>)
+</code></pre><h2 id="参考资料">参考资料</h2>
+<ol>
+<li><p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i" target="_blank" rel="external">URL Loading System Programming Guide</a></p>
+</li>
+<li><p><a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/index.html" target="_blank" rel="external">NSURLSession</a></p>
+</li>
+<li><p><a href="http://www.swiftv.cn/course/i815wjme" target="_blank" rel="external">小波说iOS8 第二季 Swift网络编程</a></p>
+</li>
+</ol>
+]]></content>
+    
+    
+      <category term="Swift" scheme="http://zhonghuan.info/tags/Swift/"/>
+    
+      <category term="Swift" scheme="http://zhonghuan.info/categories/Swift/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[osx XAMPP 403 error及在mac下的XAMPP下配置VirtualHosts]]></title>

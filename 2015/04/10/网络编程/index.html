@@ -1,0 +1,564 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Swift网络编程 | de部落格^_^</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="钟桓">
+    
+    <meta name="description" itemprop="description" content="Swift网络编程">
+    
+    
+    
+    
+    <link rel="alternate" href="/atom.xml" title="de部落格^_^" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/BlogLogo64.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/BlogLogo64.ico">
+    <link rel="apple-touch-icon-precomposed" href="/img/BlogLogo64.ico">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/BlogLogo.png" alt="de部落格^_^" title="de部落格^_^"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="de部落格^_^">de部落格^_^</a></h1>
+				<h2 class="blog-motto">Enjoy your choice, enjoy your life.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">存档</a></li>
+					
+						<li><a href="/about">关于ZH</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhonghuan.info">
+					</form>
+					
+					</li>
+					
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/10/网络编程/" title="Swift网络编程" itemprop="url">Swift网络编程</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhonghuan.info" title="钟桓">钟桓</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-04-10T06:37:56.000Z" itemprop="datePublished">4月 10 2015</time>
+    更新日期:<time datetime="2015-04-10T06:40:51.000Z" itemprop="dateModified">4月 10 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#开头扫描大概"><span class="toc-number">1.</span> <span class="toc-text">开头扫描大概</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取数据"><span class="toc-number">2.</span> <span class="toc-text">获取数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSURLSession"><span class="toc-number">3.</span> <span class="toc-text">NSURLSession</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1_资源定位_使用NSURL"><span class="toc-number">3.0.1.</span> <span class="toc-text">1 资源定位  使用NSURL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2_会话配置"><span class="toc-number">3.0.2.</span> <span class="toc-text">2 会话配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3_操作方法（任务）"><span class="toc-number">3.0.3.</span> <span class="toc-text">3 操作方法（任务）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4_任务状态"><span class="toc-number">3.0.4.</span> <span class="toc-text">4 任务状态</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在Swift_playground的简单http访问"><span class="toc-number">3.1.</span> <span class="toc-text">在Swift playground的简单http访问</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol>
+		</div>
+		
+		<h2 id="开头扫描大概">开头扫描大概</h2>
+<p>在ios中，有一个名称位URL loading system，它是一系列通过URL访问获取内容的类和协议的统称。它的核心是  <strong>NSURL</strong>  类。</p>
+<p>Foundation 提供了丰富的一系列的类允许你  1 加载某个URL下的内容，2 上传数据到服务器，3 操作cookie， 4 控制响应的缓存   5 其它的例如证书存储，认证等。</p>
+<p>URL loading system支持下面的一系列协议。</p>
+<ol>
+<li>File Transfer Protocol (ftp://)</li>
+<li>Hypertext Transfer Protocol (http://)</li>
+<li>Hypertext Transfer Protocol with encryption (https://)</li>
+<li>Local file URLs (file:///)</li>
+<li>Data URLs (data://)</li>
+</ol>
+<p>同时，osx和ios还提供了一些api允许在其它应用中打开URL，例如Safari，但本篇不会涉及。(可自行上网搜罗)</p>
+<p>URL loading system 大致可以分为5部分，可以看下图：</p>
+<p><img src="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/Art/nsobject_hierarchy_2x.png" alt=""></p>
+<p>我们最常用的可能就是根据URL来获取数据。在ios和osx中，有几种方式，可以根据不同的target进行选择。</p>
+<ol>
+<li>在ios7或者之后的版本，osx v10.9或者之后的版本，更倾向于使用NSURLSession</li>
+<li>对于想要支持老版本的osx，可以使用NSURLDownload</li>
+<li>对于想支持老版本的ios或者osx，可以使用 NSURLConnection</li>
+</ol>
+<p>本文主要介绍支持新版本的NSURLSession (依据ios  版本的百分比，ios7和8占据多数)</p>
+<p>若要使用NSURLConnection，可以查看<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLConnection.html#//apple_ref/doc/uid/20001836-BAJEAIEE" target="_blank" rel="external">Using NSURLConnection</a></p>
+<p>若要使用NSURLDownload，可以查看<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/Tasks/UsingNSURLDownload.html#//apple_ref/doc/uid/20001839-BAJEAIEE" target="_blank" rel="external">Using NSURLDownload</a></p>
+<h2 id="获取数据">获取数据</h2>
+<ol>
+<li><p>对于简单的访问，使用NSURLSession的api，根据NSURL对象，可以直接获取NSData对象或者是下载文件</p>
+</li>
+<li><p>对于较为复杂的访问，例如还需要上传数据，提供了NSURLRequest对象或者它的子类NSMutableURLRequest，</p>
+</li>
+</ol>
+<h2 id="NSURLSession">NSURLSession</h2>
+<p>NSURLSession 提供了通过HTTP下载内容的API，并且提供丰富的委托方法，来支持认证，和当app退居背后的时候，依旧能够进行下载。</p>
+<p>顾名思义，NSURLSession是一次<strong>会话</strong>，在进行会话时候，我们需要设置几点</p>
+<ol>
+<li>session的类型(通过 configuration 对象来确定)</li>
+<li>task的类型(是上传呢，还是下载呢？)</li>
+</ol>
+<h4 id="1_资源定位_使用NSURL">1 资源定位  使用NSURL</h4>
+<pre><code>     <span class="comment">//网址</span>
+     <span class="keyword">let</span> url = NSURL(<span class="keyword">string</span>:<span class="string">"http://......."</span>)
+</code></pre><h4 id="2_会话配置">2 会话配置</h4>
+<p> 有几种方式：</p>
+<p> a 磁盘缓存<br> b 内存缓存<br> c 系统后台缓存</p>
+<p> 默认方式是磁盘缓存</p>
+<pre><code>     <span class="comment">//默认的会话配置</span>
+     <span class="keyword">let</span> config = NSURLSessionConfiguration.defaultSessionConfiguration()
+
+     <span class="comment">//还能设置会话超时时间，默认是1分钟，可以自己设定。</span>
+     config.timeoutIntervalForRequest = <span class="number">10</span> <span class="comment">// 设置为10秒</span>
+
+     <span class="comment">//建立会话</span>
+     <span class="keyword">let</span> session = NSURLSession(configuration : config)
+</code></pre><h4 id="3_操作方法（任务）">3 操作方法（任务）</h4>
+<p> 上传，下载或者同时皆有</p>
+<pre><code>     <span class="comment">//建立会话的任务</span>
+     <span class="keyword">let</span> task = session.dataTaskWithURL(url!,completionHandler:{(data,
+         <span class="number">_</span>,error) -&gt; <span class="type">Void</span> <span class="keyword">in</span>
+
+         <span class="comment">//如果连接没有错误，则处理数据</span>
+         <span class="keyword">if</span> error == <span class="built_in">nil</span> {
+              <span class="keyword">let</span> temp = <span class="type">NSJSONSerialization</span>.<span class="type">JSONObjectWithData</span>(data,options:<span class="type">NSJSONReadingOptions</span>.<span class="type">AllowFragment</span>, error : <span class="built_in">nil</span>) <span class="keyword">as</span>? <span class="type">NSDictionary</span> {
+
+                  <span class="comment">//可以对dictionary 直接进行 map</span>
+                  <span class="keyword">let</span> weather = (json.valueForKey(<span class="string">"result"</span>) <span class="keyword">as</span>? <span class="type">NSDictionary</span>).<span class="built_in">map</span>{
+
+                      <span class="type">Weather</span>(city: $<span class="number">0</span>[<span class="string">"citynm"</span>] <span class="keyword">as</span>? <span class="type">String</span> , 
+                              weather : $<span class="number">0</span>[<span class="string">"weather"</span>] <span class="keyword">as</span>? <span class="type">String</span>,
+                              temp : $<span class="number">0</span>[<span class="string">"temp"</span>] <span class="keyword">as</span>? <span class="type">String</span>)
+
+                  }
+
+
+                  <span class="comment">// 由于session执行task的线程和更新界面的主线程不是同一个线程，所以，如果要更新界面UI，那么需要切换到主线程，提升速度。速度差异明显，自己尝试便知</span>
+
+                  dispatch_async(dispatch_get_main_queue(),{
+                      () -&gt; void <span class="keyword">in</span> 
+                          <span class="keyword">self</span>.weatherDatas = weather
+                  })
+
+
+
+                  <span class="comment">// 更新界面和</span>
+
+
+              }
+
+
+         }
+
+     })
+
+     <span class="comment">//执行任务</span>
+     task.resume()
+</code></pre><h4 id="4_任务状态">4 任务状态</h4>
+<p> 继续，暂停，取消</p>
+<h3 id="在Swift_playground的简单http访问">在Swift playground的简单http访问</h3>
+<pre><code>        <span class="keyword">import</span> Foundation
+
+        <span class="keyword">import</span> XCPlayground
+
+        func httpGet(request: NSURLRequest<span class="subst">!</span>, callback: (<span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">?</span>) <span class="subst">-&gt; </span><span class="literal">Void</span>) {
+            <span class="built_in">var</span> session <span class="subst">=</span> NSURLSession<span class="built_in">.</span>sharedSession()  <span class="comment">//共享的会话，使用默认的configuration</span>
+            <span class="built_in">var</span> task <span class="subst">=</span> session<span class="built_in">.</span>dataTaskWithRequest(request){
+                (<span class="built_in">data</span>, response, error) <span class="subst">-&gt; </span><span class="literal">Void</span> <span class="keyword">in</span>
+                <span class="keyword">if</span> error <span class="subst">!=</span> nil {
+                    callback(<span class="string">""</span>, error<span class="built_in">.</span>localizedDescription)
+                } <span class="keyword">else</span> {
+                    <span class="built_in">var</span> result <span class="subst">=</span> NSString(<span class="built_in">data</span>: <span class="built_in">data</span>, encoding:
+                        NSASCIIStringEncoding)<span class="subst">!</span>
+                    callback(result as <span class="built_in">String</span>, nil)
+                }
+            }
+            task<span class="built_in">.</span>resume() 
+        }
+
+        <span class="built_in">var</span> request <span class="subst">=</span> NSMutableURLRequest(URL: NSURL(<span class="built_in">string</span>: <span class="string">"http://www.baidu.com"</span>)<span class="subst">!</span>)
+
+        httpGet(request){
+                (<span class="built_in">data</span>, error) <span class="subst">-&gt; </span><span class="literal">Void</span> <span class="keyword">in</span>
+                <span class="keyword">if</span> error <span class="subst">!=</span> nil {
+                    println(error)
+                } <span class="keyword">else</span> {
+                    println(<span class="built_in">data</span>)
+                }
+        }
+
+        XCPSetExecutionShouldContinueIndefinitely(continueIndefinitely: <span class="literal">true</span>)
+</code></pre><h2 id="参考资料">参考资料</h2>
+<ol>
+<li><p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i" target="_blank" rel="external">URL Loading System Programming Guide</a></p>
+</li>
+<li><p><a href="https://developer.apple.com/library/ios/documentation/Foundation/Reference/NSURLSession_class/index.html" target="_blank" rel="external">NSURLSession</a></p>
+</li>
+<li><p><a href="http://www.swiftv.cn/course/i815wjme" target="_blank" rel="external">小波说iOS8 第二季 Swift网络编程</a></p>
+</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Swift/">Swift</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Swift/">Swift</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhonghuan.info/2015/04/10/网络编程/" data-title="Swift网络编程 | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/03/10/osx-XAMPP-403-error及在mac下的XAMPP下配置VirtualHosts/"  title="osx XAMPP 403 error及在mac下的XAMPP下配置VirtualHosts">
+ <strong>NEXT:</strong><br/> 
+ <span>osx XAMPP 403 error及在mac下的XAMPP下配置VirtualHosts
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#开头扫描大概"><span class="toc-number">1.</span> <span class="toc-text">开头扫描大概</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取数据"><span class="toc-number">2.</span> <span class="toc-text">获取数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSURLSession"><span class="toc-number">3.</span> <span class="toc-text">NSURLSession</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1_资源定位_使用NSURL"><span class="toc-number">3.0.1.</span> <span class="toc-text">1 资源定位  使用NSURL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2_会话配置"><span class="toc-number">3.0.2.</span> <span class="toc-text">2 会话配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3_操作方法（任务）"><span class="toc-number">3.0.3.</span> <span class="toc-text">3 操作方法（任务）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4_任务状态"><span class="toc-number">3.0.4.</span> <span class="toc-text">4 任务状态</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在Swift_playground的简单http访问"><span class="toc-number">3.1.</span> <span class="toc-text">在Swift playground的简单http访问</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Swift/" title="Swift">Swift<sup>2</sup></a></li>
+		
+			<li><a href="/categories/webspider/" title="python网络爬虫">python网络爬虫<sup>2</sup></a></li>
+		
+			<li><a href="/categories/工具类，软件类介绍/" title="工具类，软件类介绍">工具类，软件类介绍<sup>2</sup></a></li>
+		
+			<li><a href="/categories/算法/" title="算法">算法<sup>4</sup></a></li>
+		
+			<li><a href="/categories/编译/" title="编译">编译<sup>1</sup></a></li>
+		
+			<li><a href="/categories/记or谈/" title="记or谈">记or谈<sup>1</sup></a></li>
+		
+			<li><a href="/categories/问题笔记/" title="问题笔记">问题笔记<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/KMP/" title="KMP">KMP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Swift/" title="Swift">Swift<sup>2</sup></a></li>
+		
+			<li><a href="/tags/XAMPP/" title="XAMPP">XAMPP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>4</sup></a></li>
+		
+			<li><a href="/tags/mac/" title="mac">mac<sup>1</sup></a></li>
+		
+			<li><a href="/tags/osX/" title="osX">osX<sup>3</sup></a></li>
+		
+			<li><a href="/tags/pip/" title="pip">pip<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>2</sup></a></li>
+		
+			<li><a href="/tags/python安装管理工具/" title="python安装管理工具">python安装管理工具<sup>1</sup></a></li>
+		
+			<li><a href="/tags/re/" title="re">re<sup>1</sup></a></li>
+		
+			<li><a href="/tags/urllib/" title="urllib">urllib<sup>1</sup></a></li>
+		
+			<li><a href="/tags/urllib2/" title="urllib2">urllib2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/webspider/" title="webspider">webspider<sup>2</sup></a></li>
+		
+			<li><a href="/tags/单调队列/" title="单调队列">单调队列<sup>1</sup></a></li>
+		
+			<li><a href="/tags/字符串匹配/" title="字符串匹配">字符串匹配<sup>1</sup></a></li>
+		
+			<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/电子商务/" title="电子商务">电子商务<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编译原理/" title="编译原理">编译原理<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> You, lower the IQ of the street, go to study~~ <br/>
+			^_^</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/u/2103243911" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/ZHONGHuanGit" target="_blank" title="github"></a>
+		
+		
+	</div>
+		
+		<p class="copyright">
+			<font face="arial">
+ 			博客所有内容采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">自由转载-非商业用途-非衍生-保持署名的创作共用协议</a>
+			</font>
+		</p>
+		<p class="copyright">
+			<font face="arial">
+ 			Licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike License</a>.
+			</font>
+		</p>
+		
+
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://zhonghuan.info" target="_blank" title="钟桓">钟桓</a>
+		
+		<font face=“arial” size=“0.5”>
+		</font>
+		</p>
+</div>
+
+
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});    
+</script>
+
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"zhonghuan001"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+  </body>
+</html>
