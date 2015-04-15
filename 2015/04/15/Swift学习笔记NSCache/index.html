@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Mac下“一键回桌面”应用开发笔记 | de部落格^_^</title>
+    <title># Swift学习笔记NSCache | de部落格^_^</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="钟桓">
     
-    <meta name="description" itemprop="description" content="一键回桌面应用开发笔记">
+    <meta name="description" itemprop="description" content="Swift-NSCache的介绍，使用">
     
     
     
@@ -72,15 +72,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/03/03/Mac下“一键回桌面”应用开发笔记/" title="Mac下“一键回桌面”应用开发笔记" itemprop="url">Mac下“一键回桌面”应用开发笔记</a>
+      <a href="/2015/04/15/Swift学习笔记NSCache/" title="# Swift学习笔记NSCache" itemprop="url"># Swift学习笔记NSCache</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhonghuan.info" title="钟桓">钟桓</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-03-03T13:48:32.000Z" itemprop="datePublished">3月 3 2015</time>
-    更新日期:<time datetime="2015-04-11T02:24:46.000Z" itemprop="dateModified">4月 11 2015</time>
+    <time datetime="2015-04-15T05:47:38.000Z" itemprop="datePublished">4月 15 2015</time>
+    更新日期:<time datetime="2015-04-15T05:51:34.000Z" itemprop="dateModified">4月 15 2015</time>
     
   </p>
 </header>
@@ -89,66 +89,120 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#功能"><span class="toc-number">1.</span> <span class="toc-text">功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#状态栏"><span class="toc-number">2.</span> <span class="toc-text">状态栏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#显示桌面"><span class="toc-number">3.</span> <span class="toc-text">显示桌面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开机启动"><span class="toc-number">4.</span> <span class="toc-text">开机启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#效果展示"><span class="toc-number">5.</span> <span class="toc-text">效果展示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#应用下载"><span class="toc-number">6.</span> <span class="toc-text">应用下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码"><span class="toc-number">7.</span> <span class="toc-text">代码</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#环境_Xcode_6-3，_Swift_1-2"><span class="toc-number">1.</span> <span class="toc-text">环境 Xcode 6.3， Swift 1.2</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字典的实现"><span class="toc-number"></span> <span class="toc-text">字典的实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用NSCache"><span class="toc-number"></span> <span class="toc-text">使用NSCache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料"><span class="toc-number"></span> <span class="toc-text">参考资料</span></a>
 		</div>
 		
-		<p>偶然看到别人的写得一篇<a href="http://jiajixin.cn/2015/02/21/mac-application-show-desktop/" target="_blank" rel="external">Mac下显示桌面应用开发</a>,觉得挺有趣的，并且，一键回桌面，对我来说，也是挺常用的，所以，就试着自己开发了一个，不过原来的作者使用的是objective c开发的。这里使用的是Swift语言来进行开发，也是加深自己对于Swift的运用吧。</p>
-<h3 id="功能">功能</h3>
-<ol>
-<li>状态栏点击图标，即显示桌面，所有显示窗口最小化。</li>
-<li>开机默认自启动，用户可以选择是否开机自启动。</li>
-</ol>
-<p>原来的作者开发的是纯状态栏应用，初衷也挺好的，但是，有一个瑕疵是，用户不能手动退出应用了。所以，我把它放在dock了(其实这也是瑕疵！)，这样的好处，不用的时候，用户可以手动退出。</p>
-<h3 id="状态栏">状态栏</h3>
-<p>要在状态栏中显示icon，并且添加点击它的action，代码如下：</p>
-<pre><code><span class="keyword">let</span> <span class="variable">statusItem =</span> NSStatusBar.systemStatusBar().statusItemWithLength(-<span class="number">1</span>)
+		<h5 id="环境_Xcode_6-3，_Swift_1-2">环境 Xcode 6.3， Swift 1.2</h5>
+<p>从名字上可以感觉出来，Cache，缓存。我们都知道，有时候一些计算量比较大的结果，我们可以缓存起来，下次使用时，可以直接使用，不用重复计算。</p>
+<p>简单的例子来说吧。例如我们有一些图片需要使用，这些图片资源是从网络上获取来的。我们直观上的感觉就是不用每次使用图片都从网络上去获取，可以将得到的图片缓存起来，需要使用的时候，我们可以直接拿来用。</p>
+<p>如果没有NSCache，你会怎么做，我的第一反应是 ———&gt; <strong>Dictionary，字典</strong>。</p>
+<hr>
+<h3 id="字典的实现">字典的实现</h3>
+<p>字典，有 <strong> key—value 键-值对</strong>，所以通过url(String)—image这样的组合，我们可以实现一个简单的缓存。例如：</p>
+<pre><code>var <span class="variable">imageCache =</span> Dictionary &lt; String , UIImage &gt;()
 
-//icon showed <span class="keyword">in</span> system status bar
-<span class="keyword">let</span> <span class="variable">icon =</span> NSImage(named: <span class="string">"desktop"</span>)
-icon?.setTemplate(<span class="constant">true</span>)
-statusItem.<span class="variable">image =</span> icon
+<span class="keyword">let</span> <span class="variable">url =</span> <span class="string">"图片的URL"</span>
 
-// define the action when the icon was clicked!
-statusItem.<span class="variable">action =</span> Selector(<span class="string">"goBackDesktop:"</span>)
-</code></pre><h3 id="显示桌面">显示桌面</h3>
-<p>如何实现显示桌面呢？<br>其实显示桌面是有快捷键的，CMD+ALT+H+M，按下CMD+ALT+H就会隐藏当前窗口除外的窗口，CMD+M会隐藏当前窗口，所以同时按下CMD+ALT+H+M就会达到显示桌面的效果。</p>
-<p>所以现在需要做的就是模拟按键，代码如下：</p>
-<pre><code>    //simulate option+command+h+m 
+<span class="keyword">let</span> <span class="variable">image =</span> imageCache[url]
 
-    var <span class="variable">src =</span> CGEventSourceCreate(CGEventSourceStateID(kCGEventSourceStateHIDSystemState)).takeRetainedValue()
+<span class="keyword">if</span> <span class="variable">image =</span>= nil { 
 
-    <span class="keyword">let</span> <span class="variable">cmdDown =</span> CGEventCreateKeyboardEvent(src, <span class="number">0</span>x37, <span class="constant">true</span>).takeRetainedValue()
-    <span class="keyword">let</span> <span class="variable">cmdUp =</span> CGEventCreateKeyboardEvent(src, <span class="number">0</span>x37, <span class="constant">false</span>).takeRetainedValue()
-    CGEventSetFlags(cmdDown, CGEventFlags(kCGEventFlagMaskCommand))
-    CGEventSetFlags(cmdUp, CGEventFlags(kCGEventFlagMaskCommand))
+    // 如果imageCache中没有该url对应的图片，则访问url，获取图片，放在imageCache中
 
+    <span class="keyword">let</span> <span class="variable">request =</span> NSURLRequest(URL : NSURL(string : url!)!)
 
-    <span class="keyword">let</span> <span class="variable">loc =</span> CGEventTapLocation(kCGHIDEventTap)
+        <span class="keyword">let</span> <span class="variable">session =</span> NSURLSession.sharedSession()
 
-    CGEventPost(loc, cmdDown)
+        <span class="keyword">let</span> <span class="variable">task =</span> session.dataTaskWithRequest(request){
+            (data,response,error) -&gt; Void <span class="keyword">in</span>
+            <span class="keyword">if</span>(<span class="variable">error =</span>= nil){
+                <span class="keyword">let</span> <span class="variable">image =</span> UIImage(data: data)
 
-    CGEventPost(loc, cmdUp)
-</code></pre><p>其中0x37，对应的是Command按键。</p>
-<h3 id="开机启动">开机启动</h3>
-<p>Swift开机启动，我是看了这个<a href="http://stackoverflow.com/questions/26475008/swift-getting-a-mac-app-to-launch-on-startup" target="_blank" rel="external">stackoverflow的提问</a>,了解的。</p>
-<h3 id="效果展示">效果展示</h3>
-<p><img src="http://zhonghuan.qiniudn.com/showDesktop.gif" alt=""></p>
-<h3 id="应用下载">应用下载</h3>
-<p><a href="http://zhonghuan.info/ZHShowDesktop.app.zip" target="_blank" rel="external">http://zhonghuan.info/ZHShowDesktop.app.zip</a></p>
-<p>下载完后，直接拷贝到应用程序中即可</p>
-<h3 id="代码">代码</h3>
-<p>代码都放在我的github上了，喜欢的朋友请点个赞，觉得有必要改进的朋友，可以fork之后，再合并给我。</p>
-<p>地址： <a href="https://github.com/ZHONGHuanGit/ZHShowDesktop" target="_blank" rel="external">https://github.com/ZHONGHuanGit/ZHShowDesktop</a></p>
+                //放入imageCache中
+                self.imageCache[url!] = image
+
+                    //可以使用图片
+
+            }
+        }
+
+        task.resume()
+
+}<span class="keyword">else</span>{
+    // 如果imageCache中已经有了图片，则可以直接使用。
+
+} 
+</code></pre><hr>
+<h3 id="使用NSCache">使用NSCache</h3>
+<p>上面的实现，似乎已经可以满足要求了，可是，有一个问题，如果图片资源过多，程序运行时占据太多存储资源。我们希望，如果图片长时间不用的话，可以释放它，等需要用时，在从网络中获取。在时间和空间中，取一个权衡。</p>
+<p>那么好了，NSCache可以帮我们做到这一点。它就像一个容器一样，内部存储的也是key-value 对，它类似Dictionary，但不同的是，当空间比较紧张的时候，NSCache可以释放一部分资源。正因为需要释放资源，NSCache存储的对象需要实现 <a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSDiscardableContent_Protocol/index.html#//apple_ref/occ/intf/NSDiscardableContent" target="_blank" rel="external">NSDiscardableContent</a> 协议。</p>
+<p>可以参照ios developer library <a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSCache_Class/index.html#//apple_ref/occ/instp/NSCache/evictsObjectsWithDiscardedContent" target="_blank" rel="external">NSCache</a>，来看看它的使用方式。</p>
+<p>下面看一个，取代上面图片缓存的例子：</p>
+<pre><code><span class="keyword">import</span> UIKit
+
+class ImageLoader {
+
+    <span class="built_in">var</span> <span class="keyword">cache</span> <span class="subst">=</span> NSCache()
+
+    class <span class="built_in">var</span> sharedLoader : ImageLoader {
+        struct Static {
+            static <span class="keyword">let</span> instance : ImageLoader <span class="subst">=</span> ImageLoader()
+        }
+        <span class="keyword">return</span> Static<span class="built_in">.</span>instance
+    }
+
+    func imageForUrl(urlString: <span class="built_in">String</span>, completionHandler:(image: UIImage<span class="subst">?</span>, url: <span class="built_in">String</span>) <span class="subst">-&gt; </span>()) {
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, <span class="number">0</span>), {()<span class="keyword">in</span>
+            <span class="built_in">var</span> <span class="built_in">data</span>: NSData<span class="subst">?</span> <span class="subst">=</span> <span class="built_in">self</span><span class="built_in">.</span><span class="keyword">cache</span><span class="built_in">.</span>objectForKey(urlString) as<span class="subst">?</span> NSData
+
+            <span class="keyword">if</span> <span class="keyword">let</span> goodData <span class="subst">=</span> <span class="built_in">data</span> {
+                <span class="keyword">let</span> image <span class="subst">=</span> UIImage(<span class="built_in">data</span>: goodData)
+                dispatch_async(dispatch_get_main_queue(), {() <span class="keyword">in</span>
+                    completionHandler(image: image, url: urlString)
+                })
+                <span class="keyword">return</span>
+            }
+
+            <span class="built_in">var</span> downloadTask: NSURLSessionDataTask <span class="subst">=</span> NSURLSession<span class="built_in">.</span>sharedSession()<span class="built_in">.</span>dataTaskWithURL(NSURL(<span class="built_in">string</span>: urlString)<span class="subst">!</span>, completionHandler: {(<span class="built_in">data</span>: NSData<span class="subst">!</span>, response: NSURLResponse<span class="subst">!</span>, error: NSError<span class="subst">!</span>) <span class="subst">-&gt; </span><span class="literal">Void</span> <span class="keyword">in</span>
+                <span class="keyword">if</span> (error <span class="subst">!=</span> nil) {
+                    completionHandler(image: nil, url: urlString)
+                    <span class="keyword">return</span>
+                }
+
+                <span class="keyword">if</span> <span class="built_in">data</span> <span class="subst">!=</span> nil {
+                    <span class="keyword">let</span> image <span class="subst">=</span> UIImage(<span class="built_in">data</span>: <span class="built_in">data</span>)
+                    <span class="built_in">self</span><span class="built_in">.</span><span class="keyword">cache</span><span class="built_in">.</span>setObject(<span class="built_in">data</span>, forKey: urlString)
+                    dispatch_async(dispatch_get_main_queue(), {() <span class="keyword">in</span>
+                        completionHandler(image: image, url: urlString)
+                    })
+                    <span class="keyword">return</span>
+                }
+
+            })
+            downloadTask<span class="built_in">.</span>resume()
+        })
+
+    }
+}
+</code></pre><p>使用：</p>
+<pre><code>ImageLoader.sharedLoader.imageForUrl(<span class="string">"图片的URL"</span>, completionHandler:{(image: UIImage?, url: <span class="built_in">String</span>) <span class="keyword">in</span>
+            <span class="comment">//这里写你的completionHandler</span>
+        })
+</code></pre><hr>
 <p>笔者注：欢迎非商业转载，但请一定注明出处</p>
 <p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳笔者的辛苦：</p>
 <p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
+<hr>
+<h3 id="参考资料">参考资料</h3>
+<p><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSCache_Class/index.html#//apple_ref/occ/instp/NSCache/evictsObjectsWithDiscardedContent" target="_blank" rel="external">NSCache in IOS Developer Library</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Swift/">Swift</a><a href="/tags/osX/">osX</a><a href="/tags/mac/">mac</a>
+  <span></span> <a href="/tags/Swift/">Swift</a>
   </div>
 
 
@@ -161,7 +215,7 @@ statusItem.<span class="variable">action =</span> Selector(<span class="string">
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhonghuan.info/2015/03/03/Mac下“一键回桌面”应用开发笔记/" data-title="Mac下“一键回桌面”应用开发笔记 | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
+  <div data-url="http://zhonghuan.info/2015/04/15/Swift学习笔记NSCache/" data-title="# Swift学习笔记NSCache | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
   </div>
 
 </div>
@@ -170,19 +224,11 @@ statusItem.<span class="variable">action =</span> Selector(<span class="string">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/03/10/osx-XAMPP-403-error及在mac下的XAMPP下配置VirtualHosts/" title="osx XAMPP 403 error及在mac下的XAMPP下配置VirtualHosts">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  osx XAMPP 403 error及在mac下的XAMPP下配置VirtualHosts</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/11/23/浅析编译原理-上下文无关文法/"  title="浅析编译原理-上下文无关文法">
+<a href="/2015/04/10/网络编程/"  title="Swift网络编程">
  <strong>NEXT:</strong><br/> 
- <span>浅析编译原理-上下文无关文法
+ <span>Swift网络编程
 </span>
 </a>
 </div>
@@ -199,7 +245,7 @@ statusItem.<span class="variable">action =</span> Selector(<span class="string">
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#功能"><span class="toc-number">1.</span> <span class="toc-text">功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#状态栏"><span class="toc-number">2.</span> <span class="toc-text">状态栏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#显示桌面"><span class="toc-number">3.</span> <span class="toc-text">显示桌面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开机启动"><span class="toc-number">4.</span> <span class="toc-text">开机启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#效果展示"><span class="toc-number">5.</span> <span class="toc-text">效果展示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#应用下载"><span class="toc-number">6.</span> <span class="toc-text">应用下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码"><span class="toc-number">7.</span> <span class="toc-text">代码</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#环境_Xcode_6-3，_Swift_1-2"><span class="toc-number">1.</span> <span class="toc-text">环境 Xcode 6.3， Swift 1.2</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字典的实现"><span class="toc-number"></span> <span class="toc-text">字典的实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用NSCache"><span class="toc-number"></span> <span class="toc-text">使用NSCache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料"><span class="toc-number"></span> <span class="toc-text">参考资料</span></a>
   </div>
 
 <div id="asidepart">

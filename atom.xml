@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Enjoy your choice, enjoy your life.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhonghuan.info/"/>
-  <updated>2015-04-10T06:41:06.705Z</updated>
+  <updated>2015-04-15T05:51:49.647Z</updated>
   <id>http://zhonghuan.info/</id>
   
   <author>
@@ -15,11 +15,130 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[# Swift学习笔记NSCache]]></title>
+    <link href="http://zhonghuan.info/2015/04/15/Swift%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0NSCache/"/>
+    <id>http://zhonghuan.info/2015/04/15/Swift学习笔记NSCache/</id>
+    <published>2015-04-15T05:47:38.000Z</published>
+    <updated>2015-04-15T05:51:34.000Z</updated>
+    <content type="html"><![CDATA[<h5 id="环境_Xcode_6-3，_Swift_1-2">环境 Xcode 6.3， Swift 1.2</h5>
+<p>从名字上可以感觉出来，Cache，缓存。我们都知道，有时候一些计算量比较大的结果，我们可以缓存起来，下次使用时，可以直接使用，不用重复计算。</p>
+<p>简单的例子来说吧。例如我们有一些图片需要使用，这些图片资源是从网络上获取来的。我们直观上的感觉就是不用每次使用图片都从网络上去获取，可以将得到的图片缓存起来，需要使用的时候，我们可以直接拿来用。</p>
+<p>如果没有NSCache，你会怎么做，我的第一反应是 ———&gt; <strong>Dictionary，字典</strong>。</p>
+<hr>
+<h3 id="字典的实现">字典的实现</h3>
+<p>字典，有 <strong> key—value 键-值对</strong>，所以通过url(String)—image这样的组合，我们可以实现一个简单的缓存。例如：</p>
+<pre><code>var <span class="variable">imageCache =</span> Dictionary &lt; String , UIImage &gt;()
+
+<span class="keyword">let</span> <span class="variable">url =</span> <span class="string">"图片的URL"</span>
+
+<span class="keyword">let</span> <span class="variable">image =</span> imageCache[url]
+
+<span class="keyword">if</span> <span class="variable">image =</span>= nil { 
+
+    // 如果imageCache中没有该url对应的图片，则访问url，获取图片，放在imageCache中
+
+    <span class="keyword">let</span> <span class="variable">request =</span> NSURLRequest(URL : NSURL(string : url!)!)
+
+        <span class="keyword">let</span> <span class="variable">session =</span> NSURLSession.sharedSession()
+
+        <span class="keyword">let</span> <span class="variable">task =</span> session.dataTaskWithRequest(request){
+            (data,response,error) -&gt; Void <span class="keyword">in</span>
+            <span class="keyword">if</span>(<span class="variable">error =</span>= nil){
+                <span class="keyword">let</span> <span class="variable">image =</span> UIImage(data: data)
+
+                //放入imageCache中
+                self.imageCache[url!] = image
+
+                    //可以使用图片
+
+            }
+        }
+
+        task.resume()
+
+}<span class="keyword">else</span>{
+    // 如果imageCache中已经有了图片，则可以直接使用。
+
+} 
+</code></pre><hr>
+<h3 id="使用NSCache">使用NSCache</h3>
+<p>上面的实现，似乎已经可以满足要求了，可是，有一个问题，如果图片资源过多，程序运行时占据太多存储资源。我们希望，如果图片长时间不用的话，可以释放它，等需要用时，在从网络中获取。在时间和空间中，取一个权衡。</p>
+<p>那么好了，NSCache可以帮我们做到这一点。它就像一个容器一样，内部存储的也是key-value 对，它类似Dictionary，但不同的是，当空间比较紧张的时候，NSCache可以释放一部分资源。正因为需要释放资源，NSCache存储的对象需要实现 <a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSDiscardableContent_Protocol/index.html#//apple_ref/occ/intf/NSDiscardableContent" target="_blank" rel="external">NSDiscardableContent</a> 协议。</p>
+<p>可以参照ios developer library <a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSCache_Class/index.html#//apple_ref/occ/instp/NSCache/evictsObjectsWithDiscardedContent" target="_blank" rel="external">NSCache</a>，来看看它的使用方式。</p>
+<p>下面看一个，取代上面图片缓存的例子：</p>
+<pre><code><span class="keyword">import</span> UIKit
+
+class ImageLoader {
+
+    <span class="built_in">var</span> <span class="keyword">cache</span> <span class="subst">=</span> NSCache()
+
+    class <span class="built_in">var</span> sharedLoader : ImageLoader {
+        struct Static {
+            static <span class="keyword">let</span> instance : ImageLoader <span class="subst">=</span> ImageLoader()
+        }
+        <span class="keyword">return</span> Static<span class="built_in">.</span>instance
+    }
+
+    func imageForUrl(urlString: <span class="built_in">String</span>, completionHandler:(image: UIImage<span class="subst">?</span>, url: <span class="built_in">String</span>) <span class="subst">-&gt; </span>()) {
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, <span class="number">0</span>), {()<span class="keyword">in</span>
+            <span class="built_in">var</span> <span class="built_in">data</span>: NSData<span class="subst">?</span> <span class="subst">=</span> <span class="built_in">self</span><span class="built_in">.</span><span class="keyword">cache</span><span class="built_in">.</span>objectForKey(urlString) as<span class="subst">?</span> NSData
+
+            <span class="keyword">if</span> <span class="keyword">let</span> goodData <span class="subst">=</span> <span class="built_in">data</span> {
+                <span class="keyword">let</span> image <span class="subst">=</span> UIImage(<span class="built_in">data</span>: goodData)
+                dispatch_async(dispatch_get_main_queue(), {() <span class="keyword">in</span>
+                    completionHandler(image: image, url: urlString)
+                })
+                <span class="keyword">return</span>
+            }
+
+            <span class="built_in">var</span> downloadTask: NSURLSessionDataTask <span class="subst">=</span> NSURLSession<span class="built_in">.</span>sharedSession()<span class="built_in">.</span>dataTaskWithURL(NSURL(<span class="built_in">string</span>: urlString)<span class="subst">!</span>, completionHandler: {(<span class="built_in">data</span>: NSData<span class="subst">!</span>, response: NSURLResponse<span class="subst">!</span>, error: NSError<span class="subst">!</span>) <span class="subst">-&gt; </span><span class="literal">Void</span> <span class="keyword">in</span>
+                <span class="keyword">if</span> (error <span class="subst">!=</span> nil) {
+                    completionHandler(image: nil, url: urlString)
+                    <span class="keyword">return</span>
+                }
+
+                <span class="keyword">if</span> <span class="built_in">data</span> <span class="subst">!=</span> nil {
+                    <span class="keyword">let</span> image <span class="subst">=</span> UIImage(<span class="built_in">data</span>: <span class="built_in">data</span>)
+                    <span class="built_in">self</span><span class="built_in">.</span><span class="keyword">cache</span><span class="built_in">.</span>setObject(<span class="built_in">data</span>, forKey: urlString)
+                    dispatch_async(dispatch_get_main_queue(), {() <span class="keyword">in</span>
+                        completionHandler(image: image, url: urlString)
+                    })
+                    <span class="keyword">return</span>
+                }
+
+            })
+            downloadTask<span class="built_in">.</span>resume()
+        })
+
+    }
+}
+</code></pre><p>使用：</p>
+<pre><code>ImageLoader.sharedLoader.imageForUrl(<span class="string">"图片的URL"</span>, completionHandler:{(image: UIImage?, url: <span class="built_in">String</span>) <span class="keyword">in</span>
+            <span class="comment">//这里写你的completionHandler</span>
+        })
+</code></pre><hr>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
+<hr>
+<h3 id="参考资料">参考资料</h3>
+<p><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSCache_Class/index.html#//apple_ref/occ/instp/NSCache/evictsObjectsWithDiscardedContent" target="_blank" rel="external">NSCache in IOS Developer Library</a></p>
+]]></content>
+    
+    
+      <category term="Swift" scheme="http://zhonghuan.info/tags/Swift/"/>
+    
+      <category term="Swift" scheme="http://zhonghuan.info/categories/Swift/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[Swift网络编程]]></title>
     <link href="http://zhonghuan.info/2015/04/10/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"/>
     <id>http://zhonghuan.info/2015/04/10/网络编程/</id>
     <published>2015-04-10T06:37:56.000Z</published>
-    <updated>2015-04-10T06:40:51.000Z</updated>
+    <updated>2015-04-11T02:25:44.000Z</updated>
     <content type="html"><![CDATA[<h2 id="开头扫描大概">开头扫描大概</h2>
 <p>在ios中，有一个名称位URL loading system，它是一系列通过URL访问获取内容的类和协议的统称。它的核心是  <strong>NSURL</strong>  类。</p>
 <p>Foundation 提供了丰富的一系列的类允许你  1 加载某个URL下的内容，2 上传数据到服务器，3 操作cookie， 4 控制响应的缓存   5 其它的例如证书存储，认证等。</p>
@@ -147,7 +266,12 @@
         }
 
         XCPSetExecutionShouldContinueIndefinitely(continueIndefinitely: <span class="literal">true</span>)
-</code></pre><h2 id="参考资料">参考资料</h2>
+</code></pre><hr>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
+<hr>
+<h2 id="参考资料">参考资料</h2>
 <ol>
 <li><p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165i" target="_blank" rel="external">URL Loading System Programming Guide</a></p>
 </li>
@@ -248,7 +372,7 @@
     <link href="http://zhonghuan.info/2015/03/03/Mac%E4%B8%8B%E2%80%9C%E4%B8%80%E9%94%AE%E5%9B%9E%E6%A1%8C%E9%9D%A2%E2%80%9D%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/"/>
     <id>http://zhonghuan.info/2015/03/03/Mac下“一键回桌面”应用开发笔记/</id>
     <published>2015-03-03T13:48:32.000Z</published>
-    <updated>2015-03-03T16:27:46.000Z</updated>
+    <updated>2015-04-11T02:24:46.000Z</updated>
     <content type="html"><![CDATA[<p>偶然看到别人的写得一篇<a href="http://jiajixin.cn/2015/02/21/mac-application-show-desktop/" target="_blank" rel="external">Mac下显示桌面应用开发</a>,觉得挺有趣的，并且，一键回桌面，对我来说，也是挺常用的，所以，就试着自己开发了一个，不过原来的作者使用的是objective c开发的。这里使用的是Swift语言来进行开发，也是加深自己对于Swift的运用吧。</p>
 <h3 id="功能">功能</h3>
 <ol>
@@ -296,6 +420,9 @@ statusItem.<span class="variable">action =</span> Selector(<span class="string">
 <h3 id="代码">代码</h3>
 <p>代码都放在我的github上了，喜欢的朋友请点个赞，觉得有必要改进的朋友，可以fork之后，再合并给我。</p>
 <p>地址： <a href="https://github.com/ZHONGHuanGit/ZHShowDesktop" target="_blank" rel="external">https://github.com/ZHONGHuanGit/ZHShowDesktop</a></p>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
 ]]></content>
     
     
@@ -314,7 +441,7 @@ statusItem.<span class="variable">action =</span> Selector(<span class="string">
     <link href="http://zhonghuan.info/2014/11/23/%E6%B5%85%E6%9E%90%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-%E4%B8%8A%E4%B8%8B%E6%96%87%E6%97%A0%E5%85%B3%E6%96%87%E6%B3%95/"/>
     <id>http://zhonghuan.info/2014/11/23/浅析编译原理-上下文无关文法/</id>
     <published>2014-11-23T15:47:09.000Z</published>
-    <updated>2014-11-23T15:50:09.000Z</updated>
+    <updated>2015-04-11T02:26:47.000Z</updated>
     <content type="html"><![CDATA[<p>查找wiki，是这样说文法，文法即文章的书写法规，一般用来指以文字、词语、短句、句子[1]编排而成的完整语句和文章的合理性组织。语言的结构方式。包括词的构成和变化﹐词组和句子的组织。</p>
 <pre><code>例如：
 最简单的语句组合一：主词及动词：
@@ -379,6 +506,10 @@ statusItem.<span class="variable">action =</span> Selector(<span class="string">
 <pre><code>  S→bA
   <span class="literal">A</span>→aA|<span class="literal">a</span> 它定义了一个什么语言呢？
 </code></pre><p>从开始符S出发，我们可以推出如下句子：<br>   S → bA → ba<br>   S → bA → baA → baa<br>   S → bA → baA → …  → baa…a<br>可以写为：L(G1)={ba^n|n≥1}</p>
+<hr>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
 <hr>
 <h3 id="参考资料：">参考资料：</h3>
 <ul>
@@ -492,7 +623,7 @@ statusItem.<span class="variable">action =</span> Selector(<span class="string">
     <link href="http://zhonghuan.info/2014/10/01/pip%E4%BB%8B%E7%BB%8D%E4%B8%8E%E4%BD%BF%E7%94%A8/"/>
     <id>http://zhonghuan.info/2014/10/01/pip介绍与使用/</id>
     <published>2014-10-01T01:26:54.000Z</published>
-    <updated>2014-10-01T06:14:53.000Z</updated>
+    <updated>2015-04-11T02:24:57.000Z</updated>
     <content type="html"><![CDATA[<h2 id="介绍">介绍</h2>
 <p>pip 是一个安装和管理 Python 包的工具，python安装包的工具有easy_install, setuptools, pip，distribute。使用这些工具都能下载并安装django。，而pip是easy_install的替代品。在CPython解释器，pypy解释器，可以很好地工作</p>
 <hr>
@@ -523,6 +654,10 @@ pip <span class="keyword">install</span> <span class="string">'SomePackage&gt;=1
 <p>例如我要安装Django，用下面的一条命令即可，方便快捷。</p>
 <pre><code><span class="attribute">pip install Django=</span>=<span class="string">1.7</span>
 </code></pre><hr>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
+<hr>
 <h2 id="参考资料">参考资料</h2>
 <ul>
 <li><a href="https://pip.pypa.io/en/latest/installing.html" target="_blank" rel="external">pip</a></li>
@@ -543,7 +678,7 @@ pip <span class="keyword">install</span> <span class="string">'SomePackage&gt;=1
     <link href="http://zhonghuan.info/2014/09/24/%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%E8%BD%AF%E4%BB%B62014%E6%9C%BA%E8%AF%95/"/>
     <id>http://zhonghuan.info/2014/09/24/清华大学软件2014机试/</id>
     <published>2014-09-24T11:33:15.000Z</published>
-    <updated>2014-09-24T11:34:35.000Z</updated>
+    <updated>2015-04-11T02:25:57.000Z</updated>
     <content type="html"><![CDATA[<p>今天刚刚机试完，乘者还没忘记，把自己知道的记下来，也算是泽被后来人吧~~~</p>
 <p>这次的机试题，相对来说，会更简单一点，总共3题，时间是3小时。</p>
 <h3 id="1_超级幸运数">1 超级幸运数</h3>
@@ -584,6 +719,10 @@ pip <span class="keyword">install</span> <span class="string">'SomePackage&gt;=1
 <p>为什么是2，因为这里只需要把第4，第5本书移动到第三本书的前面，就能够保证书的有序，移动的重量和是2。</p>
 <p>解题思路：</p>
 <p>移动的重量和最小，其实就是求，不移动重量和的最大是多少。那么怎么求不移动的最大重量和呢？其实就是记录下每本书的位置，高度，重量，然后按照高度排序，排序完后，按照节点的位置，来求一个最大子序列，不过这个最大子序列，大不在长度上，而是重量和上，这样求出来的最大子序列重量和，就是不移动的最大重量和，总的重量减去它，就是我们要的答案</p>
+<hr>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
 ]]></content>
     
     
@@ -594,7 +733,7 @@ pip <span class="keyword">install</span> <span class="string">'SomePackage&gt;=1
     <link href="http://zhonghuan.info/2014/09/16/%E6%B5%85%E6%9E%90%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/"/>
     <id>http://zhonghuan.info/2014/09/16/浅析快速排序/</id>
     <published>2014-09-16T08:08:44.000Z</published>
-    <updated>2014-11-21T16:30:21.000Z</updated>
+    <updated>2015-04-11T02:26:23.000Z</updated>
     <content type="html"><![CDATA[<h2 id="基本思想与特性">基本思想与特性</h2>
 <p>快速排序是C.R.A.Hoare于1962年提出的一种划分交换排序。它采用了一种分治的策略，通常称其为分治法(Divide-and-ConquerMethod)。</p>
 <p>该方法的基本思想是：</p>
@@ -800,6 +939,10 @@ pip <span class="keyword">install</span> <span class="string">'SomePackage&gt;=1
 <h3 id="（6）稳定性">（6）稳定性</h3>
 <p>快速排序是非稳定的.</p>
 <hr>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
+<hr>
 <h2 id="参考资料：">参考资料：</h2>
 <ul>
 <li><p><a href="http://student.zjzk.cn/course_ware/data_structure/web/paixu/paixu8.3.2.4.htm" target="_blank" rel="external">快速排序—算法分析</a></p>
@@ -823,7 +966,7 @@ pip <span class="keyword">install</span> <span class="string">'SomePackage&gt;=1
     <link href="http://zhonghuan.info/2014/09/16/%E6%B5%85%E6%9E%90%E8%BF%9E%E7%BB%AD%E5%AD%90%E5%90%91%E9%87%8F(%E5%AD%90%E6%95%B0%E7%BB%84)%E5%92%8C%E9%97%AE%E9%A2%98/"/>
     <id>http://zhonghuan.info/2014/09/16/浅析连续子向量(子数组)和问题/</id>
     <published>2014-09-16T08:06:47.000Z</published>
-    <updated>2014-09-16T08:12:59.000Z</updated>
+    <updated>2015-04-11T02:26:12.000Z</updated>
     <content type="html"><![CDATA[<h2 id="最大连续子向量和">最大连续子向量和</h2>
 <h4 id="问题描述：">问题描述：</h4>
 <pre><code>输入是具有n个浮点数的向量x，输出这个向量的任何连续子向量中的最大和。
@@ -1025,6 +1168,10 @@ for <span class="variable">i=</span>[<span class="number">0</span>,n)
 }
 </code></pre><p>时间辅助度降到O(N<em>M</em>min(M,N)),差不多O(N^3)吧。</p>
 <hr>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
+<hr>
 <h2 id="参考资料：">参考资料：</h2>
 <ul>
 <li><p>Programming pearls <strong>[推荐]</strong></p>
@@ -1048,7 +1195,7 @@ for <span class="variable">i=</span>[<span class="number">0</span>,n)
     <link href="http://zhonghuan.info/2014/09/16/%E6%B5%85%E6%9E%90%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/"/>
     <id>http://zhonghuan.info/2014/09/16/浅析单调队列/</id>
     <published>2014-09-16T08:04:36.000Z</published>
-    <updated>2014-09-16T08:06:04.000Z</updated>
+    <updated>2015-04-11T02:26:36.000Z</updated>
     <content type="html"><![CDATA[<p>大家应该了解什么是队列，那么在队列前面加上“单调”，意思也是显而易见的，就是这个队列是从前往后单调递增或者单调递减的。</p>
 <p>如：{a1,a2,a3,a4……an}满足a1&lt;=a2&lt;=a3……&lt;=an,a序列便是单调递增序列。同理递减队列也是存在的。</p>
 <pre><code>单调队列的出现可以简化问题，队首元素便是最大（小）值，这样，选取最大（小）值的复杂度便为o（1），由于队列的性质，每个元素入队一次，出队一次，维护队列的复杂度均摊下来便是o（1）。
@@ -1241,6 +1388,10 @@ for <span class="variable">i=</span>[<span class="number">0</span>,n)
 <p>这道题的本质就是用单调队列维护了决策本身的价值和其在原序列中位置的同时单调。</p>
 <p>要特别注意单调队列中的值是决策在原决策序列中的位置。</p>
 <hr>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
+<hr>
 <h2 id="参考资料：">参考资料：</h2>
 <ul>
 <li><p><a href="http://www.cnblogs.com/neverforget/archive/2011/10/13/ll.html" target="_blank" rel="external">单调队列及其应用</a>  <strong>[推荐]</strong></p>
@@ -1264,7 +1415,7 @@ for <span class="variable">i=</span>[<span class="number">0</span>,n)
     <link href="http://zhonghuan.info/2014/09/16/%E2%80%9C%E6%B5%85%E6%9E%90kmp%E7%AE%97%E6%B3%95%E2%80%9D/"/>
     <id>http://zhonghuan.info/2014/09/16/“浅析kmp算法”/</id>
     <published>2014-09-16T08:00:57.000Z</published>
-    <updated>2014-09-16T08:03:11.000Z</updated>
+    <updated>2015-04-11T02:27:46.000Z</updated>
     <content type="html"><![CDATA[<p>首先，KMP是一个字符串匹配算法，什么是字符串匹配呢？简单地说，有一个字符串“BBC ABCDAB ABCDABCDABDE”，我想知道这个字符串里面是否有“ABCDABD”；我想，你的脑海中马上就浮现了一个简单的暴力算法，是的，它也有名字，叫做暴力匹配，就是从头开始进行匹配，如果不行的话，就从主字符串的下一个继续。看下面的图结合文字会更清晰些：</p>
 <hr>
 <h2 id="暴力匹配：">暴力匹配：</h2>
@@ -1495,6 +1646,10 @@ for <span class="variable">i=</span>[<span class="number">0</span>,n)
     }
 }
 </code></pre><hr>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
+<hr>
 <h2 id="参考资料">参考资料</h2>
 <ul>
 <li><p><a href="http://jakeboxer.com/blog/2009/12/13/the-knuth-morris-pratt-algorithm-in-my-own-words/" target="_blank" rel="external">The Knuth-Morris-Pratt Algorithm in my own words</a> : <strong>[推荐]</strong></p>
@@ -1528,7 +1683,7 @@ for <span class="variable">i=</span>[<span class="number">0</span>,n)
     <link href="http://zhonghuan.info/2014/09/04/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8Cpython%E7%9A%84re%E6%A8%A1%E5%9D%97/"/>
     <id>http://zhonghuan.info/2014/09/04/正则表达式和python的re模块/</id>
     <published>2014-09-04T15:04:30.000Z</published>
-    <updated>2014-09-04T15:26:41.000Z</updated>
+    <updated>2015-04-11T02:25:25.000Z</updated>
     <content type="html"><![CDATA[<h2 id="什么是正则表达式">什么是正则表达式</h2>
 <p>在编写处理字符串的程序或网页时，经常会有查找符合某些复杂规则的字符串的需要。正则表达式就是用于描述这些规则的工具。正则表达式就是记录文本规则的代码，换句话说，正则表达式是一种文本模式，包括普通字符（例如，a 到 z 之间的字母）和特殊字符（称为“元字符”）。模式描述在搜索文本时要匹配的一个或多个字符串。</p>
 <pre><code>字符是计算机软件处理文字时最基本的单位，可能是字母，数字，标点符号，空格，换行符，汉字等等。字符串是0个或更多个字符的序列。文本也就是文字，字符串。说某个字符串匹配某个正则表达式，通常是指这个字符串里有一部分（或几部分分别）能满足表达式给出的条件。
@@ -1737,6 +1892,10 @@ it = re.finditer(<span class="string">r"\d+"</span>,<span class="string">"123abc
 <pre><code><span class="keyword">import</span> re
 <span class="keyword">print</span> re.subn(<span class="string">r'\sAND\s'</span>, <span class="string">' &amp; '</span>, <span class="string">'Baked Beans And Spam'</span>, flags=re.IGNORECASE)
 </code></pre><hr>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
+<hr>
 <h2 id="参考资料">参考资料</h2>
 <ol>
 <li><a href="http://deerchao.net/tutorials/regex/regex.htm" target="_blank" rel="external">正则表达式30分钟入门教程</a>  <strong>(推荐)</strong></li>
@@ -1767,7 +1926,7 @@ it = re.finditer(<span class="string">r"\d+"</span>,<span class="string">"123abc
     <link href="http://zhonghuan.info/2014/09/04/python%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     <id>http://zhonghuan.info/2014/09/04/python网络爬虫学习笔记/</id>
     <published>2014-09-03T20:38:11.000Z</published>
-    <updated>2014-09-04T05:09:34.000Z</updated>
+    <updated>2015-04-11T02:25:08.000Z</updated>
     <content type="html"><![CDATA[<h2 id="介绍：">介绍：</h2>
 <p>网络爬虫的名字很有意思，英文名称web spider。真得很形象，蜘蛛结网为了获取食物，而我们的爬虫程序，也是为了获取网络上的资源。这篇blog是本人学习过程中的记录。学习过程中，使用的语言是python2.7；python2.7有两个模块，urllib和urllib2，这两个模块提供了很好的网络访问的功能。下面会更好的体会。值得一提的时，在python3中，将urllib和urllib2这两个模块合为一个urllib。感兴趣的可以看<a href="https://docs.python.org/3.4/howto/urllib2.html" target="_blank" rel="external">这里</a></p>
 <p>urllib和urllib2是python中功能强大得网络工作库，它们让你的网络访问像文件访问一样（例如，文件访问我们要先open()一个文件，它的操作也是类似的，后面就会看到例子）。之所以能够这么方便，因为这些模块的内部很好的使用不同的网络协议来完成这些功能，（学过网络应该了解，访问一个网页这个简单的过程，其实涉及到很多的网络协议，像http，dns等等，而urllib和urllib2封装了这些协议，让我们不用和它们打交道，只需要调用这些模块的方法来完成我们需要的功能）。同时，这些模块也提供一些稍微更复杂一点的借口来处理一些情形，例如用户认证，cookies和代理等等。下面让我们开始来学习它们吧。</p>
@@ -2081,6 +2240,10 @@ response = opener.<span class="built_in">open</span>(<span class="string">'http:
 urllib2.install_opener(opener)
 <span class="variable">response =</span> urllib2.urlopen('http://www.google.com')
 </code></pre><hr>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一点，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
+<hr>
 <h2 id="参考资料：">参考资料：</h2>
 <ol>
 <li><p><a href="https://docs.python.org/2.7/howto/urllib2.html" target="_blank" rel="external">python urllib2的使用</a> <strong>(推荐)</strong></p>
