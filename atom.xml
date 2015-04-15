@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Enjoy your choice, enjoy your life.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhonghuan.info/"/>
-  <updated>2015-04-15T05:51:49.647Z</updated>
+  <updated>2015-04-15T05:53:31.413Z</updated>
   <id>http://zhonghuan.info/</id>
   
   <author>
@@ -15,11 +15,11 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[# Swift学习笔记NSCache]]></title>
+    <title><![CDATA[Swift学习笔记NSCache]]></title>
     <link href="http://zhonghuan.info/2015/04/15/Swift%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0NSCache/"/>
     <id>http://zhonghuan.info/2015/04/15/Swift学习笔记NSCache/</id>
     <published>2015-04-15T05:47:38.000Z</published>
-    <updated>2015-04-15T05:51:34.000Z</updated>
+    <updated>2015-04-15T05:53:17.000Z</updated>
     <content type="html"><![CDATA[<h5 id="环境_Xcode_6-3，_Swift_1-2">环境 Xcode 6.3， Swift 1.2</h5>
 <p>从名字上可以感觉出来，Cache，缓存。我们都知道，有时候一些计算量比较大的结果，我们可以缓存起来，下次使用时，可以直接使用，不用重复计算。</p>
 <p>简单的例子来说吧。例如我们有一些图片需要使用，这些图片资源是从网络上获取来的。我们直观上的感觉就是不用每次使用图片都从网络上去获取，可以将得到的图片缓存起来，需要使用的时候，我们可以直接拿来用。</p>
