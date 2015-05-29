@@ -1,0 +1,728 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>小贼音乐--swift开发笔记_step_1 | de部落格^_^</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="钟桓">
+    
+    <meta name="description" itemprop="description" content="小贼音乐开发笔记1">
+    
+    
+    
+    
+    <link rel="alternate" href="/atom.xml" title="de部落格^_^" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/BlogLogo64.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/BlogLogo64.ico">
+    <link rel="apple-touch-icon-precomposed" href="/img/BlogLogo64.ico">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/BlogLogo.png" alt="de部落格^_^" title="de部落格^_^"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="de部落格^_^">de部落格^_^</a></h1>
+				<h2 class="blog-motto">Enjoy your choice, enjoy your life.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">存档</a></li>
+					
+						<li><a href="/about">关于ZH</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhonghuan.info">
+					</form>
+					
+					</li>
+					
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/30/小贼音乐-swift开发笔记-step-1/" title="小贼音乐--swift开发笔记_step_1" itemprop="url">小贼音乐--swift开发笔记_step_1</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhonghuan.info" title="钟桓">钟桓</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-05-29T18:04:05.000Z" itemprop="datePublished">5月 30 2015</time>
+    更新日期:<time datetime="2015-05-29T18:18:06.000Z" itemprop="dateModified">5月 30 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#开头先说说别的"><span class="toc-number">1.</span> <span class="toc-text">开头先说说别的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建swift项目"><span class="toc-number">2.</span> <span class="toc-text">创建swift项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#接入一登SDK"><span class="toc-number">3.</span> <span class="toc-text">接入一登SDK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SDK初始化"><span class="toc-number">4.</span> <span class="toc-text">SDK初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#填写一登APPID和APPSecret"><span class="toc-number">4.1.</span> <span class="toc-text">填写一登APPID和APPSecret</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调用一登SDK获得人脸属性。"><span class="toc-number">5.</span> <span class="toc-text">调用一登SDK获得人脸属性。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#简单美化下"><span class="toc-number">6.</span> <span class="toc-text">简单美化下</span></a></li></ol>
+		</div>
+		
+		<p>小贼音乐的最终效果如下：</p>
+<p><img src="https://raw.githubusercontent.com/ZHONGHuanGit/ZHEmotionMusic/master/zhEmotionMusicInfo.gif" alt=""></p>
+<p>代码开源在我的github上，喜欢请点个赞。<a href="https://github.com/ZHONGHuanGit/ZHEmotionMusic" target="_blank" rel="external">https://github.com/ZHONGHuanGit/ZHEmotionMusic</a></p>
+<hr>
+<p>本篇博文希望达到的效果如下：</p>
+<p><img src="https://raw.githubusercontent.com/ZHONGHuanGit/ZHEmotionMusic/master/开发笔记/images/ZHEmotionMusic_Step1.gif" alt=""></p>
+<hr>
+<h3 id="开头先说说别的">开头先说说别的</h3>
+<p>先说说，为什么要开发这个吧。因为在前段时间，看到了一个很有趣的APP—-emo。是emotion的简写。没有下载的朋友，可以尝试下载一下。emo的特点就是，使用表情识别，推断当前用户的心情，进而给用户推送音乐。用了几次，觉得推送的音乐挺不错的。</p>
+<hr>
+<h3 id="创建swift项目">创建swift项目</h3>
+<p>创建一个swift项目，这个就不详述了，项目名称可以自定义，不过下面的过程，假定项目名称为ZHEmotionMusic。在开始项目前，可以给Xcode添加一个插件，<a href="https://github.com/onevcat/VVDocumenter-Xcode" target="_blank" rel="external">VVDocumenter-Xcode</a>，功能为给方法添加注释，从现在起多写写注释，不仅仅是方便他人的阅读，也是方便自己以后的回顾。</p>
+<hr>
+<h3 id="接入一登SDK">接入一登SDK</h3>
+<p>首先了解一登，开发的APP有一个过程，是人脸识别。而<a href="http://superid.me" target="_blank" rel="external">一登</a>,看官网主要上的描述，主要侧重点在刷脸登陆，但其SDK依旧提供人脸表情识别的功能。（但有一个坑，大家后面也会发现，一登如果要识别人脸表情，需要高级功能，要申请高级功能还得和一登工作人员商量。没办法，一开始没仔细看，不过其实大致的接口是类似。再说一下，国内的face++的识别效果，应该会比一登好，但是一登会比较适合这个音乐app，毕竟emo也是用一登）</p>
+<p>因为不能直接获得人脸的表情状态，但毕竟是为了学习，可以变通一下，一登的基本权限，可以获得人脸的微笑程度，现在我们把众多的表情，分成两个。1）开心  2）不开心。（就当随意练手吧，不要在意这些）</p>
+<p>现在我们集成SDK，分为几个步骤。</p>
+<ol>
+<li><p>在<a href="http://superid.me" target="_blank" rel="external">官网首页</a>点击【注册】完成一登开发者注册。</p>
+</li>
+<li><p>在一登开发者中心，创建一个新应用。应用名称可以直接填项目名称，应用类型为影音图像；下载地址和Apple ID可以忽略。注意bundle得和XCode中项目的Bundle Identifier一致。如下图：</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/ZHONGHuanGit/ZHEmotionMusic/master/开发笔记/images/image1.png" alt=""></p>
+<p>创建好应用后，注意应用中基本信息中含有APP ID 和 APP Secret，在开发过程中会使用。</p>
+<ol>
+<li><p>到一登SDK的<a href="https://github.com/SuperID/SuperID_iOSSDK" target="_blank" rel="external">Github</a>上，下载SDK，可以clone，也可以直接下载zip文件。</p>
+</li>
+<li><p>在一登 GitHub 下载一登 iOS SDK。将 SDK 包中的文件添加至本地工程，其中包括：SuperIDSDKSettings.bundle、 libSuperIDSDK.a、SIDFaceFeatureViewController.h、SuperID.h,SuperIDDelegate.h 共5个文件。为了更好的管理文档，注意记得把这五个文档归为一个Group中。</p>
+</li>
+</ol>
+<p><img src="http://superid.me/document/iOS_images/iOSDemo_file.png" alt=""></p>
+<ol>
+<li>在工程引入静态库之后”需要在编译时添加 -ObjC 和 -lstdc++ 编译选项。方法：xcodeproj-&gt;Build Settings-&gt;Linking-&gt;Other Linker Flags,在 Other Linker Flags 选项中，双击该选项，点击弹出框左下角的 + 按钮，分别添加 “-ObjC” 字符和 “-lstdc++” 字符（如下图）。</li>
+</ol>
+<p><img src="http://superid.me/document/iOS_images/iOSDemo_flag.png" alt=""></p>
+<ol>
+<li>添加依赖库,</li>
+</ol>
+<p>如果你的应用无法正常通过编译，请添加SDK所需的依赖库。主要为：</p>
+<ul>
+<li><p>CoreTelephony.framework</p>
+</li>
+<li><p>CoreMedia.framework</p>
+</li>
+<li><p>AVFoundation.framework</p>
+</li>
+<li><p>libc++.dylib</p>
+</li>
+</ul>
+<p>添加路径为：工程-&gt;Build Phases-&gt;Link Binary With Libraries-&gt;Add-&gt;选择上述的依赖库。</p>
+<hr>
+<h3 id="SDK初始化">SDK初始化</h3>
+<p>注意，我们的项目使用的是Swift语言，但是一登SDK是用objective-c编写的。你可能会焦急，这个怎么办？ 不用担心，Apple公司允许开发人员，在Swift中调用objective-c，需要进行桥接。怎么做呢？看下面的步骤。</p>
+<p>按command+n 创建一个新文件，选择IOS—&gt;Source—&gt;Cocoa Touch Class,随意输入类名，例如OC<br>Object,注意选择语言为objective-c。当你在Swift项目中创建一个object-c文件时候，XCode会自动提示你，创建  项目名称-Bridging-Header.h 文件（这里是 ZHEmotionMusic-Bridging-Header.h），这个文件起桥接作用，你可以在上面引入你需要调用的objective-c头文件，方式和普通的objective-c引入头文件类似，例如，在项目中会使用到 SuperID.h 。所以在里面添加：</p>
+<pre><code>    #<span class="keyword">import</span> <span class="string">"SuperID.h"</span>
+</code></pre><p>声明完后，就可以在项目中使用一登SDK了，不过注意的是，在项目中，我们是使用Swift代码进行编写，即使调用objective-c的类，也是使用Swift方式调用，XCode会帮你转换，这个不用我们担心。</p>
+<h4 id="填写一登APPID和APPSecret">填写一登APPID和APPSecret</h4>
+<p>在SDK文档中有介绍，调用的借口为</p>
+<pre><code><span class="pp">- <span class="params">(void)</span>registerAppWithAppID:<span class="params">(<span class="variable">NSString</span> *)</span>appID withAppSecret:<span class="params">(<span class="variable">NSString</span> *)</span>appSecret;</span>
+</code></pre><p>具体的代码为：</p>
+<pre><code>    - (<span class="built_in">BOOL</span>)application:(<span class="built_in">UIApplication</span> *)application didFinishLaunchingWithOptions:(<span class="built_in">NSDictionary</span> *)launchOptions {
+
+        [[SuperID sharedInstance]registerAppWithAppID:<span class="string">@"应用的AppID"</span> withAppSecret:<span class="string">@"应用的AppSecret"</span>];
+
+        <span class="keyword">return</span> <span class="literal">YES</span>;
+    }
+</code></pre><p>在我们的项目中，使用Swift编写代码如下：</p>
+<pre><code>    <span class="func"><span class="keyword">func</span></span> application(application: <span class="type">UIApplication</span>, didFinishLaunchingWithOptions launchOptions: [<span class="type">NSObject</span>: <span class="type">AnyObject</span>]?) -&gt; <span class="type">Bool</span> {
+            <span class="comment">// Override point for customization after application launch.</span>
+
+
+            <span class="comment">//在代码中向一登 SDK 注册你的 AppID 和 AppSecret</span>
+            <span class="type">SuperID</span>.sharedInstance().registerAppWithAppID(<span class="string">"LDYEYQoR6lnpA2mehpZVzvzK"</span>, withAppSecret: <span class="string">"sETEcYSE1g5OYnmLwSybGheY"</span>)
+
+            <span class="comment">//设置SDK语言模式为简体中文</span>
+            <span class="type">SuperID</span>.setLanguageMode(<span class="type">SIDLanguageMode</span>.<span class="type">SimplifiedChineseMode</span>)
+
+            <span class="comment">//设置SDK调试模式，应用发布时，注意需要关闭</span>
+            <span class="type">SuperID</span>.setDebugMode(<span class="built_in">true</span>);
+
+            <span class="keyword">return</span> <span class="built_in">true</span>
+        }
+</code></pre><p>至此，一登SDK接入完毕，下面看如何调用其人脸识别的功能。</p>
+<hr>
+<h3 id="调用一登SDK获得人脸属性。">调用一登SDK获得人脸属性。</h3>
+<p>在您调用 SIDEmotionViewController(具有人脸识别的View Controller) 的当前 View Controller 中，您需要设置当前 View Controller 作为 SDK 的协议委托对象，并在当前 VC 中声明继承一登 SDK 的Protocol（SuperIDDelegate）并声明 SDK 单例对象，具体代码如下所示。</p>
+<pre><code>    <span class="comment">//先让当前ViewController 实现 SuperIDDelegate 协议</span>
+    <span class="class"><span class="keyword">class</span> <span class="title">ViewController</span>: <span class="title">UIViewController</span> , <span class="title">SuperIDDelegate</span> </span>
+</code></pre><p>然后重载viewWillAppear方法。</p>
+<pre><code>     <span class="javadoc">/**
+        Description
+            View将出现时，所做的操作，这里添加了SDK的委托声明
+        :param: animated
+        */</span>
+        <span class="keyword">override</span> func viewWillAppear(animated: Bool) {
+            <span class="keyword">super</span>.viewWillAppear(animated)
+
+            superIdSdk = SuperID.sharedInstance() <span class="comment">// 获取SDK单例</span>
+            superIdSdk?.delegate = self <span class="comment">//设置委托对象</span>
+        }
+</code></pre><p>然后，在storyboard中，首先选中当前的ViewController，然后在Utilities中的Attributes Inspector中，调整size为iphone4-inch(个人喜好，不喜欢方形的)，然后，添加一个button，放在当前View Controller 中间，然后选中button，按control键，连接button至ViewController中，选择Connection为Action，命名为getFaceFeature。现在的目的是，测试一登的SDK,我们希望，点击button，能够调用用于完成人脸属性检测的ViewController，代码如下：</p>
+<pre><code>    <span class="preprocessor">@IBAction</span> fun getFaceFeature(sender: <span class="type">AnyObject</span>) {
+            <span class="comment">//getAuthorityOfCamera()</span>
+
+            <span class="keyword">var</span> error : <span class="type">NSError</span>? = <span class="built_in">nil</span>;
+
+            <span class="keyword">var</span> <span class="type">SIDEmotionViewController</span>  = superIdSdk!.obtainFaceFeatureViewControllerWithError(&amp;error) <span class="keyword">as</span>? <span class="type">UIViewController</span>;
+
+            <span class="keyword">if</span> <span class="keyword">let</span> <span class="type">SEV</span> = <span class="type">SIDEmotionViewController</span>{
+                <span class="comment">//采用present的方式弹出人脸情绪的功能：</span>
+                <span class="keyword">self</span>.presentViewController(<span class="type">SIDEmotionViewController</span>!, animated: <span class="built_in">true</span>, completion: <span class="built_in">nil</span>)
+
+            }
+            <span class="keyword">else</span>{
+                <span class="built_in">println</span>(<span class="string">"<span class="subst">\(error?.code)</span>     <span class="subst">\(error?.description)</span>"</span>)
+            }
+
+        }
+</code></pre><p>按Command+B，若无错误，则说明上面的步骤正确。可能会有一些警告信息，可以忽略。</p>
+<p>可以进行测试，注意，因为表情识别会用到，摄像头，可是IOS simulator不支持，所以，需要使用真机进行测试，这需要苹果开发者账号，如果没有，可以选在在淘宝上搜 “Xcode 真机测试”，可以允许你在mac上对一台iphone进行真机测试，具体怎么做，可以淘宝搜，店主会详细告诉你。</p>
+<p>如果，你一切顺利，当点击按钮，会提示你，没有权限，下面我们需要写一段代码，让用户每次点击按钮，如果用户没有获得摄像头的权限，可以选择赋予摄像头权限，代码的逻辑很简单，就是先检查当前的权限的状态，然后根据状态进行判断。代码如下：</p>
+<pre><code> <span class="javadoc">/**
+    Description 
+            调用该方法，获取调用相机权限
+    */</span>
+    func getAuthorityOfCamera(){
+        <span class="keyword">var</span> status:AVAuthorizationStatus =  AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
+
+
+        <span class="keyword">if</span>(status == AVAuthorizationStatus.Authorized) { <span class="comment">// authorized</span>
+            <span class="keyword">return</span>;
+        }
+        <span class="keyword">else</span> {
+
+            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: {
+                (Bool granted) -&gt; Void in
+
+                <span class="comment">//如果用户赋予了权限</span>
+                <span class="keyword">if</span>(granted){
+
+                }
+                <span class="comment">//如果没有赋予权限</span>
+                <span class="keyword">else</span>{
+
+                }
+            })
+        }
+    }
+</code></pre><p>然后，注意将getFaceFeature中的一个注释去掉。</p>
+<pre><code> <span class="function">getAuthorityOfCamera</span>()  <span class="comment">// 去掉注释。</span>
+</code></pre><p>然后编译运行试试，会出现一个新的界面，界面使用了前置摄像头，你只需将脸对着前置摄像头，从而进行识别。</p>
+<p>你会奇怪，识别完后，似乎什么事情都没有发生，这是因为，你并没有设定，识别完后做什么。其实。当一登用户在一登 SDK 完成人脸属性检测事件后，SDK 将执行协议中的相应方法，开发者可在对应的方法中进行根据需要相应事件处理。方法是superID，我们需要实现它。代码如下：</p>
+<pre><code>     <span class="javadoc">/**
+        Description
+                用户在一登 SDK 完成人脸属性检测事件后，SDK 将执行协议中的方法，就是本方法，开发者可本方法中进行根据需要相应事件处理
+        :param: sender       SuperID实例
+        :param: featureInfo  检测的人脸信息
+        :param: error        error == nil 则不发生错误； 否则发生错误。
+        */</span>
+        func superID(sender: SuperID!, userDidFinishGetFaceFeatureWithFeatureInfo featureInfo: [NSObject : AnyObject]!, error: NSError!) {
+            <span class="keyword">if</span>(error == nil){
+                println(<span class="string">"操作成功!"</span>)
+
+                println(featureInfo)
+
+            }
+            <span class="keyword">else</span>{
+                println(<span class="string">"操作失败!"</span>)
+
+                println(<span class="string">"\(error.code)   \(error.description)"</span>)
+            }
+        }
+</code></pre><p>当你再次运行，你会在All out中，发现，输出了一些内容。例如：</p>
+<pre><code>    操作成功!
+    [eyeglasses: {
+        <span class="literal">result</span> = <span class="number">1</span>;
+        score = <span class="string">"0.992422"</span>;
+    }, male: {
+        <span class="literal">result</span> = <span class="number">1</span>;
+        score = <span class="string">"0.999256"</span>;
+    }, sunglasses: {
+        <span class="literal">result</span> = <span class="number">0</span>;
+        score = <span class="string">"0.393262"</span>;
+    }, smiling: {
+        <span class="literal">result</span> = <span class="number">0</span>;
+        score = <span class="string">"0.001676"</span>;
+    }, age: <span class="number">25</span>.<span class="number">96</span>, resource_id: <span class="number">55620</span>c94de77d8ae668e1fc4, mustache: {
+        <span class="literal">result</span> = <span class="number">1</span>;
+        score = <span class="string">"0.518885"</span>;
+    }]
+</code></pre><p>好了，一登SDK暂且OK。下面让我们美化一下。</p>
+<hr>
+<h3 id="简单美化下">简单美化下</h3>
+<pre><code>    顺便提一句，app_icon ，是用Sketch来设计制作的，请大家体谅一下，不是Sketch不好用，而是本人捉急的艺术功底。
+</code></pre><p>先看 app_icon.png,这个拖至Images.xcassets的AppIcon中。</p>
+<p><img src="https://raw.githubusercontent.com/ZHONGHuanGit/ZHEmotionMusic/master/开发笔记/images/app_icon.png" alt=""></p>
+<p>再添加几个图片，</p>
+<p>basic.png</p>
+<p><img src="https://raw.githubusercontent.com/ZHONGHuanGit/ZHEmotionMusic/master/开发笔记/images/basic.png" alt=""></p>
+<p>happy.png</p>
+<p><img src="https://raw.githubusercontent.com/ZHONGHuanGit/ZHEmotionMusic/master/开发笔记/images/happy.png" alt=""></p>
+<p>sad.png</p>
+<p><img src="https://raw.githubusercontent.com/ZHONGHuanGit/ZHEmotionMusic/master/开发笔记/images/sad.png" alt=""></p>
+<p>这些是后面步骤会使用到的图片。现在AppIcon已经有图片了，所以当你再次运行时，iphone手机上的图标就有了。现在我们改改图标下面显示的App名字。也很简单，就是打开Supporting Files—&gt;Info.plist文件，找到，Bundle name，修改为—&gt;小贼音乐。如图所示：</p>
+<p><img src="https://raw.githubusercontent.com/ZHONGHuanGit/ZHEmotionMusic/master/开发笔记/images/image2.png" alt=""></p>
+<p>打开Main.storyboard，删除原来的button，现在选择一个image View放到上面，设置大小为250*250，设置图片为basic， 再添加两个label，最后，如图所示：</p>
+<p><img src="https://raw.githubusercontent.com/ZHONGHuanGit/ZHEmotionMusic/master/开发笔记/images/image3.png" alt=""></p>
+<p>上面的image view 和两个label都使用了auto layout布局，这个大家可以去了解一下，然后选择合适的方式将它们展示出来就可以了。</p>
+<p>注意需要设定中间ImageView的layer.cornerRadius，不少人喜欢在代码中实现，但本人懒，不太喜欢用代码。但是，有无法直接在ImageView的属性中进行设定，推荐大家一种方式，使用User Defined Runtime Attributes，详情可看<a href="http://spin.atomicobject.com/2014/05/30/xcode-runtime-attributes/" target="_blank" rel="external">这里</a>。最终，如下图：</p>
+<p><img src="https://raw.githubusercontent.com/ZHONGHuanGit/ZHEmotionMusic/master/开发笔记/images/image4.png" alt=""></p>
+<p>按control，将image view和两个label都绑定到View Controller中。</p>
+<pre><code>  <span class="comment">///ImageView实例</span>
+    <span class="preprocessor">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> imageView: <span class="type">UIImageView</span>!
+
+    <span class="comment">///第一个Label标签</span>
+    <span class="preprocessor">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> label1: <span class="type">UILabel</span>!
+
+    <span class="comment">/// 第二个Label标签</span>
+    <span class="preprocessor">@IBOutlet</span> <span class="keyword">weak</span> <span class="keyword">var</span> label2: <span class="type">UILabel</span>!
+</code></pre><p>在Main.storyboard中，给当前的view Controller 添加一个Long Press Gesture Recognizer，因为设定是长按屏幕，进行扫描人脸。如果不了解 Gesture recognizer，可以去了解一下，简单的说，就是手势识别，这个Long Press Gesture Recognizer是专门用来识别长按屏幕这个手势操作的，是苹果官方提供的手势识别，当然你也可以自己写自己的手势，不过我们暂时使用这个手势就足够了。</p>
+<p>按control将手势连接至ViewController，选择Action，命名位longPressAction，大致内容和上面的getFaceFeature一样。</p>
+<pre><code>     <span class="comment">/**
+        Description
+            处理用户长按屏幕的行动
+
+        :param: sender
+        */</span>
+        <span class="preprocessor">@IBAction</span> <span class="func"><span class="keyword">func</span></span> longPressAction(sender: <span class="type">AnyObject</span>) {
+            getAuthorityOfCamera()
+
+            <span class="keyword">var</span> error : <span class="type">NSError</span>? = <span class="built_in">nil</span>;
+
+            <span class="keyword">var</span> <span class="type">SIDEmotionViewController</span>  = superIdSdk!.obtainFaceFeatureViewControllerWithError(&amp;error) <span class="keyword">as</span>? <span class="type">UIViewController</span>;
+
+            <span class="keyword">if</span> <span class="keyword">let</span> <span class="type">SEV</span> = <span class="type">SIDEmotionViewController</span>{
+                <span class="comment">//采用present的方式弹出人脸情绪的功能：</span>
+                <span class="keyword">self</span>.presentViewController(<span class="type">SIDEmotionViewController</span>!, animated: <span class="built_in">true</span>, completion: <span class="built_in">nil</span>)
+
+            }
+            <span class="keyword">else</span>{
+                <span class="built_in">println</span>(<span class="string">"<span class="subst">\(error?.code)</span>     <span class="subst">\(error?.description)</span>"</span>)
+            }
+
+        }
+</code></pre><p>但我们更新一下，实现的协议方法superID，</p>
+<pre><code> /**
+    <span class="type">Description</span>
+            用户在一登 <span class="type">SDK</span> 完成人脸属性检测事件后，<span class="type">SDK</span> 将执行协议中的方法，就是本方法，开发者可本方法中进行根据需要相应事件处理
+    :param: sender       <span class="type">SuperID</span>实例
+    :param: featureInfo  检测的人脸信息
+    :param: error        error == <span class="keyword">nil</span> 则不发生错误； 否则发生错误。
+    */
+    func superID(sender: <span class="type">SuperID</span>!, userDidFinishGetFaceFeatureWithFeatureInfo featureInfo: [<span class="type">NSObject</span> : <span class="type">AnyObject</span>]!, error: <span class="type">NSError</span>!) {
+        <span class="keyword">if</span>(error == <span class="keyword">nil</span>){
+            println(<span class="string">"操作成功!"</span>)
+
+            println(featureInfo)
+//            <span class="keyword">var</span> info = featureInfo!
+
+            //因为featureInfo和其内部的数据，都是optional类型，需要 unwrap
+            <span class="keyword">if</span> <span class="keyword">let</span> info = featureInfo {
+                <span class="keyword">var</span> smileResult = info[<span class="string">"smiling"</span>]!
+                <span class="keyword">var</span> <span class="literal">result</span> = smileResult[<span class="string">"result"</span>] <span class="keyword">as</span>! <span class="type">Int</span>
+                <span class="keyword">var</span> score = smileResult[<span class="string">"score"</span>] <span class="keyword">as</span>! <span class="type">Double</span>
+                println(score)
+                <span class="keyword">if</span> <span class="literal">result</span> == <span class="number">1</span> {
+                    imageView.image = <span class="type">UIImage</span>(named: <span class="string">"happy"</span>)
+                    label1.text = <span class="string">"诶哟！"</span>
+                    label2.text = <span class="string">"今天心情不错哦！"</span>
+                }<span class="keyword">else</span>{
+                    imageView.image = <span class="type">UIImage</span>(named: <span class="string">"sad"</span>)
+                    label1.text = <span class="string">"唉！一言以蔽之"</span>
+                    label2.text = <span class="string">"心好涩"</span>
+                }
+            }
+
+        }
+        <span class="keyword">else</span>{
+            println(<span class="string">"操作失败!"</span>)
+
+            println(<span class="string">"\(error.code)   \(error.description)"</span>)
+        }
+    }
+</code></pre><p>最后一个步骤，让我们修改一下Launch image，查看  项目—&gt; General —&gt; App Icons and Launch Images —&gt; Launch screen file。 默认的Launch image是LaunchScreen.xib，这个在项目创建时自动生成的，在这里，我们选择Main.storyboard作为Launch image。 </p>
+<p>可以尝试运行，测试一下结果如何。第一步，暂时到此结束。</p>
+<hr>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一快两块的，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Swift/">Swift</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Swift/">Swift</a>►<a class="article-category-link" href="/categories/Swift/小贼音乐/">小贼音乐</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhonghuan.info/2015/05/30/小贼音乐-swift开发笔记-step-1/" data-title="小贼音乐--swift开发笔记_step_1 | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/30/小贼音乐-swift开发笔记-step-2/" title="小贼音乐--swift开发笔记_step_2">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  小贼音乐--swift开发笔记_step_2</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/04/16/UIImage添加Gesture-Recognizer/"  title="UIImage添加Gesture Recognizer">
+ <strong>NEXT:</strong><br/> 
+ <span>UIImage添加Gesture Recognizer
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#开头先说说别的"><span class="toc-number">1.</span> <span class="toc-text">开头先说说别的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建swift项目"><span class="toc-number">2.</span> <span class="toc-text">创建swift项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#接入一登SDK"><span class="toc-number">3.</span> <span class="toc-text">接入一登SDK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SDK初始化"><span class="toc-number">4.</span> <span class="toc-text">SDK初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#填写一登APPID和APPSecret"><span class="toc-number">4.1.</span> <span class="toc-text">填写一登APPID和APPSecret</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调用一登SDK获得人脸属性。"><span class="toc-number">5.</span> <span class="toc-text">调用一登SDK获得人脸属性。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#简单美化下"><span class="toc-number">6.</span> <span class="toc-text">简单美化下</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Swift/" title="Swift">Swift<sup>7</sup></a></li>
+		
+			<li><a href="/categories/webspider/" title="python网络爬虫">python网络爬虫<sup>2</sup></a></li>
+		
+			<li><a href="/categories/Swift/小贼音乐/" title="小贼音乐">小贼音乐<sup>3</sup></a></li>
+		
+			<li><a href="/categories/工具类，软件类介绍/" title="工具类，软件类介绍">工具类，软件类介绍<sup>2</sup></a></li>
+		
+			<li><a href="/categories/算法/" title="算法">算法<sup>4</sup></a></li>
+		
+			<li><a href="/categories/编译/" title="编译">编译<sup>1</sup></a></li>
+		
+			<li><a href="/categories/记or谈/" title="记or谈">记or谈<sup>1</sup></a></li>
+		
+			<li><a href="/categories/问题笔记/" title="问题笔记">问题笔记<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/KMP/" title="KMP">KMP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Swift/" title="Swift">Swift<sup>7</sup></a></li>
+		
+			<li><a href="/tags/XAMPP/" title="XAMPP">XAMPP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>4</sup></a></li>
+		
+			<li><a href="/tags/mac/" title="mac">mac<sup>1</sup></a></li>
+		
+			<li><a href="/tags/osX/" title="osX">osX<sup>3</sup></a></li>
+		
+			<li><a href="/tags/pip/" title="pip">pip<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>2</sup></a></li>
+		
+			<li><a href="/tags/python安装管理工具/" title="python安装管理工具">python安装管理工具<sup>1</sup></a></li>
+		
+			<li><a href="/tags/re/" title="re">re<sup>1</sup></a></li>
+		
+			<li><a href="/tags/urllib/" title="urllib">urllib<sup>1</sup></a></li>
+		
+			<li><a href="/tags/urllib2/" title="urllib2">urllib2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/webspider/" title="webspider">webspider<sup>2</sup></a></li>
+		
+			<li><a href="/tags/单调队列/" title="单调队列">单调队列<sup>1</sup></a></li>
+		
+			<li><a href="/tags/字符串匹配/" title="字符串匹配">字符串匹配<sup>1</sup></a></li>
+		
+			<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/电子商务/" title="电子商务">电子商务<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编译原理/" title="编译原理">编译原理<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> You, lower the IQ of the street, go to study~~ <br/>
+			^_^</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/u/2103243911" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/ZHONGHuanGit" target="_blank" title="github"></a>
+		
+		
+	</div>
+		
+		<p class="copyright">
+			<font face="arial">
+ 			博客所有内容采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">自由转载-非商业用途-非衍生-保持署名的创作共用协议</a>
+			</font>
+		</p>
+		<p class="copyright">
+			<font face="arial">
+ 			Licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike License</a>.
+			</font>
+		</p>
+		
+
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://zhonghuan.info" target="_blank" title="钟桓">钟桓</a>
+		
+		<font face=“arial” size=“0.5”>
+		</font>
+		</p>
+</div>
+
+
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});    
+</script>
+
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"zhonghuan001"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+  </body>
+</html>

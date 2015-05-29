@@ -1,0 +1,925 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>小贼音乐--swift开发笔记_step_2 | de部落格^_^</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="钟桓">
+    
+    <meta name="description" itemprop="description" content="小贼音乐开发笔记2">
+    
+    
+    
+    
+    <link rel="alternate" href="/atom.xml" title="de部落格^_^" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/BlogLogo64.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/BlogLogo64.ico">
+    <link rel="apple-touch-icon-precomposed" href="/img/BlogLogo64.ico">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/BlogLogo.png" alt="de部落格^_^" title="de部落格^_^"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="de部落格^_^">de部落格^_^</a></h1>
+				<h2 class="blog-motto">Enjoy your choice, enjoy your life.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">存档</a></li>
+					
+						<li><a href="/about">关于ZH</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhonghuan.info">
+					</form>
+					
+					</li>
+					
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/30/小贼音乐-swift开发笔记-step-2/" title="小贼音乐--swift开发笔记_step_2" itemprop="url">小贼音乐--swift开发笔记_step_2</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhonghuan.info" title="钟桓">钟桓</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-05-29T18:04:12.000Z" itemprop="datePublished">5月 30 2015</time>
+    更新日期:<time datetime="2015-05-29T18:18:23.000Z" itemprop="dateModified">5月 30 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导入CircularProgressView"><span class="toc-number">1.</span> <span class="toc-text">导入CircularProgressView</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#水水的添加音乐"><span class="toc-number">2.</span> <span class="toc-text">水水的添加音乐</span></a></li></ol>
+		</div>
+		
+		<p>小贼音乐的最终效果如下：</p>
+<p><img src="https://raw.githubusercontent.com/ZHONGHuanGit/ZHEmotionMusic/master/zhEmotionMusicInfo.gif" alt=""></p>
+<p>代码开源在我的github上，喜欢请点个赞。<a href="https://github.com/ZHONGHuanGit/ZHEmotionMusic" target="_blank" rel="external">https://github.com/ZHONGHuanGit/ZHEmotionMusic</a></p>
+<hr>
+<p>在step1中，我们可以识别人脸表情，在这一步中，我们加入音乐的功能。时不我待，开始吧。</p>
+<p>首先了解我们希望得到的最终结果，如下图，是一个能够扫描心情，并且播放音乐：</p>
+<p><img src="https://raw.githubusercontent.com/ZHONGHuanGit/ZHEmotionMusic/master/开发笔记/images/image6.PNG" alt=""></p>
+<hr>
+<h3 id="导入CircularProgressView">导入CircularProgressView</h3>
+<p>什么是ProgressView，应该了解，那么前面加了个Circular，意思很明确了，就是在圆形的progress view了，不过它的实现并没有继承progress view，而是继承自view再实现。它虽然带着ProgressView的名字，却也扮演着播放器的角色。可以看<a href="https://cocoapods.org/pods/CircularProgressView" target="_blank" rel="external">这篇blog了解它</a>。由于原作者的版本，音乐播放并不支持网络上的音乐，所以，我更新了其实现方式，更改了内部的播放器，让它支持网络上的音乐文件。<strong>更新的CircularProgressView开源在<a href="https://github.com/ZHONGHuanGit/CircularProgressView" target="_blank" rel="external">github</a>。</strong> <strong><em>喜欢点个赞哈</em></strong> </p>
+<p>按照github上面的步骤，我们将CircularProgressView.h和CircularProgressView.m导入我们的项目中，并且新建了一个group，起名CircularProgressView。方便代码审阅。并且把CircularProgressViewDemo中的“我的歌声里”这首歌添加进我们的项目。</p>
+<p>导入了objective-c代码，由于我们在项目中需要使用它，所以需要在ZHEmotionMusic-Bridging-Header中登记一下，添加代码如下：</p>
+<pre><code>    #<span class="keyword">import</span> <span class="string">"CircularProgressView.h"</span>
+</code></pre><p>然后在Main.storyboard中，添加一个View(注意，放在原先图像后面)，在其对应的Identity Inspector中，更改class为CircularProgressView.h。在size inspector中，更改大小为256*256。<br>因为我们希望一会儿圆圈的line width是4.然后，往ViewController中，添加如下代码。</p>
+<pre><code>    <span class="keyword">self</span><span class="variable">.circularProgressView</span><span class="variable">.backColor</span> = <span class="built_in">UIColor</span>(red: <span class="number">236.0</span> / <span class="number">255.0</span>, green: <span class="number">236.0</span> / <span class="number">255.0</span>, blue: <span class="number">236.0</span>/<span class="number">255.0</span>, alpha: <span class="number">1.0</span>)
+            <span class="keyword">self</span><span class="variable">.circularProgressView</span><span class="variable">.progressColor</span> = <span class="built_in">UIColor</span>(red: <span class="number">0</span>, green: <span class="number">0</span>, blue: <span class="number">0</span>, alpha: <span class="number">1.0</span>)
+            <span class="keyword">self</span><span class="variable">.circularProgressView</span><span class="variable">.lineWidth</span> = <span class="number">4</span>
+            <span class="keyword">self</span><span class="variable">.circularProgressView</span><span class="variable">.audioURL</span> = <span class="built_in">NSBundle</span><span class="variable">.mainBundle</span>()<span class="variable">.URLForResource</span>(<span class="string">"我的歌声里"</span>, withExtension: <span class="string">"mp3"</span>)
+             <span class="keyword">self</span><span class="variable">.circularProgressView</span><span class="variable">.play</span>()
+</code></pre><p>然后尝试运行，啊哦，我们希望的圈圈和原来的视图中间的图像不是很搭，这下怎么办？原因是，师徒中间的imageview使用了autolayout进行了适配，所以，为了让它们时间永远保存某种关系，可以对后面添加的view进行autolayout，我选择的方式，就是让view的top，bottom，left，right始终和imageView保持距离3。增加完autolayout后，运行，结果如下：</p>
+<p><img src="https://raw.githubusercontent.com/ZHONGHuanGit/ZHEmotionMusic/master/开发笔记/images/image5.png" alt=""></p>
+<p>中间的黑色线条，其在园中的百分比，就是歌曲进行的百分比。同时你可以听到音乐的播放。</p>
+<hr>
+<h3 id="水水的添加音乐">水水的添加音乐</h3>
+<p>由于暂时没有找到合适的根据心情，提供音乐的API，所以，就先水水的拿一个冒牌的东东来暂时替代一下吧。一些内容来自<a href="http://www.swiftv.cn/course/hwxktqix" target="_blank" rel="external">【老镇出品】实战-豆瓣电台</a>,如果从没使用swift进行网络编程的话，可以去看一下这个视频教程，里面的内容相对来说更基础，在我们的实现中，对视频中讲解的代码做了一些改进，如果你看了视频的话，可以稍微注意下，希望有所帮助。</p>
+<p>在step1中，我们暂且定义了两个表情，开心，不开心。所以需要两个源，一个是获取开心的音乐，一个获取不开心的音乐，之所以说水水的，看下面的代码：</p>
+<pre><code><span class="comment"><span class="xmlDocTag">///</span> 快乐就听摇滚</span>
+<span class="keyword">let</span> happySongsURL = <span class="string">"http://douban.fm/j/mine/playlist?channel=7"</span>
+
+<span class="comment"><span class="xmlDocTag">///</span> 悲伤就听R&amp;B</span>
+<span class="keyword">let</span> sadSongsURL = <span class="string">"http://douban.fm/j/mine/playlist?channel=14"</span>
+</code></pre><p>从代码中，可以体会出，我将豆瓣的摇滚当做快乐的音乐源，将R&amp;B当做悲伤的音乐源。不好意思，暂时没有合适的，就先这样了，大家见谅一下吧。</p>
+<p>下一步，新建一个HttpController.swift文件，然后添加如下代码：</p>
+<pre><code><span class="keyword">import</span> UIKit
+
+<span class="javadoc">/**
+*  协议负责处理网络连接后的数据处理
+*/</span>
+protocol HttpProtocol{
+    <span class="javadoc">/**
+    负责处理网络连接后的数据处理
+
+    :param: results 需要处理的数据
+    */</span>
+    func didReceiveResults(results : NSDictionary)
+
+}
+
+<span class="javadoc">/**
+*  负责网络连接
+*/</span>
+class HttpController: NSObject {
+
+    var delegate : HttpProtocol?
+
+    <span class="javadoc">/**
+        给定url，访问网络资源
+
+    :param: url 资源URL地址
+    */</span>
+    func onSearch(url : String) {
+
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = <span class="keyword">true</span>
+
+        let nsUrl = NSURL(string: url)
+        let request:NSURLRequest = NSURLRequest(URL : nsUrl!)
+        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: config)
+        let task = session.dataTaskWithRequest(request){
+            (data,response,error) -&gt; Void in
+            <span class="keyword">if</span> error == nil {
+
+                var jsonResult : NSDictionary  = NSJSONSerialization.JSONObjectWithData(data,options:NSJSONReadingOptions.MutableContainers, error : nil) as! NSDictionary
+
+
+                self.delegate?.didReceiveResults(jsonResult)
+
+            }<span class="keyword">else</span>{
+                println(error)
+            }
+
+
+        }
+
+        task.resume()
+
+    }
+
+
+}
+</code></pre><p>HttpController的作用是负责Http的连接，通过IOS的NSURLSession，获取我们需要的内容。</p>
+<p>何时调用HttpController呢？ 答案就是，扫描表情之后，所以需要修改ViewController。首先，在ViewController中，添加一个属性， </p>
+<pre><code><span class="comment">/// 用来获取网络数据</span>
+<span class="keyword">var</span> http : HttpController = HttpController()
+</code></pre><p>http是HttpController的一个实例，用来获取网络的数据。修改SuperID方法，如下：</p>
+<pre><code> /**
+    <span class="type">Description</span>
+            用户在一登 <span class="type">SDK</span> 完成人脸属性检测事件后，<span class="type">SDK</span> 将执行协议中的方法，就是本方法，开发者可本方法中进行根据需要相应事件处理
+    :param: sender       <span class="type">SuperID</span>实例
+    :param: featureInfo  检测的人脸信息
+    :param: error        error == <span class="keyword">nil</span> 则不发生错误； 否则发生错误。
+    */
+    func superID(sender: <span class="type">SuperID</span>!, userDidFinishGetFaceFeatureWithFeatureInfo featureInfo: [<span class="type">NSObject</span> : <span class="type">AnyObject</span>]!, error: <span class="type">NSError</span>!) {
+        <span class="keyword">if</span>(error == <span class="keyword">nil</span>){
+            println(<span class="string">"操作成功!"</span>)
+
+            println(featureInfo)
+//            <span class="keyword">var</span> info = featureInfo!
+
+            //因为featureInfo和其内部的数据，都是optional类型，需要 unwrap
+            <span class="keyword">if</span> <span class="keyword">let</span> info = featureInfo {
+                <span class="keyword">var</span> smileResult = info[<span class="string">"smiling"</span>]!
+                <span class="keyword">var</span> <span class="literal">result</span> = smileResult[<span class="string">"result"</span>] <span class="keyword">as</span>! <span class="type">Int</span>
+                <span class="keyword">var</span> score = smileResult[<span class="string">"score"</span>] <span class="keyword">as</span>! <span class="type">Double</span>
+                println(score)
+                <span class="keyword">if</span> <span class="literal">result</span> == <span class="number">1</span> {
+                    imageView.image = <span class="type">UIImage</span>(named: <span class="string">"happy"</span>)
+                    label1.text = <span class="string">"诶哟！"</span>
+                    label2.text = <span class="string">"今天心情不错哦！"</span>
+                    //获取happy歌曲的数据
+                    http.onSearch(happySongsURL)
+
+                }<span class="keyword">else</span>{
+                    imageView.image = <span class="type">UIImage</span>(named: <span class="string">"sad"</span>)
+                    label1.text = <span class="string">"唉！一言以蔽之"</span>
+                    label2.text = <span class="string">"心好涩"</span>
+                    //获取sad歌曲的数据
+                    http.onSearch(sadSongsURL)
+                }
+            }
+
+        }
+        <span class="keyword">else</span>{
+            println(<span class="string">"操作失败!"</span>)
+
+            println(<span class="string">"\(error.code)   \(error.description)"</span>)
+        }
+    }
+</code></pre><p>从前面可以看到，HttpController有一个delegate，属于HttpProtocol类型，专门负责处理从网络上获取的得来的数据。所以，我们让ViewController视线HttpProtocol协议，然后在其内部实现didReceiveResults方法，如下：</p>
+<pre><code>     <span class="javadoc">/**
+        负责处理从网络上获取的数据
+
+    :param: results 获取得到的数据
+    */</span>
+    func didReceiveResults(results : NSDictionary){
+        println(<span class="string">"数据成功接收"</span>)
+        println(results)
+    }
+</code></pre><p>不要忘了在viewDidLoad中，设置http的delegate，添加如下代码：</p>
+<pre><code><span class="comment">//http的处理交给当前实现HttpProtocol的ViewController来处理</span>
+        http.<span class="keyword">delegate</span> = <span class="keyword">self</span>
+</code></pre><p>运行，控制台会输出，一些从网络上获取得到的歌曲信息。现在来看看怎么处理这些信息。前提是，了解这些信息的格式，这些信息都是json数据格式，在浏览器中，访问 <a href="http://douban.fm/j/mine/playlist?channel=7" target="_blank" rel="external">http://douban.fm/j/mine/playlist?channel=7</a> 。 显示一大堆数据，它们都是json格式，复制这些数据，然后访问 <a href="http://jsoneditoronline.org" target="_blank" rel="external">http://jsoneditoronline.org</a> 。json editor online 能够将乱乱的json格式数据，排列成有序的，易于阅读的格式。看一下获取的json数据参考格式：</p>
+<pre><code>    {
+        "<span class="attribute">r</span>": <span class="value"><span class="number">0</span></span>,
+        "<span class="attribute">is_show_quick_start</span>": <span class="value"><span class="number">0</span></span>,
+        "<span class="attribute">song</span>": <span class="value">[
+            {
+                "<span class="attribute">album</span>": <span class="value"><span class="string">"/subject/7153475/"</span></span>,
+                "<span class="attribute">picture</span>": <span class="value"><span class="string">"http://img3.douban.com/lpic/s7022222.jpg"</span></span>,
+                "<span class="attribute">ssid</span>": <span class="value"><span class="string">"cd19"</span></span>,
+                "<span class="attribute">artist</span>": <span class="value"><span class="string">"Herman's Hermits"</span></span>,
+                "<span class="attribute">url</span>": <span class="value"><span class="string">"http://mr3.douban.com/201406201304/a687b5d793bb3233e243f05a3e502b20/view/song/small/p2087018.mp3"</span></span>,
+                "<span class="attribute">company</span>": <span class="value"><span class="string">"Warner"</span></span>,
+                "<span class="attribute">title</span>": <span class="value"><span class="string">"Smile Please"</span></span>,
+                "<span class="attribute">rating_avg</span>": <span class="value"><span class="number">0</span></span>,
+                "<span class="attribute">length</span>": <span class="value"><span class="number">165</span></span>,
+                "<span class="attribute">subtype</span>": <span class="value"><span class="string">""</span></span>,
+                "<span class="attribute">public_time</span>": <span class="value"><span class="string">"2004"</span></span>,
+                "<span class="attribute">songlists_count</span>": <span class="value"><span class="number">0</span></span>,
+                "<span class="attribute">sid</span>": <span class="value"><span class="string">"2087018"</span></span>,
+                "<span class="attribute">aid</span>": <span class="value"><span class="string">"7153475"</span></span>,
+                "<span class="attribute">sha256</span>": <span class="value"><span class="string">"5f6ba79e1463c1b54d0be17d090d4ee09d55121a91905ddd2217b0ba458ca7a2"</span></span>,
+                "<span class="attribute">kbps</span>": <span class="value"><span class="string">"64"</span></span>,
+                "<span class="attribute">albumtitle</span>": <span class="value"><span class="string">"The Best of"</span></span>,
+                "<span class="attribute">like</span>": <span class="value"><span class="string">"0"</span>
+            </span>},
+            {
+                "<span class="attribute">album</span>": <span class="value"><span class="string">"/subject/1947603/"</span></span>,
+                "<span class="attribute">picture</span>": <span class="value"><span class="string">"http://img3.douban.com/lpic/s4458282.jpg"</span></span>,
+                "<span class="attribute">ssid</span>": <span class="value"><span class="string">"b80e"</span></span>,
+                "<span class="attribute">artist</span>": <span class="value"><span class="string">"Pompeii"</span></span>,
+                "<span class="attribute">url</span>": <span class="value"><span class="string">"http://mr3.douban.com/201406201304/f8ea9c7ba0793030c8c486152d51527e/view/song/small/p2087210.mp3"</span></span>,
+                "<span class="attribute">company</span>": <span class="value"><span class="string">"Warner"</span></span>,
+                "<span class="attribute">title</span>": <span class="value"><span class="string">"Ten Hundred Lights"</span></span>,
+                "<span class="attribute">rating_avg</span>": <span class="value"><span class="number">3.81894</span></span>,
+                "<span class="attribute">length</span>": <span class="value"><span class="number">255</span></span>,
+                "<span class="attribute">subtype</span>": <span class="value"><span class="string">""</span></span>,
+                "<span class="attribute">public_time</span>": <span class="value"><span class="string">"2006"</span></span>,
+                "<span class="attribute">songlists_count</span>": <span class="value"><span class="number">0</span></span>,
+                "<span class="attribute">sid</span>": <span class="value"><span class="string">"2087210"</span></span>,
+                "<span class="attribute">aid</span>": <span class="value"><span class="string">"1947603"</span></span>,
+                "<span class="attribute">sha256</span>": <span class="value"><span class="string">"761fb793fd0571663c469a10bf9fc3bf0e2e3b329ecc5dddad8a2d28fd7ac0c7"</span></span>,
+                "<span class="attribute">kbps</span>": <span class="value"><span class="string">"64"</span></span>,
+                "<span class="attribute">albumtitle</span>": <span class="value"><span class="string">"Assembly"</span></span>,
+                "<span class="attribute">like</span>": <span class="value"><span class="string">"0"</span>
+            </span>}
+        ]
+    </span>} 
+</code></pre><p>了解了格式，就能够依据格式，提取出我们需要的信息。在ViewController中，添加：</p>
+<pre><code><span class="comment">/// 歌曲列表</span>
+    <span class="keyword">var</span> songs = NSArray()
+</code></pre><p>songs用来，保存歌曲。</p>
+<p>更新didReceiveResults方法，</p>
+<pre><code><span class="comment">// MARK: - HttpProtocol Method</span>
+    <span class="comment">/**
+        负责处理从网络上获取的数据
+
+    :param: results 获取得到的数据
+    */</span>
+    <span class="func"><span class="keyword">func</span></span> didReceiveResults(results : <span class="type">NSDictionary</span>){
+        <span class="built_in">println</span>(<span class="string">"数据成功接收"</span>)
+<span class="comment">//        println(results)</span>
+        <span class="keyword">self</span>.songs = results[<span class="string">"song"</span>] <span class="keyword">as</span>! <span class="type">NSArray</span>
+
+        <span class="keyword">let</span> song0 = <span class="keyword">self</span>.songs[<span class="number">0</span>] <span class="keyword">as</span>! <span class="type">NSDictionary</span>
+
+        <span class="keyword">let</span> songURL = song0[<span class="string">"url"</span>] <span class="keyword">as</span>! <span class="type">String</span>
+        <span class="built_in">println</span>(<span class="string">"song URL: <span class="subst">\(songURL)</span>"</span>)
+
+        <span class="comment">//更新界面UI的操作，放在主线程，提高反应速度</span>
+        dispatch_async(dispatch_get_main_queue(), {
+            () -&gt;<span class="type">Void</span> <span class="keyword">in</span>
+            <span class="keyword">self</span>.circularProgressView.stop()
+            <span class="keyword">self</span>.circularProgressView.audioURL = <span class="type">NSURL</span>(string: songURL)
+            <span class="keyword">self</span>.circularProgressView.play()
+
+            <span class="keyword">let</span> imageUrl = song0[<span class="string">"picture"</span>] <span class="keyword">as</span>! <span class="type">String</span>
+            <span class="keyword">self</span>.onSetImage(imageUrl)
+            <span class="type">UIApplication</span>.sharedApplication().networkActivityIndicatorVisible = <span class="built_in">false</span>
+
+        })
+
+    }
+</code></pre><p>onSetImage方法的代码如下：</p>
+<pre><code><span class="javadoc">/**
+        处理图片，调用ImageLoader单例进行图片缓存。
+
+    :param: url
+    */</span>
+    func onSetImage(url : String){
+
+        ImageLoader.sharedLoader.imageForUrl(url, completionHandler:{(image: UIImage?, url: String) in
+            self.imageView.image = image
+        })
+
+    }
+</code></pre><p>ImageLoader实现图片缓存，采用单例模式，下面看其实现代码：</p>
+<pre><code><span class="comment">//</span>
+<span class="comment">//  ImageLoader.swift</span>
+<span class="comment">//  ZHEmotionMusic</span>
+<span class="comment">//</span>
+<span class="comment">//  Created by 钟桓 on 15/5/26.</span>
+<span class="comment">//  Copyright (c) 2015年 ZH. All rights reserved.</span>
+<span class="comment">//</span>
+
+
+<span class="keyword">import</span> UIKit
+
+class ImageLoader {
+
+    <span class="built_in">var</span> <span class="keyword">cache</span> <span class="subst">=</span> NSCache()
+
+    class <span class="built_in">var</span> sharedLoader : ImageLoader {
+        struct Static {
+            static <span class="keyword">let</span> instance : ImageLoader <span class="subst">=</span> ImageLoader()
+        }
+        <span class="keyword">return</span> Static<span class="built_in">.</span>instance
+    }
+
+    func imageForUrl(urlString: <span class="built_in">String</span>, completionHandler:(image: UIImage<span class="subst">?</span>, url: <span class="built_in">String</span>) <span class="subst">-&gt; </span>()) {
+
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, <span class="number">0</span>), {()<span class="keyword">in</span>
+            <span class="built_in">var</span> <span class="built_in">data</span>: NSData<span class="subst">?</span> <span class="subst">=</span> <span class="built_in">self</span><span class="built_in">.</span><span class="keyword">cache</span><span class="built_in">.</span>objectForKey(urlString) as<span class="subst">?</span> NSData
+
+            <span class="keyword">if</span> <span class="keyword">let</span> goodData <span class="subst">=</span> <span class="built_in">data</span> {
+                <span class="keyword">let</span> image <span class="subst">=</span> UIImage(<span class="built_in">data</span>: goodData)
+                dispatch_async(dispatch_get_main_queue(), {() <span class="keyword">in</span>
+                    completionHandler(image: image, url: urlString)
+                })
+                <span class="keyword">return</span>
+            }
+
+            <span class="built_in">var</span> downloadTask: NSURLSessionDataTask <span class="subst">=</span> NSURLSession<span class="built_in">.</span>sharedSession()<span class="built_in">.</span>dataTaskWithURL(NSURL(<span class="built_in">string</span>: urlString)<span class="subst">!</span>, completionHandler: {(<span class="built_in">data</span>: NSData<span class="subst">!</span>, response: NSURLResponse<span class="subst">!</span>, error: NSError<span class="subst">!</span>) <span class="subst">-&gt; </span><span class="literal">Void</span> <span class="keyword">in</span>
+                <span class="keyword">if</span> (error <span class="subst">!=</span> nil) {
+                    completionHandler(image: nil, url: urlString)
+                    <span class="keyword">return</span>
+                }
+
+                <span class="keyword">if</span> <span class="built_in">data</span> <span class="subst">!=</span> nil {
+                    <span class="keyword">let</span> image <span class="subst">=</span> UIImage(<span class="built_in">data</span>: <span class="built_in">data</span>)
+                    <span class="built_in">self</span><span class="built_in">.</span><span class="keyword">cache</span><span class="built_in">.</span>setObject(<span class="built_in">data</span>, forKey: urlString)
+                    dispatch_async(dispatch_get_main_queue(), {() <span class="keyword">in</span>
+                        completionHandler(image: image, url: urlString)
+                    })
+                    <span class="keyword">return</span>
+                }
+
+            })
+            downloadTask<span class="built_in">.</span>resume()
+        })
+
+    }
+}
+</code></pre><p>现在运行程序，每次扫描人脸后，都会有新的歌曲进行播放。但你会发现，每当一首歌曲播放完毕，程序停滞，没有行动。因为我们没有对歌曲播放完后改采取的行动进行编写。在ViewController中添加下面三个方法：</p>
+<pre><code><span class="comment">// MARK: - CircularProgressViewDelegate Method</span>
+
+<span class="comment">//    - (void)updateProgressViewWithPlayer:(AVAudioPlayer *)player;</span>
+<span class="comment">//    - (void)updatePlayOrPauseButton;</span>
+<span class="comment">//    - (void)playerDidFinishPlaying;</span>
+
+    <span class="javadoc">/**
+        歌曲暂停时调用
+    */</span>
+    func updatePlayOrPauseButton() {
+
+    }
+
+    <span class="javadoc">/**
+        可以使用该方法，通过player的信息，对view进行更新。
+
+    :param: player 播放器
+    */</span>
+    func updateProgressViewWithPlayer(player: MPMoviePlayerController!) {
+
+    }
+
+    <span class="javadoc">/**
+        每当播放结束时调用
+    */</span>
+    func playerDidFinishPlaying() {
+
+    }
+</code></pre><p>聪明的你，注意到了MARK标志，它等价于objective-c的 #pragma。</p>
+<p>对第三个方法，也就是playerDidFinishPlaying()进行编程实现。首先，在viewController中添加变量。</p>
+<pre><code> <span class="comment">/// 记录当前播放歌曲在songs内的位置。</span>
+    <span class="keyword">var</span> id = <span class="number">0</span>;
+</code></pre><p>在didReceiveResults中，添加一行。</p>
+<pre><code><span class="attribute">         self.id </span>=<span class="string"> 0;</span>
+</code></pre><p>给playerDidFinishPlaying添加处理逻辑。</p>
+<pre><code>     <span class="comment">/**
+        每当播放结束时调用
+    */</span>
+    <span class="func"><span class="keyword">func</span></span> playerDidFinishPlaying() {
+
+        <span class="keyword">self</span>.id+=<span class="number">1</span>;
+        <span class="built_in">println</span>(<span class="keyword">self</span>.id)
+
+        <span class="comment">//放在主线程，提高反应速度</span>
+        dispatch_async(dispatch_get_main_queue(), {
+            () -&gt;<span class="type">Void</span> <span class="keyword">in</span>
+            <span class="type">UIApplication</span>.sharedApplication().networkActivityIndicatorVisible = <span class="built_in">true</span>
+            <span class="keyword">let</span> song = <span class="keyword">self</span>.songs[<span class="keyword">self</span>.id] <span class="keyword">as</span>! <span class="type">NSDictionary</span>
+            <span class="keyword">let</span> songURL = song[<span class="string">"url"</span>] <span class="keyword">as</span>! <span class="type">String</span>
+            <span class="keyword">self</span>.circularProgressView.stop()
+            <span class="keyword">self</span>.circularProgressView.audioURL = <span class="type">NSURL</span>(string: songURL)
+            <span class="keyword">self</span>.circularProgressView.play()
+            <span class="keyword">let</span> imageUrl = song[<span class="string">"picture"</span>] <span class="keyword">as</span>! <span class="type">String</span>
+            <span class="keyword">self</span>.onSetImage(imageUrl)
+            <span class="type">UIApplication</span>.sharedApplication().networkActivityIndicatorVisible = <span class="built_in">false</span>
+
+        })
+
+    }
+</code></pre><p>到这里，扫描面部后，能够放歌，并且当歌曲结束后，会自动切换歌曲。</p>
+<p>但现在我们不知道，播放的歌曲是歌名和演唱者，所以，现在来添加这部分的操作代码。在viewController中添加：</p>
+<pre><code>    <span class="comment">/**
+     负责更新歌曲
+
+    :param: song 需要更新的歌曲信息
+    */</span>
+
+     func updateSong(song : NSDictionary){
+            //<span class="operator"><span class="keyword">update</span> audio player
+            let songURL =  song[<span class="string">"url"</span>] <span class="keyword">as</span>! <span class="keyword">String</span>
+            self.circularProgressView.<span class="keyword">stop</span>()
+            self.circularProgressView.audioURL = NSURL(<span class="keyword">string</span>: songURL)
+            self.circularProgressView.play()
+
+            //<span class="keyword">update</span> image <span class="keyword">view</span>
+            let imageUrl = song[<span class="string">"picture"</span>] <span class="keyword">as</span>! <span class="keyword">String</span>
+            self.onSetImage(imageUrl)
+
+            //<span class="keyword">update</span> song title <span class="comment">--&gt; label1</span>
+            label1.<span class="built_in">text</span> = song[<span class="string">"title"</span>] <span class="keyword">as</span>? <span class="keyword">String</span>
+
+            //<span class="keyword">update</span> artist  <span class="comment">--&gt; label2</span>
+            label2.<span class="built_in">text</span> = song[<span class="string">"artist"</span>] <span class="keyword">as</span>? <span class="keyword">String</span>
+            label2.font = label2.font.fontWithSize(<span class="number">13</span>)
+
+
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = <span class="literal">false</span>
+        }</span>
+</code></pre><p>将更新歌曲的操作封装在这个函数中，所以，修改didReceiveResults方法。</p>
+<pre><code>     <span class="comment">/**
+        负责处理从网络上获取的数据
+
+    :param: results 获取得到的数据
+    */</span>
+    <span class="func"><span class="keyword">func</span></span> didReceiveResults(results : <span class="type">NSDictionary</span>){
+        <span class="built_in">println</span>(<span class="string">"数据成功接收"</span>)
+<span class="comment">//        println(results)</span>
+        <span class="keyword">self</span>.songs = results[<span class="string">"song"</span>] <span class="keyword">as</span>! <span class="type">NSArray</span>
+
+        <span class="keyword">let</span> song = <span class="keyword">self</span>.songs[<span class="number">0</span>] <span class="keyword">as</span>! <span class="type">NSDictionary</span>
+
+
+        <span class="keyword">self</span>.id = <span class="number">0</span>;
+
+        <span class="comment">//更新界面UI的操作，放在主线程，提高反应速度</span>
+        dispatch_async(dispatch_get_main_queue(), {
+            () -&gt;<span class="type">Void</span> <span class="keyword">in</span>
+
+            <span class="keyword">self</span>.updateSong(song)
+
+        })
+
+    }
+</code></pre><p>同时不要忘记修改其它地方，将切换歌曲或者播放歌曲，都放在updateSong中，修改playerDidFinishPlaying。</p>
+<pre><code>     <span class="comment">/**
+        每当播放结束时调用
+    */</span>
+    <span class="func"><span class="keyword">func</span></span> playerDidFinishPlaying() {
+
+        <span class="keyword">self</span>.id+=<span class="number">1</span>;
+        <span class="built_in">println</span>(<span class="keyword">self</span>.id)
+
+        <span class="comment">//放在主线程，提高反应速度</span>
+        dispatch_async(dispatch_get_main_queue(), {
+            () -&gt;<span class="type">Void</span> <span class="keyword">in</span>
+            <span class="type">UIApplication</span>.sharedApplication().networkActivityIndicatorVisible = <span class="built_in">true</span>
+            <span class="keyword">let</span> song = <span class="keyword">self</span>.songs[<span class="keyword">self</span>.id] <span class="keyword">as</span>! <span class="type">NSDictionary</span>
+            <span class="comment">//update song</span>
+            <span class="keyword">self</span>.updateSong(song)
+        })
+
+    }
+</code></pre><p>到现在，似乎完成的很不错了,但是有一个bug，可能你早有迷惑，我们扫描心情只是一次，提取的歌曲数量也是有限，如果歌曲列表songs中的歌曲都播放完毕了，怎么办? 如果不做处理，程序会crash。所以，需要在每次歌曲播放结束后，进行判断。</p>
+<p>在ViewController中，添加一个枚举类型。</p>
+<pre><code><span class="javadoc">/**
+    枚举类型，记录心情
+
+- happy: 快乐的心情
+- sad:   悲伤的心情
+*/</span>
+<span class="keyword">enum</span> Emotion{
+    <span class="keyword">case</span> happy
+    <span class="keyword">case</span> sad
+}
+</code></pre><p>在Viewcontroller类中，添加属性：</p>
+<pre><code> <span class="comment">/// 当前的心情</span>
+ <span class="keyword">var</span> emotion : Emotion = Emotion.happy
+</code></pre><p>更新歌曲播放结束后的处理方法playerDidFinishPlaying。</p>
+<pre><code>     <span class="comment">/**
+        每当播放结束时调用
+    */</span>
+    <span class="func"><span class="keyword">func</span></span> playerDidFinishPlaying() {
+
+        <span class="keyword">self</span>.id+=<span class="number">1</span>;
+<span class="comment">//        println(self.id)</span>
+
+        <span class="comment">//如果最后一首歌曲播放完毕，需要再次访问网络，获取资源</span>
+        <span class="keyword">if</span> <span class="keyword">self</span>.id == songs.<span class="built_in">count</span> {
+            <span class="keyword">switch</span> emotion{
+            <span class="keyword">case</span> .happy :
+                http.onSearch(happySongsURL)
+            <span class="keyword">case</span> .sad :
+                http.onSearch(sadSongsURL)
+            }
+<span class="comment">//            println("songs is over")</span>
+            <span class="keyword">self</span>.id=<span class="number">0</span>
+        }
+
+        <span class="comment">//放在主线程，提高反应速度</span>
+        dispatch_async(dispatch_get_main_queue(), {
+            () -&gt;<span class="type">Void</span> <span class="keyword">in</span>
+            <span class="type">UIApplication</span>.sharedApplication().networkActivityIndicatorVisible = <span class="built_in">true</span>
+            <span class="keyword">let</span> song = <span class="keyword">self</span>.songs[<span class="keyword">self</span>.id] <span class="keyword">as</span>! <span class="type">NSDictionary</span>
+            <span class="comment">//update song</span>
+            <span class="keyword">self</span>.updateSong(song)
+        })
+
+    }
+</code></pre><hr>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一快两块的，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Swift/">Swift</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Swift/">Swift</a>►<a class="article-category-link" href="/categories/Swift/小贼音乐/">小贼音乐</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhonghuan.info/2015/05/30/小贼音乐-swift开发笔记-step-2/" data-title="小贼音乐--swift开发笔记_step_2 | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/05/30/小贼音乐-swift开发笔记-step-3/" title="小贼音乐--swift开发笔记_step_3">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  小贼音乐--swift开发笔记_step_3</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/30/小贼音乐-swift开发笔记-step-1/"  title="小贼音乐--swift开发笔记_step_1">
+ <strong>NEXT:</strong><br/> 
+ <span>小贼音乐--swift开发笔记_step_1
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#导入CircularProgressView"><span class="toc-number">1.</span> <span class="toc-text">导入CircularProgressView</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#水水的添加音乐"><span class="toc-number">2.</span> <span class="toc-text">水水的添加音乐</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Swift/" title="Swift">Swift<sup>7</sup></a></li>
+		
+			<li><a href="/categories/webspider/" title="python网络爬虫">python网络爬虫<sup>2</sup></a></li>
+		
+			<li><a href="/categories/Swift/小贼音乐/" title="小贼音乐">小贼音乐<sup>3</sup></a></li>
+		
+			<li><a href="/categories/工具类，软件类介绍/" title="工具类，软件类介绍">工具类，软件类介绍<sup>2</sup></a></li>
+		
+			<li><a href="/categories/算法/" title="算法">算法<sup>4</sup></a></li>
+		
+			<li><a href="/categories/编译/" title="编译">编译<sup>1</sup></a></li>
+		
+			<li><a href="/categories/记or谈/" title="记or谈">记or谈<sup>1</sup></a></li>
+		
+			<li><a href="/categories/问题笔记/" title="问题笔记">问题笔记<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/KMP/" title="KMP">KMP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Swift/" title="Swift">Swift<sup>7</sup></a></li>
+		
+			<li><a href="/tags/XAMPP/" title="XAMPP">XAMPP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/algorithm/" title="algorithm">algorithm<sup>4</sup></a></li>
+		
+			<li><a href="/tags/mac/" title="mac">mac<sup>1</sup></a></li>
+		
+			<li><a href="/tags/osX/" title="osX">osX<sup>3</sup></a></li>
+		
+			<li><a href="/tags/pip/" title="pip">pip<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>2</sup></a></li>
+		
+			<li><a href="/tags/python安装管理工具/" title="python安装管理工具">python安装管理工具<sup>1</sup></a></li>
+		
+			<li><a href="/tags/re/" title="re">re<sup>1</sup></a></li>
+		
+			<li><a href="/tags/urllib/" title="urllib">urllib<sup>1</sup></a></li>
+		
+			<li><a href="/tags/urllib2/" title="urllib2">urllib2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/webspider/" title="webspider">webspider<sup>2</sup></a></li>
+		
+			<li><a href="/tags/单调队列/" title="单调队列">单调队列<sup>1</sup></a></li>
+		
+			<li><a href="/tags/字符串匹配/" title="字符串匹配">字符串匹配<sup>1</sup></a></li>
+		
+			<li><a href="/tags/正则表达式/" title="正则表达式">正则表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/电子商务/" title="电子商务">电子商务<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编译原理/" title="编译原理">编译原理<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> You, lower the IQ of the street, go to study~~ <br/>
+			^_^</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/u/2103243911" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/ZHONGHuanGit" target="_blank" title="github"></a>
+		
+		
+	</div>
+		
+		<p class="copyright">
+			<font face="arial">
+ 			博客所有内容采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">自由转载-非商业用途-非衍生-保持署名的创作共用协议</a>
+			</font>
+		</p>
+		<p class="copyright">
+			<font face="arial">
+ 			Licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike License</a>.
+			</font>
+		</p>
+		
+
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://zhonghuan.info" target="_blank" title="钟桓">钟桓</a>
+		
+		<font face=“arial” size=“0.5”>
+		</font>
+		</p>
+</div>
+
+
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});    
+</script>
+
+
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"zhonghuan001"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+  </body>
+</html>
