@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Enjoy your choice, enjoy your life.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhonghuan.info/"/>
-  <updated>2015-05-29T18:22:14.431Z</updated>
+  <updated>2015-07-16T03:03:39.178Z</updated>
   <id>http://zhonghuan.info/</id>
   
   <author>
@@ -13,6 +13,81 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[使用Array存大量数据技巧]]></title>
+    <link href="http://zhonghuan.info/2015/07/16/%E4%BD%BF%E7%94%A8Array%E5%AD%98%E5%A4%A7%E9%87%8F%E6%95%B0%E6%8D%AE%E6%8A%80%E5%B7%A7/"/>
+    <id>http://zhonghuan.info/2015/07/16/使用Array存大量数据技巧/</id>
+    <published>2015-07-16T03:01:43.000Z</published>
+    <updated>2015-07-16T03:03:23.000Z</updated>
+    <content type="html"><![CDATA[<p>Array的介绍上说 “Every array has a region of memory which stores the content of the array. If the array’s Element type is not a class or @objc protocol type, this storage is a contiguous block of memory; ”</p>
+<p>从这句可以解读出，Array是存储在一块连续的内存空间中，但也注意到前提是Array存储的不是对象，但Array存储对象的时候，应该存储的是指向对象的地址，所以，暂且可以当做都是连续存储的。</p>
+<p>这样，会产生一个疑问，如果，连续的存储空间被占满了怎么办？</p>
+<p>Swift采取的措施就是，分配一个更大的内存空间，将现有空间数据拷贝到新的存储空间中去。打个比方说，如果我们声明一个数组，例如：<code>var array  = Array&lt;Int&gt;()</code>,它一开始分配一块能够存储<code>1000</code>个<code>Int</code>的连续内存，现在你添加了<code>1050</code>个 <code>Int</code>到array中，结果，在存储第<code>1001</code> 个 <code>Int</code>的时候，发生了这么一件事，系统给array重新分配了一个存储空间，可能是原先的几倍的大小，然后将原有的数据拷贝到新的空间中去，就这样，array能够存储更多的数据。</p>
+<p>但是如果数组数据大的时候，多几次上述的分配新内存，拷贝原有数据这样的操作，会消耗额外的时间，所以，如果你知道数组最少会存储多少数据，可以预先分配一个大的存储空间，避免中间的环节造成的额外的时间消耗。</p>
+<p>预先分配存储空间的方式就是调用<code>Array</code>的<code>reserveCapacity(minimumCapacity: Int)</code>方法，我们可以做一个测试，来检测，使用预先分配的方式，是否可以缩短运行时间，提升效率。例如，看下面程序。</p>
+<pre><code><span class="keyword">import</span> <span class="type">Foundation</span>
+
+<span class="class"><span class="keyword">class</span> <span class="title">ParkBenchTimer</span> </span>{
+
+    <span class="keyword">let</span> startTime:<span class="type">CFAbsoluteTime</span>
+    <span class="keyword">var</span> endTime:<span class="type">CFAbsoluteTime</span>?
+
+    <span class="keyword">init</span>() {
+        startTime = <span class="type">CFAbsoluteTimeGetCurrent</span>() <span class="comment">// 获取系统当前的绝对时间，是从2001年1月1日0时0分到现在的绝对时间</span>
+    }
+
+    <span class="func"><span class="keyword">func</span></span> stop() -&gt; <span class="type">CFAbsoluteTime</span> {
+        endTime = <span class="type">CFAbsoluteTimeGetCurrent</span>()
+
+        <span class="keyword">return</span> duration!
+    }
+
+    <span class="keyword">var</span> duration:<span class="type">CFAbsoluteTime</span>? {
+        <span class="keyword">if</span> <span class="keyword">let</span> endTime = endTime {
+            <span class="keyword">return</span> endTime - startTime  <span class="comment">// 中间经过的时间</span>
+        } <span class="keyword">else</span> {
+            <span class="keyword">return</span> <span class="built_in">nil</span>
+        }
+    }
+}
+
+<span class="keyword">let</span> <span class="type">NUM</span> = <span class="number">5000000</span> <span class="comment">// 可以通过改变NUM的大小，观察不同情况下，效率如何。</span>
+
+<span class="keyword">var</span> list1 = <span class="type">Array</span>&lt;<span class="type">Int</span>&gt;()
+
+<span class="keyword">let</span> time1 = <span class="type">ParkBenchTimer</span>()
+<span class="comment">//let start = NSDate(); // &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; Start time  也可是使用NSDate来计算中间经过的时间</span>
+
+<span class="keyword">for</span> <span class="keyword">var</span> i = <span class="number">0</span> ; i &lt; <span class="type">NUM</span> ; i++ {
+    list1.append(i)
+}
+
+<span class="comment">//let end = NSDate();   // &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;   end time</span>
+<span class="comment">//let timeInterval: Double = end.timeIntervalSinceDate(start); // &lt;&lt;&lt;&lt;&lt; Difference in seconds (double)</span>
+<span class="comment">//print("\(timeInterval) seconds");</span>
+
+<span class="built_in">print</span> (<span class="string">"未预先分配， 时间：<span class="subst">\(time1.stop()</span>)"</span>)
+
+<span class="keyword">var</span> list2 = <span class="type">Array</span>&lt;<span class="type">Int</span>&gt;()
+list2.reserveCapacity(<span class="type">NUM</span>) <span class="comment">//预先说明分配的最小存储空间</span>
+
+<span class="keyword">let</span> time2 = <span class="type">ParkBenchTimer</span>()
+
+<span class="keyword">for</span> <span class="keyword">var</span> i = <span class="number">0</span> ; i &lt; <span class="type">NUM</span> ; i++ {
+    list2.append(i)
+}
+
+<span class="built_in">print</span>(<span class="string">"预先分配， 时间：<span class="subst">\(time2.stop()</span>)"</span>)
+</code></pre><p>根据观察，总体情况，预先分配会节省时间。</p>
+]]></content>
+    
+    
+      <category term="Swift" scheme="http://zhonghuan.info/tags/Swift/"/>
+    
+      <category term="Swift" scheme="http://zhonghuan.info/categories/Swift/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[小贼音乐--swift开发笔记_step_3]]></title>
@@ -3323,35 +3398,6 @@ urllib2.install_opener(opener)
       <category term="urllib2" scheme="http://zhonghuan.info/tags/urllib2/"/>
     
       <category term="python网络爬虫" scheme="http://zhonghuan.info/categories/webspider/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Hello World]]></title>
-    <link href="http://zhonghuan.info/2014/09/01/hello-world/"/>
-    <id>http://zhonghuan.info/2014/09/01/hello-world/</id>
-    <published>2014-09-01T08:28:04.000Z</published>
-    <updated>2014-09-01T08:28:04.000Z</updated>
-    <content type="html"><![CDATA[<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">trobuleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2>
-<h3 id="Create_a_new_post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-]]></content>
-    
     
   </entry>
   
