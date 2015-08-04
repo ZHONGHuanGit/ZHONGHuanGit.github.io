@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://zhonghuan.info/2015/04/15/Swift%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0NSCache/</loc>
+    <lastmod>2015-08-04T15:02:37.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://zhonghuan.info/about/index.html</loc>
     <lastmod>2015-07-30T13:58:23.000Z</lastmod>
   </url>
@@ -34,11 +39,6 @@
   <url>
     <loc>http://zhonghuan.info/2015/04/16/UIImage%E6%B7%BB%E5%8A%A0Gesture-Recognizer/</loc>
     <lastmod>2015-04-16T02:01:57.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://zhonghuan.info/2015/04/15/Swift%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0NSCache/</loc>
-    <lastmod>2015-04-15T05:53:17.000Z</lastmod>
   </url>
   
   <url>
