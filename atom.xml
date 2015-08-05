@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Enjoy your choice, enjoy your life.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhonghuan.info/"/>
-  <updated>2015-08-04T15:12:04.128Z</updated>
+  <updated>2015-08-05T04:24:54.007Z</updated>
   <id>http://zhonghuan.info/</id>
   
   <author>
@@ -1143,14 +1143,14 @@ class ImageLoader {
     <link href="http://zhonghuan.info/2015/04/15/Swift%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0NSCache/"/>
     <id>http://zhonghuan.info/2015/04/15/Swift学习笔记NSCache/</id>
     <published>2015-04-15T05:47:38.000Z</published>
-    <updated>2015-08-04T15:11:40.000Z</updated>
-    <content type="html"><![CDATA[<h5 id="环境_Xcode_7，_Swift_2">环境 Xcode 7， Swift 2</h5>
+    <updated>2015-08-05T04:24:41.000Z</updated>
+    <content type="html"><![CDATA[<h5 id="开头闲聊">开头闲聊</h5>
 <p>从名字上可以感觉出来，Cache，缓存。我们都知道，有时候一些计算量比较大的结果，我们可以缓存起来，下次使用时，可以直接使用，不用重复计算。</p>
 <p>简单的例子来说吧。例如我们有一些图片需要使用，这些图片资源是从网络上获取来的。我们直观上的感觉就是不用每次使用图片都从网络上去获取，可以将得到的图片缓存起来，需要使用的时候，我们可以直接拿来用。</p>
 <p>如果没有NSCache，你会怎么做，我的第一反应是 ———&gt; <strong>Dictionary，字典</strong>。</p>
 <hr>
 <h3 id="字典的实现">字典的实现</h3>
-<p>字典，有 <strong> key—value 键-值对</strong>，所以通过url(String)—image这样的组合，我们可以实现一个简单的缓存。例如：(下面代码要求Xcode7，Swift2)</p>
+<p>字典，有 <strong> key—value 键-值对</strong>，所以通过url(String)—image这样的组合，我们可以实现一个简单的缓存。例如：(Xcode6，Swift1.2)</p>
 <pre><code>var <span class="variable">imageCache =</span> Dictionary &lt; String , UIImage &gt;()
 
 <span class="keyword">let</span> <span class="variable">url =</span> <span class="string">"图片的URL"</span>
@@ -1189,7 +1189,7 @@ class ImageLoader {
 <p>上面的实现，似乎已经可以满足要求了，可是，有一个问题，如果图片资源过多，程序运行时占据太多存储资源。我们希望，如果图片长时间不用的话，可以释放它，等需要用时，在从网络中获取。在时间和空间中，取一个权衡。</p>
 <p>那么好了，NSCache可以帮我们做到这一点。它就像一个容器一样，内部存储的也是key-value 对，它类似Dictionary，但不同的是，当空间比较紧张的时候，NSCache可以释放一部分资源。正因为需要释放资源，NSCache存储的对象需要实现 <a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSDiscardableContent_Protocol/index.html#//apple_ref/occ/intf/NSDiscardableContent" target="_blank" rel="external">NSDiscardableContent</a> 协议。</p>
 <p>可以参照ios developer library <a href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSCache_Class/index.html#//apple_ref/occ/instp/NSCache/evictsObjectsWithDiscardedContent" target="_blank" rel="external">NSCache</a>，来看看它的使用方式。</p>
-<p>下面看一个，取代上面图片缓存的例子：</p>
+<p>下面看一个，取代上面图片缓存的例子：（环境 Xcode 7， Swift 2）</p>
 <pre><code>    <span class="reserved">import</span> UIKit
 
 <span class="class"><span class="keyword">class</span> <span class="title">ImageLoader</span> {</span>
