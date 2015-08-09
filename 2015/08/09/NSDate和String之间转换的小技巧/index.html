@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>flashlight--spotlight的好帮手 | de部落格^_^</title>
+    <title>NSDate和String之间转换的小技巧 | de部落格^_^</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="钟桓">
     
-    <meta name="description" itemprop="description" content="flashlight--spotlight的好帮手">
+    <meta name="description" itemprop="description" content="NSDate和String之间转换的小技巧">
     
     
     
@@ -72,15 +72,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/11/22/flashlight-spotlight的好帮手/" title="flashlight--spotlight的好帮手" itemprop="url">flashlight--spotlight的好帮手</a>
+      <a href="/2015/08/09/NSDate和String之间转换的小技巧/" title="NSDate和String之间转换的小技巧" itemprop="url">NSDate和String之间转换的小技巧</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhonghuan.info" title="钟桓">钟桓</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-11-21T16:29:30.000Z" itemprop="datePublished">11月 22 2014</time>
-    更新日期:<time datetime="2014-11-21T16:32:42.000Z" itemprop="dateModified">11月 22 2014</time>
+    <time datetime="2015-08-09T14:32:30.000Z" itemprop="datePublished">8月 9 2015</time>
+    更新日期:<time datetime="2015-08-09T14:33:38.000Z" itemprop="dateModified">8月 9 2015</time>
     
   </p>
 </header>
@@ -89,57 +89,62 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Flashlight简介："><span class="toc-number">1.</span> <span class="toc-text">Flashlight简介：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#功能"><span class="toc-number">2.</span> <span class="toc-text">功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开发"><span class="toc-number">3.</span> <span class="toc-text">开发</span></a></li></ol>
+		
 		</div>
 		
-		<h3 id="Flashlight简介：">Flashlight简介：</h3>
-<p>OS X Yosemite 上全新的 Spotlight 越发强大，大有吞并 LaunchBar 6 与 Alfread 之势，但碍于官方 API 的种种限制，很多 Web 内容、文件和应用程序不能直接在其搜索框调用。为此一款基于 Python 编写的 Spotlight 插件应运而生。这个便是Flashlight啦。</p>
-<p>那么它的作用是什么？如果你用过Alfred的话，那么对于Flashlight的定义就是给Spotlight写workflow的插件。</p>
-<p>Spotlight的作用，用过的人都知道了，就不详述了，那么flashlight给Spotlight带来了什么呢？为什么大家说，有了flashlight的话，未来Spotlight会替代Alfred（当然，这句话有待观察，毕竟Flashlight现在还不太稳定）</p>
+		<p>遇到处理日期的时候，也许我们有这样的需求，就是依据String生成NSDate，或者将NSDate转换成String。当然这里的String和NSDate都会具有某种格式。举个简单的例子，将字符串”2015-08-09”转换成日期，这个借助于NSFormatter就可以做到，但是可以借助extension来做一个简单的封装。例如看下面的代码：</p>
+<pre><code><span class="class"><span class="keyword">extension</span> <span class="title">NSDate</span></span>{
+
+    <span class="keyword">class</span> <span class="func"><span class="keyword">func</span></span> dateFromStringWithFormat(dateString: <span class="type">String</span>?, format: <span class="type">String</span>?) -&gt; <span class="type">NSDate</span>? {
+        <span class="keyword">if</span> <span class="keyword">let</span> realDateString = dateString {
+            <span class="keyword">let</span> dateFormatter = <span class="type">NSDateFormatter</span>()
+            dateFormatter.dateFormat = format
+            <span class="keyword">let</span> date = dateFormatter.dateFromString(realDateString)
+            <span class="keyword">return</span> date
+        }
+        <span class="keyword">return</span> <span class="built_in">nil</span>
+    }
+
+    <span class="keyword">class</span> <span class="func"><span class="keyword">func</span></span> stringFromDateWithFormat(date: <span class="type">NSDate</span>?, format: <span class="type">String</span>?) -&gt; <span class="type">String</span>? {
+        <span class="keyword">if</span> <span class="keyword">let</span> realDate = date {
+            <span class="keyword">let</span> dateFormatter = <span class="type">NSDateFormatter</span>()
+            dateFormatter.dateFormat = format
+            <span class="keyword">let</span> str = dateFormatter.stringFromDate(realDate)
+            <span class="keyword">return</span> str
+        }
+        <span class="keyword">return</span>  <span class="built_in">nil</span>
+
+    }
+
+}
+</code></pre><p>调用的时候，只需要使用下面的方式：</p>
+<pre><code><span class="keyword">let</span> date = NSDate.dateFromStringWithFormat(<span class="string">"2015-08-09"</span>, forma<span class="variable">t:</span> <span class="string">"yyyy-MM-dd"</span>)
+<span class="keyword">let</span> str = NSDate.stringFromDateWithFormat(date, forma<span class="variable">t:</span> <span class="string">"yyyy-MM-dd"</span>)
+</code></pre><p>希望能够有所帮助。</p>
 <hr>
-<h3 id="功能">功能</h3>
-<p>主要能够实现的功能。下面列出我觉得几个不错的扩展功能。</p>
-<ul>
-<li>天气搜索，通过 Flashlight 提供的 API 接口，Spotlight 搜索框内会显示动态天气动画与未来三天的天气预测，用法：weather + 地址</li>
-</ul>
-<p><img src="http://zhonghuan.qiniudn.com/osX/flashlight/weather.gif" alt=""></p>
-<ul>
-<li>有道词典翻译，通过 Flashlight 提供的 API 接口，Spotlight 搜索框内需要翻译的内容。用法yd + （内容）</li>
-</ul>
-<p><img src="http://zhonghuan.qiniudn.com/osX/flashlight/youdao1.gif" alt=""></p>
-<ul>
-<li>WolframAlpha搜索，WolframAlpha是一个自动问答网站，非常智慧。用法 walpha + 问题<br><img src="http://zhonghuan.qiniudn.com/osX/flashlight/walpha.gif" alt=""></li>
-</ul>
-<ul>
-<li>知乎日报的功能。 用法 zhihu + (daily || hot || 20140822(该日期热点新闻)）<br><img src="http://zhonghuan.qiniudn.com/osX/flashlight/zhihu1.gif" alt=""></li>
-</ul>
-<hr>
-<p>Flashlight，就是提供给开发者一个平台，给Spotlight增加用户需要的一些额外的功能。</p>
-<p><img src="http://zhonghuan.qiniudn.com/osX/flashlight/flashlight.png" alt=""></p>
-<hr>
-<h3 id="开发">开发</h3>
-<p>如果你想要给Spotlight增加一些额外的功能，可以看这里<a href="https://github.com/nate-parrott/Flashlight" target="_blank" rel="external">https://github.com/nate-parrott/Flashlight</a></p>
-<p>上面的功能介绍中，第四个知乎日报，是由本人闲得时候贡献的，具体可以看这里<a href="https://github.com/ZHONGHuanGit/ZhihuDaily" target="_blank" rel="external">https://github.com/ZHONGHuanGit/ZhihuDaily</a> 要是觉得不错，请点个star</p>
+<p>笔者注：欢迎非商业转载，但请一定注明出处</p>
+<p>如果你认为这篇不错，也有闲钱，那你可以用支付宝随便捐助一快两块的，以慰劳笔者的辛苦：</p>
+<p><img src="http://zhonghuan.qiniudn.com/ZH_zhifubao.png" alt=""></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/osX/">osX</a>
+  <span></span> <a href="/tags/Swift/">Swift</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/工具类，软件类介绍/">工具类，软件类介绍</a>
+  <a class="article-category-link" href="/categories/Swift/">Swift</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhonghuan.info/2014/11/22/flashlight-spotlight的好帮手/" data-title="flashlight--spotlight的好帮手 | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
+  <div data-url="http://zhonghuan.info/2015/08/09/NSDate和String之间转换的小技巧/" data-title="NSDate和String之间转换的小技巧 | de部落格^_^" data-tsina="钟Huan" class="share clearfix">
   </div>
 
 </div>
@@ -148,19 +153,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/11/23/浅析编译原理-上下文无关文法/" title="浅析编译原理-上下文无关文法">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  浅析编译原理-上下文无关文法</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/10/16/电子商务发展对企业和消费者行为带来了哪些变化/"  title="电子商务发展对企业和消费者行为带来了哪些变化">
+<a href="/2015/07/16/使用Array存大量数据技巧/"  title="使用Array存大量数据技巧">
  <strong>NEXT:</strong><br/> 
- <span>电子商务发展对企业和消费者行为带来了哪些变化
+ <span>使用Array存大量数据技巧
 </span>
 </a>
 </div>
@@ -177,7 +174,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Flashlight简介："><span class="toc-number">1.</span> <span class="toc-text">Flashlight简介：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#功能"><span class="toc-number">2.</span> <span class="toc-text">功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开发"><span class="toc-number">3.</span> <span class="toc-text">开发</span></a></li></ol>
+  
   </div>
 
 <div id="asidepart">
